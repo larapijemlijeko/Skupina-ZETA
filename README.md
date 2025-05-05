@@ -1,0 +1,2 @@
+# Skupina-ZETA
+ta prava
