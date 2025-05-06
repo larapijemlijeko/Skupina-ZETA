@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_DB: baza
       POSTGRES_HOST: db
     depends_on:
       - db
@@ -17,7 +17,7 @@ services:
     environment:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydatabase
+      POSTGRES_DB: baza
     volumes:
       - pgdata:/var/lib/postgresql/data
 
