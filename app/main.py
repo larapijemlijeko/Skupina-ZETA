@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask, render_template
 from models import app, db, User
 
 @app.route('/')
 def index():
-    return "PostgreSQL with SQLAlchemy works!"
+    return render_template("home.html")
 
 if __name__ == "__main__":
     with app.app_context():
