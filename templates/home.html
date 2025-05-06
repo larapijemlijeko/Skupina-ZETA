@@ -103,12 +103,24 @@
     <div class="card">Desserts</div>
     <div class="card">Vegetarian</div>
     <div class="card">Quick Meals</div>
+    <div id="google_translate_element">Translate page</div>
   </div>
 </section>
 
 <footer>
   &copy; 2025 DelishBites. All rights reserved.
 </footer>
+
+<script type="text/javascript">
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'es,fr,de,zh-CN',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+    }
+</script>
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
