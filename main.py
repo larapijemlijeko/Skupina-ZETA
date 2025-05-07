@@ -27,6 +27,8 @@ def index():
 
 
 
+
+
 url_pattern = re.compile(
     r'^(?:http|ftp)s?://'
     r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}|'
