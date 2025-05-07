@@ -1,26 +1,35 @@
-version: "3.9"
-
 services:
-  web:
-    build: .
-    ports:
-      - "8080:5000"  # Exposes Flask on localhost:8080
-    environment:
-      - FLASK_ENV=development  # Optional: Enables Flask debug mode
-    depends_on:
-      - db
-    volumes:
-      - .:/app  # Mounts local files into the container
-
   db:
-    image: postgres:13
+    image: postgres
+    restart: always
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: baza
+      POSTGRES_PASSWORD: ${DBPASS:?db password not set}
+      POSTGRES_USER: ${DBUSER:?db user not set}
+      POSTGRES_DB: ${DBNAME:?db name not set}
     volumes:
-      - pgdata:/var/lib/postgresql/data
-
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DBUSER} -d ${DBNAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - postgres-net
+  web-app:
+    build: .
+    env_file:
+      - .env
+    volumes:
+      - ./src:/app
+    ports:
+      - "8080:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - postgres-net
+    command: ["gunicorn", "--bind", "0.0.0.0:5000", "--reload", "app:f_app"]
 volumes:
-  pgdata:
-
+  postgres-data:
+networks:
+  postgres-net:
