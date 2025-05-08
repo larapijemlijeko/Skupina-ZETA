@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <title>Prijava</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .login-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button, .register-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #ff7043;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button:hover, .register-btn:hover {
+      background-color: #e95e2f;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <h2>Prijava</h2>
+  <form action="/prijava" method="post">
+    <label for="username">Uporabniško ime:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Geslo:</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Prijavi se</button>
+  </form>
+
+  <a href="/registracija" class="register-btn">Registriraj se</a>
+</div>
+
+</body>
+</html>
