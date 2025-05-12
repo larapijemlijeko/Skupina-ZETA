@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pogosta vprašanja</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #fff8f0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: #ff7043;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .faq-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .faq-title {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .faq-item {
+      background-color: white;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      background-color: #ff7043;
+      color: white;
+      cursor: pointer;
+      padding: 15px 20px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .faq-question:hover {
+      background-color: #e55c30;
+    }
+
+    .faq-answer {
+      padding: 15px 20px;
+      display: none;
+      background-color: #fff;
+      color: #333;
+    }
+
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>DelishBites</h1>
+    <nav>
+      <a href="/">Domov</a>
+      <a href="/recepti">Recepti</a>
+      <a href="/novice">Novice</a>
+      <a href="/vprasanja">Pogosta vprašanja</a>
+      <a href="/prijava">Prijava</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="faq-container">
+      <h2 class="faq-title">Pogosta vprašanja</h2>
+
+      <div class="faq-item">
+        <div class="faq-question">Kako lahko dodam svoj recept?</div>
+        <div class="faq-answer">
+          Recept lahko dodaš prek svojega profila po prijavi. Klikni na "Dodaj recept" in sledi navodilom.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Ali lahko uporabljam recepte brez registracije?</div>
+        <div class="faq-answer">
+          Da, vse recepte lahko gledaš brez prijave. Za dodajanje in shranjevanje priljubljenih pa se moraš registrirati.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question">Ali so recepti preverjeni?</div>
+        <div class="faq-answer">
+          Vsi recepti so pregledani s strani urednikov in ocenjeni s strani skupnosti.
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 DelishBites. Vse pravice pridržane.
+  </footer>
+
+  <script>
+    const questions = document.querySelectorAll(".faq-question");
+
+    questions.forEach(q => {
+      q.addEventListener("click", () => {
+        const answer = q.nextElementSibling;
+        const isVisible = answer.style.display === "block";
+        
+        // Skrij vse odgovore
+        document.querySelectorAll(".faq-answer").forEach(a => a.style.display = "none");
+
+        // Če ni bil prikazan, ga prikaži
+        if (!isVisible) {
+          answer.style.display = "block";
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
