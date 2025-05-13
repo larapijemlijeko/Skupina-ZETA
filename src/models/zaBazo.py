@@ -5,7 +5,7 @@ def create_tables():
     try:
         conn = get_connection()
         cur = conn.cursor()
-        
+        print("dela")
         # 1. Tabela za uporabnike (če še ne obstaja)
         cur.execute("""
             CREATE TABLE IF NOT EXISTS uporabniki (
