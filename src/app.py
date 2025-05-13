@@ -10,7 +10,7 @@ import controllers.vprasanja
 import controllers.registracija
 import controllers.pozabljenogeslo
 
-create_tables
+create_tables()
 f_app = Flask(__name__)
 
 

@@ -1,9 +1,9 @@
-from db import get_connection
+import db
 
 def create_tables():
     conn = None
     try:
-        conn = get_connection()
+        conn = db.get_connection()
         cur = conn.cursor()
         print("dela")
         # 1. Tabela za uporabnike (če še ne obstaja)
