@@ -25,8 +25,7 @@ def create_tables():
                 opis TEXT,
                 priprava TEXT NOT NULL,
                 cas_priprave INTEGER,
-                tezavnost VARCHAR(20),
-                kategorija VARCHAR(50),
+                tezavnost INT,
                 slika_url VARCHAR(255),
                 uporabnik_id INTEGER REFERENCES uporabniki(id),
                 datum_kreiranja TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -50,6 +49,14 @@ def create_tables():
                 id SERIAL PRIMARY KEY,
                 recept_id INTEGER NOT NULL REFERENCES recepti(id) ON DELETE CASCADE,
                 oznaka VARCHAR(30) NOT NULL
+            )
+        """)
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS favourite(
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(50),
+                url VARCHAR(100),
+                uporabnik_id INTEGER REFERENCES uporabniki(id)
             )
         """)
         
