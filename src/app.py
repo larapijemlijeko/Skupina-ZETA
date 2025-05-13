@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from recipe_scrapers import scrape_me
-
+from models.zaBazo import create_tables
 
 import controllers.index
 import controllers.prijava
@@ -12,6 +12,7 @@ import controllers.pozabljenogeslo
 
 
 f_app = Flask(__name__)
+
 
 @f_app.get('/')
 def home():
