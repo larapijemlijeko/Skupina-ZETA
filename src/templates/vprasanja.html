@@ -4,85 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pogosta vprašanja</title>
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #fff8f0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      background-color: #ff7043;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    nav a {
-      margin: 0 15px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .faq-container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    .faq-title {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .faq-item {
-      background-color: white;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-
-    .faq-question {
-      background-color: #ff7043;
-      color: white;
-      cursor: pointer;
-      padding: 15px 20px;
-      font-weight: bold;
-      transition: background-color 0.3s;
-    }
-
-    .faq-question:hover {
-      background-color: #e55c30;
-    }
-
-    .faq-answer {
-      padding: 15px 20px;
-      display: none;
-      background-color: #fff;
-      color: #333;
-    }
-
-    footer {
-      background-color: #333;
-      color: white;
-      text-align: center;
-      padding: 15px 0;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="faq-page">
 
   <header>
     <h1>DelishBites</h1>

@@ -3,61 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Novice</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background-color: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-
-    .news-item {
-      border-bottom: 1px solid #ddd;
-      padding: 15px 0;
-    }
-
-    .news-item:last-child {
-      border-bottom: none;
-    }
-
-    .news-title {
-      font-size: 20px;
-      color: #ff7043;
-      margin: 0 0 5px;
-    }
-
-    .news-date {
-      font-size: 12px;
-      color: #888;
-      margin-bottom: 10px;
-    }
-
-    .news-content {
-      font-size: 14px;
-      color: #444;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<div class="container">
-  <h1>Novice</h1>
+  {% include 'header.html' %}
 
-</div>
+  <main>
+    <div class="container">
+    <h2>Novice</h2>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 DelishBites. All rights reserved.
+  </footer>
+
+  <script>
+    // Naloži header.html v placeholder
+    fetch("/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+  </script>
 
 </body>
 </html>

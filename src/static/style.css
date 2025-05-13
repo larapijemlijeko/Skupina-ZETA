@@ -1,0 +1,509 @@
+/* Global styles */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header and navigation */
+header {
+  background-color: #ff7043;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+nav a {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Main content */
+main {
+  flex: 1;
+}
+
+/* Footer */
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+}
+
+/* Index page styles */
+body {
+  background: #fff8f0;
+}
+
+.section {
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.recipes, .categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* Recipes page specific styles */
+.recipes-page h2 {
+  text-align: center;
+}
+
+/* Novice page styles */
+.container {
+  max-width: 800px;
+  margin: auto;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.news-item {
+  border-bottom: 1px solid #ddd;
+  padding: 15px 0;
+}
+
+.news-item:last-child {
+  border-bottom: none;
+}
+
+.news-title {
+  font-size: 20px;
+  color: #ff7043;
+  margin: 0 0 5px;
+}
+
+.news-date {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 10px;
+}
+
+.news-content {
+  font-size: 14px;
+  color: #444;
+}
+
+/* Login page styles */
+.login-body {
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-container {
+  background-color: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 320px;
+}
+
+.login-body h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #111;
+}
+
+.login-body label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.login-body input[type="text"],
+.login-body input[type="password"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.form-footer a {
+  color: #ff7043;
+  text-decoration: none;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
+.login-body button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ff7043;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.login-body button:hover {
+  background-color: #e95e2f;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.register-link a {
+  color: #ff7043;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+}
+
+/* Forgot password page styles */
+.forgot-password-body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.forgot-container {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 350px;
+}
+
+.forgot-password-body h2 {
+  text-align: center;
+  color: #000;
+  margin-bottom: 10px;
+}
+
+.forgot-password-body p {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.forgot-password-body label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.forgot-password-body input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.forgot-password-body button {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff7043;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.forgot-password-body button:hover {
+  background-color: #e95e2f;
+}
+
+.bottom-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+  color: #666;
+}
+
+.bottom-link a {
+  color: #ff7043;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.bottom-link a:hover {
+  text-decoration: underline;
+}
+
+/* Register page styles */
+.register-body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.register-container {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  width: 300px;
+}
+
+.register-body h2 {
+  text-align: center;
+  color: #333;
+}
+
+.register-body input[type="text"],
+.register-body input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.register-body button {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff7043;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.register-body button:hover {
+  background-color: #e95e2f;
+}
+
+/* FAQ page styles */
+.faq-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.faq-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.faq-item {
+  background-color: white;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.faq-question {
+  background-color: #ff7043;
+  color: white;
+  cursor: pointer;
+  padding: 15px 20px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.faq-question:hover {
+  background-color: #e55c30;
+}
+
+.faq-answer {
+  padding: 15px 20px;
+  display: none;
+  background-color: #fff;
+  color: #333;
+}
+
+/* Scraper page styles */
+.scraper-page main {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.scraper-page form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.scraper-page input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  min-width: 200px;
+}
+
+.scraper-page button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.scraper-page button:hover {
+  background-color: #e8592f;
+}
+
+.supported-sites-btn {
+  display: inline-block;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+/* New styles for the two-column layout */
+.recipe-card {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+/* Recipe header with title and favourite button */
+.recipe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.recipe-header h2 {
+  margin: 0;
+}
+
+.favourite-btn {
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.recipe-container {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.recipe-image {
+  flex: 1;
+  min-width: 300px;
+  max-width: 45%;
+}
+
+.recipe-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.recipe-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recipe-ingredients, .recipe-instructions {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+}
+
+.scraper-page ul, 
+.scraper-page ol {
+  padding-left: 1.5rem;
+  margin-top: 10px;
+}
+
+.scraper-page li {
+  margin-bottom: 5px;
+}
+
+/* Media query for responsiveness */
+@media (max-width: 800px) {
+  .recipe-container {
+    flex-direction: column;
+  }
+  
+  .recipe-image {
+    max-width: 100%;
+  }
+  
+  .recipe-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .favourite-btn {
+    align-self: flex-end;
+  }
+}

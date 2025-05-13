@@ -4,80 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>DelishBites - Home</title>
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: #fff8f0;
-    }
-
-    header {
-      background-color: #ff7043;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    nav a {
-      margin: 0 15px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    main {
-      flex: 1;
-    }
-
-    .section {
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .recipes, .categories {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    footer {
-      background-color: #333;
-      color: white;
-      text-align: center;
-      padding: 15px 0;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-  <header>
-    <h1>DelishBites</h1>
-    <nav>
-      <a href="/">Domov</a>
-      <a href="/recepti">Recepti</a>
-      <a href="/novice">Novice</a>
-      <a href="/vprasanja">Pogosta vprašanja</a>
-      <a href="/prijava">Prijava</a>
-      <a href="/scraper">Strgalnik</a>
-    </nav>
-  </header>
+  {% include 'header.html' %}
 
   <main>
     <section class="section">
@@ -126,6 +57,14 @@
     }
   </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script>
+    // Naloži header.html v placeholder
+    fetch("/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+  </script>
 
 </body>
 </html>

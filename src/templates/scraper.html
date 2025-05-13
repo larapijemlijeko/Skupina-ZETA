@@ -3,122 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Scrape Recipe – DelishBites</title>
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden; /* Prevent horizontal scroll */
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-      font-family: Arial, sans-serif;
-      background: #fff8f0;
-    }
-
-    header {
-      background-color: #ff7043;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    nav a {
-      margin: 0 15px;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    main {
-      flex: 1;
-      padding: 40px 20px;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      margin-top: 20px;
-      max-width: 100%;
-      overflow-wrap: break-word;
-    }
-
-    form {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-    }
-
-    input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      font-size: 1rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      min-width: 200px;
-    }
-
-    button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #ff7043;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      margin: 20px auto;
-      border-radius: 10px;
-    }
-
-    ul, ol {
-      padding-left: 1.5rem;
-    }
-
-    footer {
-      background-color: #333;
-      color: white;
-      text-align: center;
-      padding: 15px 0;
-    }
-
-    @media (max-width: 600px) {
-      form {
-        flex-direction: column;
-      }
-
-      button {
-        width: 100%;
-      }
-    }
-  </style>
+  <title>Strgalnik</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="scraper-page">
 
-  <header>
-    <h1>DelishBites</h1>
-    <nav>
-      <a href="/">Domov</a>
-      <a href="/recepti">Recepti</a>
-      <a href="/novice">Novice</a>
-      <a href="/vprasanja">Pogosta vprašanja</a>
-      <a href="/prijava">Prijava</a>
-    </nav>
-  </header>
+  {% include 'header.html' %}
 
   <main>
     <h2>🔍 Scrape a Recipe</h2>
@@ -126,31 +16,44 @@
       <input type="text" name="url" placeholder="Paste a recipe URL..." required>
       <button type="submit">Scrape</button>
     </form>
-    <a href="{{ url_for('static', filename='podprteStrani.txt') }}" target="_blank" style="margin-top: 10px; display: inline-block;">
+    <a href="{{ url_for('static', filename='podprteStrani.txt') }}" target="_blank" class="supported-sites-btn">
         <button type="button">📄 Podprte strani</button>
     </a>
 
     {% if recipe %}
-    <div class="card">
-      <h2>{{ recipe.title }}</h2>
+    <div class="recipe-card">
+      <div class="recipe-header">
+        <h2>{{ recipe.title }}</h2>
+        <button type="button" class="favourite-btn">❤️ Favourite</button>
+      </div>
+      
+      <div class="recipe-container">
+        <div class="recipe-image">
+          {% if recipe.image_url %}
+          <img src="{{ recipe.image_url }}" alt="Recipe image">
+          {% endif %}
+        </div>
+        
+        <div class="recipe-details">
+          <div class="recipe-ingredients">
+            <h3>📋 Ingredients</h3>
+            <ul>
+              {% for item in recipe.ingredients %}
+              <li>{{ item }}</li>
+              {% endfor %}
+            </ul>
+          </div>
 
-      {% if recipe.image_url %}
-      <img src="{{ recipe.image_url }}" alt="Recipe image">
-      {% endif %}
-
-      <h3>📋 Ingredients</h3>
-      <ul>
-        {% for item in recipe.ingredients %}
-        <li>{{ item }}</li>
-        {% endfor %}
-      </ul>
-
-      <h3>👨‍🍳 Instructions</h3>
-      <ol>
-        {% for step in recipe.instructions.split('\n') if step %}
-        <li>{{ step }}</li>
-        {% endfor %}
-      </ol>
+          <div class="recipe-instructions">
+            <h3>👨‍🍳 Instructions</h3>
+            <ol>
+              {% for step in recipe.instructions.split('\n') if step %}
+              <li>{{ step }}</li>
+              {% endfor %}
+            </ol>
+          </div>
+        </div>
+      </div>
     </div>
     {% endif %}
   </main>
@@ -158,6 +61,15 @@
   <footer>
     &copy; 2025 DelishBites. All rights reserved.
   </footer>
+
+  <script>
+    // Naloži header.html v placeholder
+    fetch("/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+  </script>
 
 </body>
 </html>
