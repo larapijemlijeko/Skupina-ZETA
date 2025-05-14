@@ -4,6 +4,7 @@ from recipe_scrapers import scrape_me
 import controllers.index
 import controllers.prijava
 import controllers.recepti
+import controllers.oddajrecept
 import controllers.novice
 import controllers.kontakt
 import controllers.vprasanja
@@ -20,6 +21,10 @@ def home():
 @f_app.get('/recepti')
 def recepti():
     return controllers.recepti.recepti()
+
+@f_app.get('/oddajrecept')
+def oddajrecept():
+    return controllers.oddajrecept.oddajrecept()
 
 @f_app.route('/novice')
 def novice():

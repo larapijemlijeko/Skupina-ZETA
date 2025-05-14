@@ -423,15 +423,30 @@ body {
 }
 
 /* Recipe header with title and favourite button */
-.recipe-header {
+.recipes-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 }
 
-.recipe-header h2 {
+.recipes-header h2 {
   margin: 0;
+  text-align: left;
+}
+
+.submit-recipe-btn {
+  background-color: #ff7043;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.submit-recipe-btn:hover {
+  background-color: #e95e2f;
 }
 
 .favourite-btn {
@@ -505,5 +520,17 @@ body {
   
   .favourite-btn {
     align-self: flex-end;
+  }
+}
+
+@media (max-width: 600px) {
+  .recipes-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .submit-recipe-btn {
+    align-self: flex-start;
   }
 }

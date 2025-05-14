@@ -3,16 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DelishBites - Home</title>
+  <title>DelishBites - Recepti</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="recipes-page">
-
   {% include 'header.html' %}
-
   <main>
     <section class="section">
-      <h2>Recepti</h2>
+      <div class="recipes-header">
+        <h2>Recepti</h2>
+        <a href="/oddajrecept" class="submit-recipe-btn">📄 Oddaj svoj recept</a>
+      </div>
       <div class="recipes">
         <div class="card">
           <h3>Spaghetti Carbonara</h3>
@@ -30,18 +31,8 @@
       </div>
     </section>
   </main>
-
   <footer>
     &copy; 2025 DelishBites. All rights reserved.
   </footer>
-
-  <script>
-    // Naloži header.html v placeholder
-    fetch("/header.html")
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById("header-placeholder").innerHTML = data;
-      });
-  </script>
 </body>
 </html>
