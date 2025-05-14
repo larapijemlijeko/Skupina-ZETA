@@ -3,39 +3,35 @@ import os
 from datetime import datetime
 import db
 import psycopg2
+import csv
+from apscheduler.schedulers.background import BackgroundScheduler
+
+def initializeScheduler():
+    print('Starting backup scheduler')
+    scheduler = BackgroundScheduler()
+    # Run every hour, for example
+    scheduler.add_job(createBackup, 'interval', hours=1)
+    #scheduler.add_job(createBackup, 'interval', seconds=10) # For testing purposes only
+    scheduler.start()
 
 def createBackup():
-    # Database credentials (can come from .env or your app config)
-    db_name = os.environ["DBNAME"]
-    db_user = os.environ["DBUSER"]
-    db_host = "db"  # or 'localhost' or 'db' if running inside Docker
-    db_port = "5432"
-    db_pass = os.environ["DBPASS"]
+    print('Starting backup')
+    #Backup tabele uporabniki v csv
+    backupTableToCsv("uporabniki")
 
-    # Output file
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    backup_file = f"postgres_backup_{timestamp}.sql"
+    #Backup tabele recepti v csv
+    backupTableToCsv("recepti")
 
-    # Set password for pg_dump
-    env = os.environ.copy()
-    env["PGPASSWORD"] = db_pass
+    print('Backup done')
 
-    # Run pg_dump command
-    try:
-        subprocess.run(
-            [
-                "pg_dump",
-                "-h", db_host,
-                "-p", db_port,
-                "-U", db_user,
-                "-F", "c",          # custom format, you can use "plain" too
-                "-b",               # include blobs
-                "-f", backup_file,  # output file
-                db_name
-            ],
-            env=env,
-            check=True
-        )
-        print(f"Backup successful: {backup_file}")
-    except subprocess.CalledProcessError as e:
-        print("Backup failed:", e)
+        
+
+
+def backupTableToCsv(table_name):
+    conn = db.get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM public." + table_name)
+    with open(table_name + '_backup.csv', 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([desc[0] for desc in cursor.description])
+        writer.writerows(cursor.fetchall())
