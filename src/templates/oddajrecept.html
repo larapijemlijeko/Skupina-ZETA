@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <title>Oddaj recpet</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  {% include 'header.html' %}
+
+  <main>
+    <div class="container">
+    <h2>Oddaj svoj recept</h2>
+    <div>Veseli smo, da želite deliti svoje kulinarične mojstrovine z našo skupnostjo! Na DelishBites cenimo edinstvene recepte in osebne kuharske zgodbe. Vaš recept bo navdihnil druge kuharske navdušence in obogatil našo zbirko.</div>
+    <!-- Tukaj spodaj gre form za oddajo recepta -->
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 DelishBites. All rights reserved.
+  </footer>
+
+  <script>
+    // Naloži header.html v placeholder
+    fetch("/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+  </script>
+
+</body>
+</html>
