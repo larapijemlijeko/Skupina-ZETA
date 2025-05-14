@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from recipe_scrapers import scrape_me
-from models.zaBazo import create_tables
 
 import controllers.index
 import controllers.prijava
@@ -10,7 +9,6 @@ import controllers.vprasanja
 import controllers.registracija
 import controllers.pozabljenogeslo
 
-create_tables()
 f_app = Flask(__name__)
 
 

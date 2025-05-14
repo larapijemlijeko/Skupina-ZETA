@@ -38,41 +38,41 @@ def create_tables():
             );
         """)
 
-        # 3. Tabela za sestavine
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS sestavine (
-                id SERIAL PRIMARY KEY,
-                recept_id INTEGER NOT NULL REFERENCES recepti(id) ON DELETE CASCADE,
-                ime VARCHAR(50) NOT NULL,
-                kolicina VARCHAR(50),
-                enota VARCHAR(20)
-            );
-        """)
+        # # 3. Tabela za sestavine
+        # cur.execute("""
+        #     CREATE TABLE IF NOT EXISTS sestavine (
+        #         id SERIAL PRIMARY KEY,
+        #         recept_id INTEGER NOT NULL REFERENCES recepti(id) ON DELETE CASCADE,
+        #         ime VARCHAR(50) NOT NULL,
+        #         kolicina VARCHAR(50),
+        #         enota VARCHAR(20)
+        #     );
+        # """)
 
-        # 4. Tabela za oznake
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS oznake (
-                id SERIAL PRIMARY KEY,
-                recept_id INTEGER NOT NULL REFERENCES recepti(id) ON DELETE CASCADE,
-                oznaka VARCHAR(30) NOT NULL
-            );
-        """)
+        # # 4. Tabela za oznake
+        # cur.execute("""
+        #     CREATE TABLE IF NOT EXISTS oznake (
+        #         id SERIAL PRIMARY KEY,
+        #         recept_id INTEGER NOT NULL REFERENCES recepti(id) ON DELETE CASCADE,
+        #         oznaka VARCHAR(30) NOT NULL
+        #     );
+        # """)
 
-        # 5. Tabela za priljubljene (favourite)
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS favourite (
-                id SERIAL PRIMARY KEY,
-                title VARCHAR(50),
-                url VARCHAR(100),
-                uporabnik_id INTEGER REFERENCES uporabniki(id)
-            );
-        """)
+        # # 5. Tabela za priljubljene (favourite)
+        # cur.execute("""
+        #     CREATE TABLE IF NOT EXISTS favourite (
+        #         id SERIAL PRIMARY KEY,
+        #         title VARCHAR(50),
+        #         url VARCHAR(100),
+        #         uporabnik_id INTEGER REFERENCES uporabniki(id)
+        #     );
+        # """)
 
         conn.commit()
-        print("✅ Tabele so bile uspešno ustvarjene.")
+        print(" Tabele so bile uspešno ustvarjene.")
 
     except (psycopg2.Error, Exception) as e:
-        print(f"❌ Napaka pri ustvarjanju tabel: {e}")
+        print(f" Napaka pri ustvarjanju tabel: {e}")
         if conn:
             conn.rollback()
 
