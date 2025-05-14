@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <title>Kontakt</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  {% include 'header.html' %}
+
+  <main>
+    <div class="container">
+    <h2>Kontakt</h2>
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 DelishBites. All rights reserved.
+  </footer>
+
+  <script>
+    // Naloži header.html v placeholder
+    fetch("/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+  </script>
+
+</body>
+</html>

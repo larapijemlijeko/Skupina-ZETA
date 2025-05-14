@@ -6,6 +6,7 @@ import controllers.index
 import controllers.prijava
 import controllers.recepti
 import controllers.novice
+import controllers.kontakt
 import controllers.vprasanja
 import controllers.registracija
 import controllers.pozabljenogeslo
@@ -24,6 +25,10 @@ def recepti():
 @f_app.route('/novice')
 def novice():
     return controllers.novice.novice()
+
+@f_app.route('/kontakt')
+def kontakt():
+    return controllers.kontakt.kontakt()
     
 @f_app.route('/vprasanja')
 def vprasanja():
