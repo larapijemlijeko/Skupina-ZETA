@@ -1,12 +1,18 @@
+# src/models/zaBazo.py
+
 import db
+import psycopg2
 
 def create_tables():
+    """Ustvari vse potrebne tabele v bazi, če še ne obstajajo."""
     conn = None
     try:
         conn = db.get_connection()
         cur = conn.cursor()
-        print("dela")
-        # 1. Tabela za uporabnike (če še ne obstaja)
+
+        print("Vzpostavljena povezava z bazo.")
+
+        # 1. Tabela za uporabnike
         cur.execute("""
             CREATE TABLE IF NOT EXISTS uporabniki (
                 id SERIAL PRIMARY KEY,
@@ -14,10 +20,10 @@ def create_tables():
                 email VARCHAR(100) UNIQUE NOT NULL,
                 geslo VARCHAR(255) NOT NULL,
                 datum_registracije TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
+            );
         """)
-        
-        # 2. Tabela za recepte (z eno sliko)
+
+        # 2. Tabela za recepte
         cur.execute("""
             CREATE TABLE IF NOT EXISTS recepti (
                 id SERIAL PRIMARY KEY,
@@ -29,9 +35,9 @@ def create_tables():
                 slika_url VARCHAR(255),
                 uporabnik_id INTEGER REFERENCES uporabniki(id),
                 datum_kreiranja TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
+            );
         """)
-        
+
         # 3. Tabela za sestavine
         cur.execute("""
             CREATE TABLE IF NOT EXISTS sestavine (
@@ -40,35 +46,37 @@ def create_tables():
                 ime VARCHAR(50) NOT NULL,
                 kolicina VARCHAR(50),
                 enota VARCHAR(20)
-            )
+            );
         """)
-        
+
         # 4. Tabela za oznake
         cur.execute("""
             CREATE TABLE IF NOT EXISTS oznake (
                 id SERIAL PRIMARY KEY,
                 recept_id INTEGER NOT NULL REFERENCES recepti(id) ON DELETE CASCADE,
                 oznaka VARCHAR(30) NOT NULL
-            )
+            );
         """)
+
+        # 5. Tabela za priljubljene (favourite)
         cur.execute("""
-            CREATE TABLE IF NOT EXISTS favourite(
+            CREATE TABLE IF NOT EXISTS favourite (
                 id SERIAL PRIMARY KEY,
                 title VARCHAR(50),
                 url VARCHAR(100),
                 uporabnik_id INTEGER REFERENCES uporabniki(id)
-            )
+            );
         """)
-        
+
         conn.commit()
-        print("Tabele so bile uspešno ustvarjene.")
-    except Exception as e:
-        print(f"Napaka pri ustvarjanju tabel: {e}")
+        print("✅ Tabele so bile uspešno ustvarjene.")
+
+    except (psycopg2.Error, Exception) as e:
+        print(f"❌ Napaka pri ustvarjanju tabel: {e}")
         if conn:
             conn.rollback()
+
     finally:
         if conn:
             conn.close()
-
-# Pokličemo funkcijo za ustvarjanje tabel
-create_tables()
+            print("Povezava z bazo je zaprta.")
