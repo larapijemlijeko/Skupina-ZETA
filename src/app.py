@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from recipe_scrapers import scrape_me
 
-
 import controllers.index
 import controllers.prijava
 import controllers.recepti
@@ -11,8 +10,8 @@ import controllers.vprasanja
 import controllers.registracija
 import controllers.pozabljenogeslo
 
-
 f_app = Flask(__name__)
+
 
 @f_app.get('/')
 def home():
