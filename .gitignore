@@ -1,0 +1,12 @@
+# Python byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.env/
+.venv/
