@@ -66,3 +66,7 @@ def scrape():
         recipe_data = None
 
     return render_template('scraper.html', recipe=recipe_data)
+
+
+if __name__ == "__main__":
+    f_app.run(port=5000, debug=True)
