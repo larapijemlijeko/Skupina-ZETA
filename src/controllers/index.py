@@ -4,5 +4,6 @@ from models.dbBackup import initializeScheduler
 
 def home():
     create_tables()
+
     initializeScheduler()
     return render_template("index.html")

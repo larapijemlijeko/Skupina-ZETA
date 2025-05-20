@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from recipe_scrapers import scrape_me
-
+from controllers.admin import admin_bp
 import controllers.index
 import controllers.prijava
 import controllers.recepti
@@ -12,8 +12,7 @@ import controllers.registracija
 import controllers.pozabljenogeslo
 
 f_app = Flask(__name__)
-
-
+f_app.register_blueprint(admin_bp)
 @f_app.get('/')
 def home():
     return controllers.index.home()

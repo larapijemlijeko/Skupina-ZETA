@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Plošča</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+    <h1>🛠️ Admin Plošča</h1>
+    <form action="/admin/dodaj" method="get">
+        <button type="submit">➕ Dodaj testne podatke</button>
+    </form>
+    <form action="/admin/izbrisi_podatke" method="get">
+        <button type="submit">🗑️ Izbriši vse podatke</button>
+    </form>
+    <form action="/admin/izbrisi_tabele" method="get">
+        <button type="submit">💥 Izbriši vse tabele</button>
+    </form>
+</body>
+</html>
