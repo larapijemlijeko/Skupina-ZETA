@@ -67,6 +67,15 @@ def create_tables():
         #         uporabnik_id INTEGER REFERENCES uporabniki(id)
         #     );
         # """)
+        # # 6. Tabela za prijavo na nagradne igre
+        cur.execute("""
+           CREATE TABLE IF NOT EXISTS nagradne_prijave (
+            id SERIAL PRIMARY KEY,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            prijavljen_ob TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+             );
+            """)
+
 
         conn.commit()
         print(" Tabele so bile uspešno ustvarjene.")

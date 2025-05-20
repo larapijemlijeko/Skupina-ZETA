@@ -10,6 +10,8 @@ import controllers.kontakt
 import controllers.vprasanja
 import controllers.registracija
 import controllers.pozabljenogeslo
+import controllers.nagradneigre
+
 
 f_app = Flask(__name__)
 
@@ -67,6 +69,9 @@ def scrape():
 
     return render_template('scraper.html', recipe=recipe_data)
 
+@f_app.route("/nagradneigre", methods=["GET", "POST"])
+def nagradneigre():
+    return controllers.nagradneigre.nagradne_igre()
 
-if __name__ == "__main__":
-    f_app.run(port=5000, debug=True)
+
+#
