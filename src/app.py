@@ -12,10 +12,16 @@ import controllers.kontakt
 import controllers.vprasanja
 import controllers.registracija
 import controllers.pozabljenogeslo
+from models.zaBazo import create_tables
+from models.dbBackup import initializeScheduler
 
 f_app = Flask(__name__)
 f_app.register_blueprint(admin_bp)
 f_app.register_blueprint(recepti_bp)
+
+create_tables()
+
+initializeScheduler()
 
 @f_app.get('/')
 def home():
