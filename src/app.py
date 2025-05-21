@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from recipe_scrapers import scrape_me
 from controllers.admin import admin_bp
+from controllers.recepti import recepti_bp
+
 import controllers.index
 import controllers.prijava
 import controllers.recepti
@@ -13,13 +15,15 @@ import controllers.pozabljenogeslo
 
 f_app = Flask(__name__)
 f_app.register_blueprint(admin_bp)
+f_app.register_blueprint(recepti_bp)
+
 @f_app.get('/')
 def home():
     return controllers.index.home()
 
 @f_app.get('/recepti')
 def recepti():
-    return controllers.recepti.recepti()
+    return redirect(url_for('recepti.seznam_receptov'))
 
 @f_app.get('/oddajrecept')
 def oddajrecept():

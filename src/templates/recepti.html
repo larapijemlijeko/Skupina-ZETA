@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -15,24 +15,38 @@
         <a href="/oddajrecept" class="submit-recipe-btn">📄 Oddaj svoj recept</a>
       </div>
       <div class="recipes">
-        <div class="card">
-          <h3>Spaghetti Carbonara</h3>
-          <p>Creamy, savory, and ready in 20 minutes.</p>
-        </div>
-        <div class="card">
-          <h3>Classic Chicken Curry</h3>
-          <p>Aromatic and flavorful comfort food.</p>
-        </div>
-        <div class="card">
-          <h3>Vegan Tacos</h3>
-          <p>Fresh, healthy, and totally good food.</p>
-        </div>
-        <!-- Dodaš lahko več receptov -->
+        {% if recepti %}
+          {% for recept in recepti %}
+            <a href="{{ url_for('recepti.prikazi_recept', slug=recept.slug) }}" class="recipe-link">
+              <div class="card">
+                <div class="recipe-image-preview">
+                  {% if recept.slika_url %}
+                    <img src="{{ recept.slika_url }}" alt="{{ recept.naslov }}">
+                  {% else %}
+                    <img src="{{ url_for('static', filename='img/default-recipe.jpg') }}" alt="Privzeta slika">
+                  {% endif %}
+                </div>
+                <h3>{{ recept.naslov }}</h3>
+                <p>{{ recept.opis|truncate(100) }}</p>
+                <div class="recipe-time">
+                  {% if recept.cas_priprave %}
+                    <span>⏱️ {{ recept.cas_priprave }} min</span>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          <div class="no-recipes">
+            <p>Trenutno ni objavljenih receptov.</p>
+          </div>
+        {% endif %}
       </div>
     </section>
   </main>
+  
   <footer>
-    &copy; 2025 DelishBites. All rights reserved.
+    &copy; 2025 DelishBites. Vse pravice pridržane.
   </footer>
 </body>
 </html>
