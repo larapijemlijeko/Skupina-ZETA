@@ -44,8 +44,8 @@ def novice():
     return controllers.novice.novice()
 
 @f_app.route('/nakljucniRecepti')
-def novice():
-    return controllers.nakljucniRecepti.nakljucnirecept()
+def nakljucniRecepti():
+    return controllers.nakljucniRecepti.nakljucnirecepti()
 
 @f_app.route('/kontakt')
 def kontakt():
