@@ -4,7 +4,7 @@ import db
 import psycopg2
 
 # Uvoz funkcij za ustvarjanje tabel
-from . import uporabniki, recepti, sestavine, oznake, favourite, vsecki
+from . import uporabniki, recepti, sestavine, oznake, favourite, vsecki, nagradneigre
 
 def create_tables():
     """Ustvari vse potrebne tabele v bazi, če še ne obstajajo."""
@@ -15,14 +15,7 @@ def create_tables():
 
         print("Vzpostavljena povezava z bazo.")
 
-        # Tabela za prijave na nagradne igre (tvoj dodatek)
-        cur.execute("""
-            CREATE TABLE IF NOT EXISTS nagradne_prijave (
-                id SERIAL PRIMARY KEY,
-                email VARCHAR(255) UNIQUE NOT NULL,
-                prijavljen_ob TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        """)
+       
 
         # Klici funkcij iz posameznih modelov
         uporabniki.create_table(cur)
@@ -31,6 +24,7 @@ def create_tables():
         oznake.create_table(cur)
         favourite.create_table(cur)
         vsecki.create_table(cur)
+        nagradneigre.create_table(cur)
 
         conn.commit()
         print("Tabele so bile uspešno ustvarjene.")

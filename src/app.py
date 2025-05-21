@@ -73,5 +73,7 @@ def scrape():
 def nagradneigre():
     return controllers.nagradneigre.nagradne_igre()
 
+if __name__ == "__main__":
+    f_app.run(port=5000, debug=True)
 
 #
