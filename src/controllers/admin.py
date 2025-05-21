@@ -103,4 +103,6 @@ def izbrisi_tabele():
         cur.close()
         conn.close()
 
+
     return redirect(url_for('admin.admin_panel'))
+    
