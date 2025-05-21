@@ -12,6 +12,8 @@ import controllers.kontakt
 import controllers.vprasanja
 import controllers.registracija
 import controllers.pozabljenogeslo
+import controllers.anketa
+import controllers.nakljucniRecepti
 from models.zaBazo import create_tables
 from models.dbBackup import initializeScheduler
 
@@ -31,6 +33,8 @@ def home():
 def recepti():
     return redirect(url_for('recepti.seznam_receptov'))
 
+
+
 @f_app.route('/oddajrecept', methods=['GET', 'POST'])
 def oddajrecept():
     return controllers.oddajrecept.oddajrecept()
@@ -38,6 +42,10 @@ def oddajrecept():
 @f_app.route('/novice')
 def novice():
     return controllers.novice.novice()
+
+@f_app.route('/nakljucniRecepti')
+def novice():
+    return controllers.nakljucniRecepti.nakljucnirecept()
 
 @f_app.route('/kontakt')
 def kontakt():
@@ -58,6 +66,10 @@ def registracija():
 @f_app.route('/pozabljenogeslo')
 def pozabljenogeslo():
     return controllers.pozabljenogeslo.pozabljenogeslo()
+
+@f_app.route('/anketa')
+def anketa():
+    return controllers.anketa.anketa()
 
 @f_app.route('/scraper', methods=['GET', 'POST'])
 def scrape():
