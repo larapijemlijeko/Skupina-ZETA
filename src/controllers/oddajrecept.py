@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for
 import db
 import controllers.index
 def oddajrecept():
@@ -42,12 +42,10 @@ def oddajrecept():
                 """, (recept_id, oznaka))
 
             conn.commit()
-            flash("Recept uspešno dodan!")
             return controllers.index.home()  # Changed from index to home to match your main route
 
         except Exception as e:
             conn.rollback()
-            flash("Napaka pri dodajanju recepta.")
             print("Napaka:", e)
         finally:
             cur.close()
