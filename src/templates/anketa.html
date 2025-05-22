@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anketni vprašalnik o hrani</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function submitVote() {
+            const results = [];
+            const questions = ['foodAnswer1', 'foodAnswer2', 'foodAnswer3'];
+
+            for (const question of questions) {
+                const options = document.getElementsByName(question);
+                let selectedOption = null;
+
+                for (const option of options) {
+                    if (option.checked) {
+                        selectedOption = option.value;
+                        break;
+                    }
+                }
+
+                if (selectedOption) {
+                    results.push(selectedOption);
+                } else {
+                    results.push('Prosimo, izberite en odgovor.');
+                }
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = results.map((result, index) => `Vprašanje ${index + 1}: ${result}`).join('<br>');
+        }
+    </script>
+</head>
+<body>
+    {% include 'header.html' %}
+    <h1>Anketa o hrani</h1>
+    <form>
+        <h2>1. Katera je vaša najljubša vrsta hrane?</h2>
+        <input type="radio" id="option1-1" name="foodAnswer1" value="Italijanska hrana">
+        <label for="option1-1">Italijanska hrana</label><br>
+        <input type="radio" id="option1-2" name="foodAnswer1" value="Kitajska hrana">
+        <label for="option1-2">Kitajska hrana</label><br>
+        <input type="radio" id="option1-3" name="foodAnswer1" value="Mehiška hrana">
+        <label for="option1-3">Mehiška hrana</label><br>
+
+        <h2>2. Katera je vaša najljubša pijača?</h2>
+        <input type="radio" id="option2-1" name="foodAnswer2" value="Voda">
+        <label for="option2-1">Voda</label><br>
+        <input type="radio" id="option2-2" name="foodAnswer2" value="Sok">
+        <label for="option2-2">Sok</label><br>
+        <input type="radio" id="option2-3" name="foodAnswer2" value="Kava">
+        <label for="option2-3">Kava</label><br>
+
+        <h2>3. Katera je vaša najljubša sladica?</h2>
+        <input type="radio" id="option3-1" name="foodAnswer3" value="Torta">
+        <label for="option3-1">Torta</label><br>
+        <input type="radio" id="option3-2" name="foodAnswer3" value="Sladoled">
+        <label for="option3-2">Sladoled</label><br>
+        <input type="radio" id="option3-3" name="foodAnswer3" value="Sadna solata">
+        <label for="option3-3">Sadna solata</label><br><br>
+
+        <button type="button" onclick="submitVote()">Glasuj</button>
+    </form>
+    <div id="result"></div>
+</body>
+</html>

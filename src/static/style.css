@@ -650,3 +650,183 @@ body {
 }
 
 
+/* ========== Recept - Podrobno stran ========== */
+
+.recipe-detail h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.recipe-meta {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.recipe-time,
+.recipe-date {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.recipe-description {
+  margin: 20px 0;
+  font-size: 16px;
+  color: #444;
+}
+
+.recipe-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.recipe-ingredients ul {
+  padding-left: 20px;
+}
+
+.recipe-ingredients li {
+  margin-bottom: 5px;
+}
+
+.instructions {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
+.recipe-author {
+  margin-top: 40px;
+  font-style: italic;
+  font-size: 14px;
+  color: #555;
+}
+
+.translate-section {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.translate-section span {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* ========== Recepti seznam (recepti.html) ========== */
+
+.recipe-link {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.recipe-link:hover .card {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+}
+
+.recipe-image-preview {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.recipe-image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.card p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.no-recipes {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  margin-top: 30px;
+}
+
+#quiz-widget {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  background: white;
+  border: 2px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  padding: 15px;
+  display: none;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#quiz-widget.visible {
+  opacity: 1;
+}
+
+#quiz-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 1001;
+}
+
+.quiz-option {
+  display: block;
+  margin: 8px 0;
+}
+
+#quiz-result {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#next-button, #reset-button {
+  margin-top: 10px;
+  display: none;
+  margin-right: 8px;
+}
+
+#progress-container {
+  height: 8px;
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+#progress-bar {
+  height: 100%;
+  background-color: #007BFF;
+  width: 0%;
+  transition: width 0.3s ease;
+}

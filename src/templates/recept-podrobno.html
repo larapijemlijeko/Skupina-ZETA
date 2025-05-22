@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DelishBites - {{ recept.naslov }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% include 'header.html' %}
+  <main>
+    <section class="section recipe-detail">
+      <div class="recipe-header">
+        <h1>{{ recept.naslov }}</h1>
+        <div class="recipe-meta">
+          {% if recept.cas_priprave %}
+            <span class="recipe-time">⏱️ {{ recept.cas_priprave }} min</span>
+          {% endif %}
+          {% if recept.datum_kreiranja %}
+            <span class="recipe-date">📅 {{ recept.datum_kreiranja }}</span>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="recipe-image">
+        {% if recept.slika_url %}
+          <img src="{{ recept.slika_url }}" alt="{{ recept.naslov }}">
+        {% else %}
+          <img src="{{ url_for('static', filename='img/default-recipe.jpg') }}" alt="Privzeta slika">
+        {% endif %}
+      </div>
+
+      <div class="recipe-description">
+        <p>{{ recept.opis }}</p>
+      </div>
+
+      <div class="recipe-content">
+        <div class="recipe-ingredients">
+          <h2>Sestavine</h2>
+          {% if recept.sestavine and recept.sestavine|length > 0 %}
+            <ul>
+              {% for sestavina in recept.sestavine %}
+                <li>{{ sestavina }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>Za ta recept sestavine niso navedene.</p>
+          {% endif %}
+        </div>
+
+        <div class="recipe-instructions">
+          <h2>Postopek priprave</h2>
+          {% if recept.postopek %}
+            <div class="instructions">{{ recept.postopek|safe }}</div>
+          {% else %}
+            <p>Za ta recept postopek ni naveden.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if recept.avtor %}
+        <div class="recipe-author">
+          <p>Avtor: {{ recept.avtor }}</p>
+        </div>
+      {% endif %}
+      
+      <div class="translate-section">
+        <span>Translate page</span>
+        <div id="google_translate_element"></div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 DelishBites. Vse pravice pridržane.
+  </footer>
+
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'sl'}, 'google_translate_element');
+    }
+  </script>
+  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

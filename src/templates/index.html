@@ -10,6 +10,7 @@
 
   {% include 'header.html' %}
 
+
   <main>
     <section class="section">
       <h2>Featured Recipes</h2>
@@ -42,6 +43,7 @@
       </div>
     </section>
 
+<<<<<<< HEAD
     <!-- Gumb za prikaz modala -->
     <div style="text-align:center; margin-top: 20px;">
       <button onclick="openModal()" class="modal-btn">Prijavi se na nagradno igro</button>
@@ -70,6 +72,19 @@
       {% endif %}
     {% endwith %}
 
+=======
+    <button id="quiz-button" title="Take Quiz">❓</button>
+
+    <div id="quiz-widget">
+      <div id="progress-container"><div id="progress-bar"></div></div>
+      <div id="quiz-question"></div>
+      <div id="quiz-options"></div>
+      <button onclick="submitQuiz()">Submit</button>
+      <button id="next-button" onclick="nextQuestion()">Next</button>
+      <button id="reset-button" onclick="resetQuiz()">Reset</button>
+      <div id="quiz-result"></div>
+    </div>
+>>>>>>> 5996517b5951d75d7cd89e3e6e85e24f48e025ec
   </main>
 
   <footer>
@@ -88,6 +103,7 @@
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <script>
+<<<<<<< HEAD
     function openModal() {
       document.getElementById('nagradaModal').classList.add('show');
     }
@@ -95,6 +111,125 @@
     function closeModal() {
       document.getElementById('nagradaModal').classList.remove('show');
     }
+=======
+    // Naloži header.html v placeholder
+    fetch("/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+
+    const quizData = [
+    {
+      question: "What is the capital of France?",
+      options: ["London", "Berlin", "Paris", "Rome"],
+      answer: "Paris"
+    },
+    {
+      question: "Which planet is known as the Red Planet?",
+      options: ["Earth", "Mars", "Jupiter", "Saturn"],
+      answer: "Mars"
+    },
+    {
+      question: "What is the largest ocean on Earth?",
+      options: ["Atlantic", "Indian", "Arctic", "Pacific"],
+      answer: "Pacific"
+    }
+  ];
+
+  let currentQuestion = 0;
+  let score = 0;
+
+  const quizButton = document.getElementById("quiz-button");
+  const quizWidget = document.getElementById("quiz-widget");
+  const quizQuestion = document.getElementById("quiz-question");
+  const quizOptions = document.getElementById("quiz-options");
+  const quizResult = document.getElementById("quiz-result");
+  const nextButton = document.getElementById("next-button");
+  const resetButton = document.getElementById("reset-button");
+  const progressBar = document.getElementById("progress-bar");
+
+  quizButton.addEventListener("click", () => {
+    if (quizWidget.style.display === "block") {
+      quizWidget.classList.remove("visible");
+      setTimeout(() => quizWidget.style.display = "none", 300);
+    } else {
+      quizWidget.style.display = "block";
+      setTimeout(() => quizWidget.classList.add("visible"), 10);
+      if (currentQuestion === 0) loadQuestion();
+    }
+  });
+
+  function loadQuestion() {
+    const q = quizData[currentQuestion];
+    quizQuestion.textContent = q.question;
+    quizOptions.innerHTML = "";
+    quizResult.textContent = "";
+    nextButton.style.display = "none";
+    resetButton.style.display = "none";
+
+    q.options.forEach(opt => {
+      const label = document.createElement("label");
+      label.className = "quiz-option";
+      label.innerHTML = `<input type="radio" name="quiz" value="${opt}"> ${opt}`;
+      quizOptions.appendChild(label);
+    });
+
+    updateProgress();
+  }
+
+  function submitQuiz() {
+    const selected = document.querySelector('input[name="quiz"]:checked');
+    if (!selected) {
+      quizResult.textContent = "Please select an answer.";
+      quizResult.style.color = "black";
+      return;
+    }
+
+    const isCorrect = selected.value === quizData[currentQuestion].answer;
+    quizResult.textContent = isCorrect ? "✅ Correct!" : `❌ Incorrect. Answer: ${quizData[currentQuestion].answer}`;
+    quizResult.style.color = isCorrect ? "green" : "red";
+
+    if (isCorrect) score++;
+
+    nextButton.style.display = "inline-block";
+  }
+
+  function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion < quizData.length) {
+      fadeToNextQuestion(loadQuestion);
+    } else {
+      fadeToNextQuestion(() => {
+        quizQuestion.textContent = `🎉 Quiz complete!`;
+        quizOptions.innerHTML = "";
+        quizResult.innerHTML = `Your score: <strong>${score}/${quizData.length}</strong>`;
+        nextButton.style.display = "none";
+        resetButton.style.display = "inline-block";
+        updateProgress();
+      });
+    }
+  }
+
+  function resetQuiz() {
+    currentQuestion = 0;
+    score = 0;
+    fadeToNextQuestion(loadQuestion);
+  }
+
+  function updateProgress() {
+    const percent = Math.min((currentQuestion / quizData.length) * 100, 100);
+    progressBar.style.width = `${percent}%`;
+  }
+
+  function fadeToNextQuestion(callback) {
+    quizWidget.classList.remove("visible");
+    setTimeout(() => {
+      callback();
+      quizWidget.classList.add("visible");
+    }, 300);
+  }
+>>>>>>> 5996517b5951d75d7cd89e3e6e85e24f48e025ec
   </script>
 
 </body>

@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from recipe_scrapers import scrape_me
 from controllers.admin import admin_bp
+from controllers.recepti import recepti_bp
+
 import controllers.index
 import controllers.prijava
 import controllers.recepti
@@ -10,6 +12,7 @@ import controllers.kontakt
 import controllers.vprasanja
 import controllers.registracija
 import controllers.pozabljenogeslo
+<<<<<<< HEAD
 import controllers.nagradneigre
 
 
@@ -18,6 +21,20 @@ f_app.register_blueprint(admin_bp)
 
 f_app.secret_key = "mojaTajnaVrednost123"  
 
+=======
+import controllers.anketa
+import controllers.nakljucniRecepti
+from models.zaBazo import create_tables
+from models.dbBackup import initializeScheduler
+
+f_app = Flask(__name__)
+f_app.register_blueprint(admin_bp)
+f_app.register_blueprint(recepti_bp)
+
+create_tables()
+
+initializeScheduler()
+>>>>>>> 5996517b5951d75d7cd89e3e6e85e24f48e025ec
 
 @f_app.get('/')
 def home():
@@ -25,15 +42,21 @@ def home():
 
 @f_app.get('/recepti')
 def recepti():
-    return controllers.recepti.recepti()
+    return redirect(url_for('recepti.seznam_receptov'))
 
-@f_app.get('/oddajrecept')
+
+
+@f_app.route('/oddajrecept', methods=['GET', 'POST'])
 def oddajrecept():
     return controllers.oddajrecept.oddajrecept()
 
 @f_app.route('/novice')
 def novice():
     return controllers.novice.novice()
+
+@f_app.route('/nakljucniRecepti')
+def nakljucniRecepti():
+    return controllers.nakljucniRecepti.nakljucnirecepti()
 
 @f_app.route('/kontakt')
 def kontakt():
@@ -54,6 +77,10 @@ def registracija():
 @f_app.route('/pozabljenogeslo')
 def pozabljenogeslo():
     return controllers.pozabljenogeslo.pozabljenogeslo()
+
+@f_app.route('/anketa')
+def anketa():
+    return controllers.anketa.anketa()
 
 @f_app.route('/scraper', methods=['GET', 'POST'])
 def scrape():

@@ -8,16 +8,7 @@
 </head>
 <body class="faq-page">
 
-  <header>
-    <h1>DelishBites</h1>
-    <nav>
-      <a href="/">Domov</a>
-      <a href="/recepti">Recepti</a>
-      <a href="/novice">Novice</a>
-      <a href="/vprasanja">Pogosta vprašanja</a>
-      <a href="/prijava">Prijava</a>
-    </nav>
-  </header>
+  {% include 'header.html' %}
 
   <main>
     <div class="faq-container">
@@ -67,6 +58,13 @@
         }
       });
     });
+
+    // Naloži header.html v placeholder
+    fetch("/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
   </script>
 
 </body>

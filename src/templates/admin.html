@@ -21,5 +21,15 @@
     <form action="/admin/izbrisi_tabele" method="get">
         <button type="submit">💥 Izbriši vse tabele</button>
     </form>
+
+    <script>
+    // Naloži header.html v placeholder
+    fetch("/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("header-placeholder").innerHTML = data;
+      });
+    </script>
+  
 </body>
 </html>

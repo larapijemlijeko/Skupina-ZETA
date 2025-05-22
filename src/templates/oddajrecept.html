@@ -4,6 +4,19 @@
   <meta charset="UTF-8">
   <title>Oddaj recpet</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script>
+        function dodajSestavino() {
+            const container = document.getElementById("sestavine");
+            const html = `
+                <div class="sestavina">
+                    <label>Ime:</label><input type="text" name="sestavina_ime[]" required>
+                    <label>Količina:</label><input type="text" name="sestavina_kolicina[]">
+                    <label>Enota:</label><input type="text" name="sestavina_enota[]">
+                    <hr>
+                </div>`;
+            container.insertAdjacentHTML("beforeend", html);
+        }
+    </script>
 </head>
 <body>
 
@@ -13,7 +26,41 @@
     <div class="container">
     <h2>Oddaj svoj recept</h2>
     <div>Veseli smo, da želite deliti svoje kulinarične mojstrovine z našo skupnostjo! Na DelishBites cenimo edinstvene recepte in osebne kuharske zgodbe. Vaš recept bo navdihnil druge kuharske navdušence in obogatil našo zbirko.</div>
-    <!-- Tukaj spodaj gre form za oddajo recepta -->
+    <form method="post" action="/oddajrecept">
+        <label>Naslov:</label><br>
+        <input type="text" name="naslov" required><br><br>
+
+        <label>Opis:</label><br>
+        <textarea name="opis"></textarea><br><br>
+
+        <label>Priprava:</label><br>
+        <textarea name="priprava" required></textarea><br><br>
+
+        <label>Čas priprave (min):</label><br>
+        <input type="number" name="cas_priprave"><br><br>
+
+        <label>Težavnost (1-5):</label><br>
+        <input type="number" name="tezavnost" min="1" max="5"><br><br>
+
+        <label>URL slike:</label><br>
+        <input type="text" name="slika_url"><br><br>
+
+        <h3>Sestavine</h3>
+        <div id="sestavine">
+            <div class="sestavina">
+                <label>Ime:</label><input type="text" name="sestavina_ime[]" required>
+                <label>Količina:</label><input type="text" name="sestavina_kolicina[]">
+                <label>Enota:</label><input type="text" name="sestavina_enota[]">
+                <hr>
+            </div>
+        </div>
+        <button type="button" onclick="dodajSestavino()">+ Dodaj še eno sestavino</button><br><br>
+
+        <label>Oznaka:</label><br>
+        <input type="text" name="oznaka"><br><br>
+
+        <button type="submit">Shrani recept</button>
+    </form>
     </div>
   </main>
 
