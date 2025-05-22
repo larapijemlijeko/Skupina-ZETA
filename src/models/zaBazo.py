@@ -17,7 +17,7 @@ def create_tables():
 
        
 
-        # Klici funkcij iz posameznih modelov
+        # Ustvari tabele
         uporabniki.create_table(cur)
         recepti.create_table(cur)
         sestavine.create_table(cur)

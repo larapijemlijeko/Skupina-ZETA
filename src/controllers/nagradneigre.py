@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, flash
+from flask import Blueprint, request, redirect, flash
 import db
 
 bp_nagradneigre = Blueprint("nagradneigre", __name__)
@@ -16,5 +16,6 @@ def nagradne_igre():
                 flash("Uspešno si se prijavil na nagradno igro!", "success")
             except Exception as e:
                 flash("Napaka: Ta e-mail je morda že prijavljen.", "danger")
-        return redirect("/nagradneigre")
-    return render_template("nagradneigre.html")
+            return redirect("/")
+    return redirect("/")
+

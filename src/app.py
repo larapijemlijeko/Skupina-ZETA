@@ -15,6 +15,8 @@ import controllers.nagradneigre
 
 f_app = Flask(__name__)
 
+f_app.secret_key = "mojaTajnaVrednost123"  # <-- DODAJ TO!
+
 
 @f_app.get('/')
 def home():
@@ -73,7 +75,6 @@ def scrape():
 def nagradneigre():
     return controllers.nagradneigre.nagradne_igre()
 
-if __name__ == "__main__":
-    f_app.run(port=5000, debug=True)
+
 
 #
