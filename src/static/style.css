@@ -535,6 +535,121 @@ body {
   }
 }
 
+/* === Nagradna igra - animacija in stil modala === */
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+#nagradaModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px; /* popravljeno */
+  height: 100vh;
+  background-color: white;
+  box-shadow: -4px 0 12px rgba(0,0,0,0.2);
+  padding: 30px;
+  z-index: 9999;
+  animation: slideInRight 0.6s ease-out;
+  box-sizing: border-box;
+}
+
+
+#nagradaModal h3 {
+  margin-top: 0;
+}
+
+#nagradaModal form input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  margin: 15px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#nagradaModal form input[type="submit"] {
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+}
+
+#nagradaModal form input[type="submit"]:hover {
+  background-color: #e95e2f;
+}
+
+#nagradaModal .close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Pokaži modal, ko ima razred .show */
+#nagradaModal.show {
+  display: block;
+}
+
+.flash-messages {
+  list-style: none;
+  padding: 10px 20px;
+  margin: 20px auto;
+  max-width: 500px;
+}
+
+.flash-messages li {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.flash-messages li.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.flash-messages li.danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.modal-btn {
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease;
+}
+
+.modal-btn:hover {
+  background-color: #e95e2f;
+}
+
+
 /* ========== Recept - Podrobno stran ========== */
 
 .recipe-detail h1 {

@@ -1,8 +1,8 @@
 import db
 import psycopg2
 
-# Uvoz funkcij za ustvarjanje posameznih tabel
-from . import uporabniki, recepti, sestavine, oznake, favourite, vsecki
+# Uvoz funkcij za ustvarjanje tabel
+from . import uporabniki, recepti, sestavine, oznake, favourite, vsecki, nagradneigre, scraped
 
 def create_tables():
     """Ustvari vse potrebne tabele v bazi, če še ne obstajajo."""
@@ -12,6 +12,8 @@ def create_tables():
         cur = conn.cursor()
         print("Vzpostavljena povezava z bazo.")
 
+       
+
         # Ustvari tabele
         uporabniki.create_table(cur)
         recepti.create_table(cur)
@@ -19,6 +21,9 @@ def create_tables():
         oznake.create_table(cur)
         favourite.create_table(cur)
         vsecki.create_table(cur)
+        nagradneigre.create_table(cur)
+        scraped.create_table(cur)
+
 
         conn.commit()
         print("Tabele so bile uspešno ustvarjene.")
