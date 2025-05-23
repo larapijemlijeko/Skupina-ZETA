@@ -24,7 +24,7 @@
     <div class="recipe-card">
       <div class="recipe-header">
         <h2>{{ recipe.title }}</h2>
-        <button type="button" class="favourite-btn">❤️ Favourite</button>
+        <button type="button" class="favourite-btn" onclick="addToFavorites()">❤️ Favourite</button>
       </div>
       
       <div class="recipe-container">
@@ -62,14 +62,32 @@
     &copy; 2025 DelishBites. All rights reserved.
   </footer>
 
-  <script>
-    // Naloži header.html v placeholder
-    fetch("/header.html")
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById("header-placeholder").innerHTML = data;
-      });
-  </script>
+  
+<script>
+function addToFavorites() {
+  const recipe = {
+    title: "{{ recipe.title }}",
+    url: "{{ recipe.url }}"
+  };
+
+  fetch('/add_favorites', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ recipe: recipe })
+  })
+  .then(response => response.json())
+  .then(data => {
+    alert(data.message);
+  })
+  .catch(error => {
+    console.error("Error saving recipe:", error);
+    alert("Failed to save recipe.");
+  });
+}
+</script>
+
 
 </body>
 </html>

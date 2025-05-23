@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from recipe_scrapers import scrape_me
 from controllers.admin import admin_bp
 from controllers.recepti import recepti_bp
+import db
 
 import controllers.index
 import controllers.prijava
@@ -12,18 +13,12 @@ import controllers.kontakt
 import controllers.vprasanja
 import controllers.registracija
 import controllers.pozabljenogeslo
-import controllers.anketa
-import controllers.nakljucniRecepti
-from models.zaBazo import create_tables
-from models.dbBackup import initializeScheduler
 
 f_app = Flask(__name__)
+f_app.secret_key = "dev"  # Add a secret key if sessions are used
+
 f_app.register_blueprint(admin_bp)
 f_app.register_blueprint(recepti_bp)
-
-create_tables()
-
-initializeScheduler()
 
 @f_app.get('/')
 def home():
@@ -33,19 +28,13 @@ def home():
 def recepti():
     return redirect(url_for('recepti.seznam_receptov'))
 
-
-
-@f_app.route('/oddajrecept', methods=['GET', 'POST'])
+@f_app.get('/oddajrecept')
 def oddajrecept():
     return controllers.oddajrecept.oddajrecept()
 
 @f_app.route('/novice')
 def novice():
     return controllers.novice.novice()
-
-@f_app.route('/nakljucniRecepti')
-def nakljucniRecepti():
-    return controllers.nakljucniRecepti.nakljucnirecepti()
 
 @f_app.route('/kontakt')
 def kontakt():
@@ -67,27 +56,89 @@ def registracija():
 def pozabljenogeslo():
     return controllers.pozabljenogeslo.pozabljenogeslo()
 
-@f_app.route('/anketa')
-def anketa():
-    return controllers.anketa.anketa()
-
 @f_app.route('/scraper', methods=['GET', 'POST'])
 def scrape():
+    recipe_data = None
+    error = None
+
     if request.method == 'POST':
-        url = request.form['url']
-        scraper = scrape_me(url)
-        recipe_data = {
-            'title': scraper.title(),
-            'url': url,
-            'ingredients': scraper.ingredients(),
-            'instructions': scraper.instructions(),
-            'image_url': scraper.image(),
-        }
-    else:
-        recipe_data = None
+        try:
+            url = request.form['url']
+            scraper = scrape_me(url)
 
-    return render_template('scraper.html', recipe=recipe_data)
+            title = scraper.title()
+            ingredients = scraper.ingredients()
+            instructions = scraper.instructions()
+            image_url = scraper.image()
 
+            if not title:
+                raise ValueError("Recipe title could not be extracted.")
+
+            recipe_data = {
+                'title': title,
+                'url': url,
+                'ingredients': ingredients,
+                'instructions': instructions,
+                'image_url': image_url
+            }
+        except Exception as e:
+            error = f"Failed to scrape the recipe: {str(e)}"
+
+    return render_template('scraper.html', recipe=recipe_data, error=error)
+
+@f_app.route('/add_favorites', methods=['POST'])
+def favorite_scraped():
+    data = request.get_json()
+    recipe = data.get('recipe')
+
+    if not recipe or 'title' not in recipe or 'url' not in recipe:
+        return jsonify({'status': 'error', 'message': 'Invalid recipe data'}), 400
+
+    # Tukaj uporabi pravi user ID iz sessiona, za test lahko daš 1
+    uporabnik_id = session.get('uporabnik_id', 1)
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("""
+            INSERT INTO scraped (uporabnik_id, naslov, url)
+            VALUES (%s, %s, %s)
+            ON CONFLICT (uporabnik_id, url) DO NOTHING;
+        """, (uporabnik_id, recipe['title'], recipe['url']))
+        conn.commit()
+        return jsonify({'status': 'success', 'message': 'Scraped recipe saved!'})
+    except Exception as e:
+        conn.rollback()
+        print("DB Error:", e)
+        return jsonify({'status': 'error', 'message': 'Failed to save recipe.'}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+@f_app.route('/scraped')
+def view_scraped():
+    uporabnik_id = session.get('uporabnik_id', 1) 
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("""
+            SELECT naslov, url, datum_shranjevanja
+            FROM scraped
+            WHERE uporabnik_id = %s
+            ORDER BY datum_shranjevanja DESC
+        """, (uporabnik_id,))
+        scraped_recipes = cur.fetchall()
+    except Exception as e:
+        print("DB Error:", e)
+        scraped_recipes = []
+    finally:
+        cur.close()
+        conn.close()
+
+    return render_template('scraped.html', recipes=scraped_recipes)
 
 if __name__ == "__main__":
     f_app.run(port=5000, debug=True)

@@ -10,3 +10,4 @@ psycopg2-binary==2.9.10
 Werkzeug==3.1.3
 recipe-scrapers
 apscheduler==3.11.0
+

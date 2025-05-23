@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Strgani Recepti - DelishBites</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  {% include 'header.html' %}
+
+  <main>
+    <section class="section">
+      <h2>🗂️ Moji strgani recepti</h2>
+      {% if recipes %}
+      <div class="recipes">
+        {% for recipe in recipes %}
+        <div class="card">
+          <h3><a href="{{ recipe.url }}" target="_blank">{{ recipe.naslov }}</a></h3>
+          <p>📅 Shranjeno: {{ recipe.datum_shranjevanja.strftime('%d. %m. %Y ob %H:%M') }}</p>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>Ni še nobenega strganega recepta. Obišči <a href="{{ url_for('scrape') }}">strgalnik</a> in shrani svoj prvi recept!</p>
+      {% endif %}
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 DelishBites. All rights reserved.
+  </footer>
+
+</body>
+</html>
