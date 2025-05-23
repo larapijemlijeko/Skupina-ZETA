@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Strgani Recepti - DelishBites</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -15,10 +15,10 @@
       <h2>🗂️ Moji strgani recepti</h2>
       {% if recipes %}
       <div class="recipes">
-        {% for recipe in recipes %}
+        {% for naslov, url, datum_shranjevanja in recipes %}
         <div class="card">
-          <h3><a href="{{ recipe.url }}" target="_blank">{{ recipe.naslov }}</a></h3>
-          <p>📅 Shranjeno: {{ recipe.datum_shranjevanja.strftime('%d. %m. %Y ob %H:%M') }}</p>
+          <h3><a href="{{ url }}" target="_blank">{{ naslov }}</a></h3>
+          <p>📅 Shranjeno: {{ datum_shranjevanja.strftime('%d. %m. %Y ob %H:%M') }}</p>
         </div>
         {% endfor %}
       </div>

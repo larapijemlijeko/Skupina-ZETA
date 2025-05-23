@@ -74,20 +74,86 @@ def scrape():
     error = None
 
     if request.method == 'POST':
-        url = request.form['url']
-        scraper = scrape_me(url)
-        recipe_data = {
-            'title': scraper.title(),
-            'url': url,
-            'ingredients': scraper.ingredients(),
-            'instructions': scraper.instructions(),
-            'image_url': scraper.image(),
-        }
-    else:
-        recipe_data = None
+        try:
+            url = request.form['url']
+            scraper = scrape_me(url)
 
-    return render_template('scraper.html', recipe=recipe_data)
+            title = scraper.title()
+            ingredients = scraper.ingredients()
+            instructions = scraper.instructions()
+            image_url = scraper.image()
 
+            if not title:
+                raise ValueError("Recipe title could not be extracted.")
+
+            recipe_data = {
+                'title': title,
+                'url': url,
+                'ingredients': ingredients,
+                'instructions': instructions,
+                'image_url': image_url
+            }
+        except Exception as e:
+            error = f"Failed to scrape the recipe: {str(e)}"
+
+    return render_template('scraper.html', recipe=recipe_data, error=error)
+
+@f_app.route('/add_favorites', methods=['POST'])
+def favorite_scraped():
+    data = request.get_json()
+    recipe = data.get('recipe')
+
+    if not recipe or 'title' not in recipe or 'url' not in recipe:
+        return jsonify({'status': 'error', 'message': 'Invalid recipe data'}), 400
+
+    uporabnik_id = 1  # FIXED user ID, ker še nimaš login sistema
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("""
+            INSERT INTO scraped (uporabnik_id, naslov, url)
+            VALUES (%s, %s, %s)
+            ON CONFLICT (uporabnik_id, url) DO NOTHING;
+        """, (
+            uporabnik_id,
+            recipe['title'],
+            recipe['url']
+        ))
+        conn.commit()
+        return jsonify({'status': 'success', 'message': 'Scraped recipe saved!'})
+    except Exception as e:
+        conn.rollback()
+        print("DB Error:", e)
+        return jsonify({'status': 'error', 'message': 'Failed to save recipe.'}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+@f_app.route('/scraped')
+def view_scraped():
+    uporabnik_id = 1  # FIXED user ID
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+
+    try:
+        cur.execute("""
+            SELECT naslov, url, datum_shranjevanja
+            FROM scraped
+            WHERE uporabnik_id = %s
+            ORDER BY datum_shranjevanja DESC
+        """, (uporabnik_id,))
+        scraped_recipes = cur.fetchall()
+    except Exception as e:
+        print("DB Error:", e)
+        scraped_recipes = []
+    finally:
+        cur.close()
+        conn.close()
+
+    return render_template('scraped.html', recipes=scraped_recipes)
 
 if __name__ == "__main__":
     f_app.run(port=5000, debug=True)

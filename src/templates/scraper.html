@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Strgalnik</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -30,7 +30,7 @@
       <div class="recipe-container">
         <div class="recipe-image">
           {% if recipe.image_url %}
-          <img src="{{ recipe.image_url }}" alt="Recipe image">
+          <img src="{{ recipe.image_url }}" alt="Recipe image" />
           {% endif %}
         </div>
         
@@ -61,23 +61,25 @@
   <footer>
     &copy; 2025 DelishBites. All rights reserved.
   </footer>
-
   
 <script>
 function addToFavorites() {
   const recipe = {
-    title: "{{ recipe.title }}",
-    url: "{{ recipe.url }}"
+    title: "{{ recipe.title | e }}",
+    url: "{{ recipe.url | e }}"
   };
 
   fetch('/add_favorites', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ recipe: recipe })
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error("Network response was not OK");
+    }
+    return response.json();
+  })
   .then(data => {
     alert(data.message);
   })
@@ -87,7 +89,6 @@ function addToFavorites() {
   });
 }
 </script>
-
 
 </body>
 </html>
