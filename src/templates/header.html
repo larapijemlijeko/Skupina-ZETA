@@ -11,3 +11,100 @@
     <a href="/anketa">Anketa</a>
   </nav>
 </header>
+
+<!-- TIMER KONTROLE -->
+<div class="timer-controls">
+  <input type="text" id="timer-input" placeholder="vpišite čas v minutah" />
+  <button id="start-btn">Start</button>
+  <button id="stop-btn">Stop</button>
+  <button id="reset-btn">Reset</button>
+
+  <div class="timer-status">
+  <span>Ostane še: <span id="nav-timer">0</span></span>
+</div>
+</div>
+
+
+
+<style>
+  .timer-controls {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 10px;
+  }
+
+  .timer-controls input,
+  .timer-controls button {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    background-color: #f6f6f6;
+  }
+
+  .timer-controls input {
+    width: 180px;
+  }
+
+  .timer-status {
+    margin-left: 20px;
+    font-size: 16px;
+  }
+</style>
+
+<script>
+  let startCountdown = 0;
+  let countSeconds = 0;
+  let displayMinutes = 0;
+  let displaySeconds = 0
+  let active = false;
+
+  const timerElement = document.getElementById('nav-timer');
+  const startButton = document.getElementById('start-btn');
+  const stopButton = document.getElementById('stop-btn');
+  const resetButton = document.getElementById('reset-btn');
+  const timerInput = document.getElementById('timer-input');
+
+  setInterval(() => {
+    if (active) {
+      countSeconds--;
+      countMinutes = Math.ceil(countSeconds / 60);
+      displayMinutes = Math.floor(countSeconds / 60)
+      displaySeconds = countSeconds - (displayMinutes * 60) 
+      //timerElement.textContent = countSeconds;
+      // Pokazi timer v minutah
+      timerElement.textContent = `${displayMinutes} min ${displaySeconds} sek`;
+      if (countSeconds <= 0) {
+        active = false;
+      }
+    }
+  }, 1000);
+
+  startButton.addEventListener('click', () => {
+    active = true;
+    if (countSeconds <= 0) {
+      const inputMinutes = parseInt(timerInput.value);
+      if (!isNaN(inputMinutes) && inputMinutes > 0) {
+        startCountdown = inputMinutes * 60;
+        countSeconds = startCountdown;
+      } else {
+        alert("Vnesite veljavno število minut.");
+        active = false;
+      }
+    }
+  });
+
+  stopButton.addEventListener('click', () => {
+    active = false;
+  });
+
+  resetButton.addEventListener('click', () => {
+    active = false;
+    countSeconds = 0;
+    timerElement.textContent = countSeconds;
+    timerInput.value = '';
+  });
+</script>

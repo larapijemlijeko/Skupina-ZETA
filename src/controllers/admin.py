@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for
+from models.dbBackup import createBackup
 import db
 
 admin_bp = Blueprint('admin', __name__)
@@ -105,4 +106,10 @@ def izbrisi_tabele():
 
 
     return redirect(url_for('admin.admin_panel'))
-    
+
+@admin_bp.route('/admin/backup_podatki')
+def backup_podatki():
+    createBackup()
+
+    return redirect(url_for('admin.admin_panel'))
+       
