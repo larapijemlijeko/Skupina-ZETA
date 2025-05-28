@@ -40,7 +40,7 @@ def home():
 def recepti():
     return redirect(url_for('recepti.seznam_receptov'))
 
-@f_app.get('/oddajrecept')
+@f_app.route('/oddajrecept', methods=['GET', 'POST'])
 def oddajrecept():
     return controllers.oddajrecept.oddajrecept()
 

@@ -55,9 +55,15 @@
             </div>
         </div>
         <button type="button" onclick="dodajSestavino()">+ Dodaj še eno sestavino</button><br><br>
+        <label for="oznaka">Oznaka (letni čas):</label><br>
+        <select name="oznaka" id="oznaka">
+          <option value="">-- izberi --</option>
+          <option value="poletni">Poletni</option>
+          <option value="zimski">Zimski</option>
+          <option value="jesenski">Jesenski</option>
+          <option value="spomladanski">Spomladanski</option>
+        </select><br><br>
 
-        <label>Oznaka:</label><br>
-        <input type="text" name="oznaka"><br><br>
 
         <button type="submit">Shrani recept</button>
     </form>
