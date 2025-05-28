@@ -12,16 +12,19 @@
     <section class="section recipe-detail">
       <div class="recipe-header">
         <h1>{{ recept.naslov }}</h1>
-        <div class="recipe-meta">
-          {% if recept.cas_priprave %}
-            <span class="recipe-time">⏱️ {{ recept.cas_priprave }} min</span>
-          {% endif %}
-          {% if recept.datum_kreiranja %}
-            <span class="recipe-date">📅 {{ recept.datum_kreiranja }}</span>
-          {% endif %}
+        <div class="recipe-actions">
+          <button class="like-btn">👍 Všeč mi je</button>
+          <button class="dislike-btn">👎 Ni mi všeč</button>
         </div>
       </div>
-
+      <div class="recipe-meta">
+        {% if recept.cas_priprave %}
+          <span class="recipe-time">⏱️ {{ recept.cas_priprave }} min</span>
+        {% endif %}
+        {% if recept.datum_kreiranja %}
+          <span class="recipe-date">📅 {{ recept.datum_kreiranja }}</span>
+        {% endif %}
+      </div>
       <div class="recipe-image">
         {% if recept.slika_url %}
           <img src="{{ recept.slika_url }}" alt="{{ recept.naslov }}">

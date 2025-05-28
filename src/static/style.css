@@ -830,3 +830,28 @@ body {
   width: 0%;
   transition: width 0.3s ease;
 }
+
+.like-btn,
+.dislike-btn {
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.like-btn:hover {
+  background-color: #e95e2f;
+}
+
+.dislike-btn {
+  background-color: #aaa;
+}
+
+.dislike-btn:hover {
+  background-color: #888;
+}
