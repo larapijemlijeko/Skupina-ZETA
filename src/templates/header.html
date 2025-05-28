@@ -20,11 +20,14 @@
   <button id="reset-btn">Reset</button>
 
   <div class="timer-status">
-  <span>Ostane še: <span id="nav-timer">0</span></span>
-</div>
+    <span>Ostane še: <span id="nav-timer">0</span></span>
+  </div>
 </div>
 
-
+<!-- DODANO SPOROČILO O ZAKLJUČKU -->
+<p id="timer-finished-msg" style="display: none; color: red; font-weight: bold; text-align: center; margin-top: 10px;">
+  Čas kuhanja je potekel!
+</p>
 
 <style>
   .timer-controls {
@@ -59,7 +62,7 @@
   let startCountdown = 0;
   let countSeconds = 0;
   let displayMinutes = 0;
-  let displaySeconds = 0
+  let displaySeconds = 0;
   let active = false;
 
   const timerElement = document.getElementById('nav-timer');
@@ -67,18 +70,17 @@
   const stopButton = document.getElementById('stop-btn');
   const resetButton = document.getElementById('reset-btn');
   const timerInput = document.getElementById('timer-input');
+  const finishedMsg = document.getElementById('timer-finished-msg');
 
   setInterval(() => {
     if (active) {
       countSeconds--;
-      countMinutes = Math.ceil(countSeconds / 60);
-      displayMinutes = Math.floor(countSeconds / 60)
-      displaySeconds = countSeconds - (displayMinutes * 60) 
-      //timerElement.textContent = countSeconds;
-      // Pokazi timer v minutah
+      displayMinutes = Math.floor(countSeconds / 60);
+      displaySeconds = countSeconds - (displayMinutes * 60);
       timerElement.textContent = `${displayMinutes} min ${displaySeconds} sek`;
       if (countSeconds <= 0) {
         active = false;
+        finishedMsg.style.display = 'block'; // pokaži sporočilo
       }
     }
   }, 1000);
@@ -90,6 +92,7 @@
       if (!isNaN(inputMinutes) && inputMinutes > 0) {
         startCountdown = inputMinutes * 60;
         countSeconds = startCountdown;
+        finishedMsg.style.display = 'none'; // skrij sporočilo, če je bilo prej vidno
       } else {
         alert("Vnesite veljavno število minut.");
         active = false;
@@ -104,7 +107,11 @@
   resetButton.addEventListener('click', () => {
     active = false;
     countSeconds = 0;
-    timerElement.textContent = countSeconds;
+    timerElement.textContent = '0';
     timerInput.value = '';
+    finishedMsg.style.display = 'none'; // skrij sporočilo
   });
 </script>
+
+
+
