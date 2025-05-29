@@ -14,26 +14,15 @@
     <div class="faq-container">
       <h2 class="faq-title">Pogosta vprašanja</h2>
 
-      <div class="faq-item">
-        <div class="faq-question">Kako lahko dodam svoj recept?</div>
-        <div class="faq-answer">
-          Recept lahko dodaš prek svojega profila po prijavi. Klikni na "Dodaj recept" in sledi navodilom.
+      {% for question, answer in faq_items %}
+        <div class="faq-item">
+          <div class="faq-question">{{ question }}</div>
+          <div class="faq-answer" style="display: none;">{{ answer }}</div>
         </div>
-      </div>
+      {% else %}
+        <p>Trenutno ni nobenih vprašanj v bazi.</p>
+      {% endfor %}
 
-      <div class="faq-item">
-        <div class="faq-question">Ali lahko uporabljam recepte brez registracije?</div>
-        <div class="faq-answer">
-          Da, vse recepte lahko gledaš brez prijave. Za dodajanje in shranjevanje priljubljenih pa se moraš registrirati.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question">Ali so recepti preverjeni?</div>
-        <div class="faq-answer">
-          Vsi recepti so pregledani s strani urednikov in ocenjeni s strani skupnosti.
-        </div>
-      </div>
     </div>
   </main>
 
