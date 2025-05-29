@@ -29,10 +29,10 @@ def dodaj_testne_podatke():
 
         # Podatki za 4 recepte
         recepti = [
-            ("Testni recept 1", "Opis 1", "Navodila 1", 15, 1, "", "Sol", "1", "žlička", "Testna1"),
-            ("Testni recept 2", "Opis 2", "Navodila 2", 25, 2, "", "Poper", "2", "žlički", "Testna2"),
-            ("Testni recept 3", "Opis 3", "Navodila 3", 30, 3, "", "Moka", "100", "g", "Testna3"),
-            ("Testni recept 4", "Opis 4", "Navodila 4", 10, 1, "", "Voda", "2", "dl", "Testna4"),
+            ("Testni recept 1", "Opis Testni recept 1", "Navodila za pripravo Testni recept 1", 15, 1, "", "soli", "1", "žlička", "Testna1"),
+            ("Testni recept 2", "Opis Testni recept 2", "Navodila za pripravo Testni recept 2", 25, 2, "", "popra", "2", "žlički", "Testna2"),
+            ("Testni recept 3", "Opis Testni recept 3", "Navodila za pripravo Testni recept 3", 30, 3, "", "moke", "100", "g", "Testna3"),
+            ("Testni recept 4", "Opis Testni recept 4", "Navodila za pripravo Testni recept 4", 10, 1, "", "vode", "2", "dl", "Testna4"),
         ]
 
         for naslov, opis, priprava, cas, tezavnost, slika, sest_ime, kolicina, enota, oznaka in recepti:

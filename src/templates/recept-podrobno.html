@@ -22,7 +22,17 @@
           <span class="recipe-time">⏱️ {{ recept.cas_priprave }} min</span>
         {% endif %}
         {% if recept.datum_kreiranja %}
-          <span class="recipe-date">📅 {{ recept.datum_kreiranja }}</span>
+          <span class="recipe-date">📅 {{ recept.datum_kreiranja.strftime("%-d. %-m. %Y ob %H:%M") }}</span>
+        {% endif %}
+        {% if recept.tezavnost %}
+          <span class="recipe-difficulty">
+            Težavnost: 🍳{{ '🍳' * (recept.tezavnost | int - 1) }}
+          </span>
+        {% endif %}
+        {% if recept.oznake %}
+          {% for oznaka in recept.oznake %}
+            <span class="recipe-tag">🏷️ {{ oznaka }}</span>
+          {% endfor %}
         {% endif %}
       </div>
       <div class="recipe-image">
@@ -53,8 +63,8 @@
 
         <div class="recipe-instructions">
           <h2>Postopek priprave</h2>
-          {% if recept.postopek %}
-            <div class="instructions">{{ recept.postopek|safe }}</div>
+          {% if recept.priprava %}
+            <div class="instructions">{{ recept.priprava|safe }}</div>
           {% else %}
             <p>Za ta recept postopek ni naveden.</p>
           {% endif %}
