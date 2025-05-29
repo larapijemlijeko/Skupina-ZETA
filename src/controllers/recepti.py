@@ -117,12 +117,18 @@ def prikazi_recept(slug):
 
                 # Pridobi sestavine
                 cur.execute("""
-                    SELECT ime, kolicina, enota
+                    SELECT ime, kolicina, enota, st_oseb
                     FROM sestavine
                     WHERE recept_id = %s
                 """, (recept_data['id'],))
                 sestavine = cur.fetchall()
-                recept_data['sestavine'] = [f"{kolicina} {enota} {ime}" for ime, kolicina, enota in sestavine]
+                # Shranimo število oseb (če obstaja vsaj ena sestavina z navedenim številom oseb)
+                if sestavine and sestavine[0][3] is not None:
+                    recept_data['st_oseb'] = sestavine[0][3]
+                else:
+                    recept_data['st_oseb'] = None
+                recept_data['sestavine'] = [f"{kolicina} {enota} {ime}" for ime, kolicina, enota, _ in sestavine]
+
 
                 # Pridobi oznake
                 cur.execute("""
@@ -145,7 +151,6 @@ def prikazi_recept(slug):
     finally:
         cur.close()
         conn.close()
-
 
 def ustvari_slug(naslov):
     """Ustvari URL-friendly slug iz naslova recepta"""

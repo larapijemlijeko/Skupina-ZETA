@@ -26,12 +26,13 @@ def oddajrecept():
             imena = request.form.getlist("sestavina_ime[]")
             kolicine = request.form.getlist("sestavina_kolicina[]")
             enote = request.form.getlist("sestavina_enota[]")
+            osebe = request.form.getlist("st_oseb")
 
-            for ime, kolicina, enota in zip(imena, kolicine, enote):
+            for ime, kolicina, enota, st_oseb in zip(imena, kolicine, enote, osebe):
                 cur.execute("""
-                    INSERT INTO sestavine (recept_id, ime, kolicina, enota)
-                    VALUES (%s, %s, %s, %s);
-                """, (recept_id, ime, kolicina, enota))
+                    INSERT INTO sestavine (recept_id, ime, kolicina, enota, st_oseb)
+                    VALUES (%s, %s, %s, %s, %s);
+                """, (recept_id, ime, kolicina, enota, st_oseb))
 
             # --- oznaka ---
             oznaka = request.form.get("oznaka", "").strip()

@@ -65,17 +65,23 @@
       </div>
 
       <div class="recipe-content">
-        <div class="recipe-ingredients">
-          <h2>Sestavine</h2>
-          {% if recept.sestavine and recept.sestavine|length > 0 %}
-            <ul>
-              {% for sestavina in recept.sestavine %}
-                <li>{{ sestavina }}</li>
-              {% endfor %}
-            </ul>
-          {% else %}
-            <p>Za ta recept sestavine niso navedene.</p>
-          {% endif %}
+          <div class="recipe-ingredients">
+            <h2>
+              Sestavine
+              {% if recept.st_oseb %}
+                za {{ recept.st_oseb }} {{ '👤' if recept.st_oseb == 1 else '👥' }}
+              {% endif %}
+            </h2>
+            {% if recept.sestavine and recept.sestavine|length > 0 %}
+              <ul>
+                {% for sestavina in recept.sestavine %}
+                  <li>{{ sestavina }}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>Za ta recept sestavine niso navedene.</p>
+            {% endif %}
+          </div>
         </div>
 
         <div class="recipe-instructions">
@@ -102,7 +108,7 @@
   </main>
   <footer>
     &copy; 2025 DelishBites. Vse pravice pridržane.
-  </footer>
+  </footer> 
 
   <script type="text/javascript">
     function googleTranslateElementInit() {
