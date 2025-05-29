@@ -41,6 +41,10 @@ def home():
 def recepti():
     return redirect(url_for('recepti.seznam_receptov'))
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> c64c010 (Moje lokalne spremembe)
 @f_app.route('/oddajrecept', methods=['GET', 'POST'])
 def oddajrecept():
     return controllers.oddajrecept.oddajrecept()
@@ -83,6 +87,24 @@ def scrape():
             ingredients = scraper.ingredients()
             instructions = scraper.instructions()
             image_url = scraper.image()
+<<<<<<< HEAD
+=======
+
+            if not title:
+                raise ValueError("Recipe title could not be extracted.")
+
+            recipe_data = {
+                'title': title,
+                'url': url,
+                'ingredients': ingredients,
+                'instructions': instructions,
+                'image_url': image_url
+            }
+        except Exception as e:
+            error = f"Failed to scrape the recipe: {str(e)}"
+
+    return render_template('scraper.html', recipe=recipe_data, error=error)
+>>>>>>> c64c010 (Moje lokalne spremembe)
 
             if not title:
                 raise ValueError("Recipe title could not be extracted.")
@@ -107,6 +129,7 @@ def recepti_po_regiji(ime_regije):
     return svetovna_kuhinja.recepti_po_regiji(ime_regije)
 
 
+<<<<<<< HEAD
 >>>>>>> c613293 (Dodana svetovna kuhinja: HTML in controller)
 
     return render_template('scraper.html', recipe=recipe_data, error=error)
@@ -151,6 +174,15 @@ def view_scraped():
     conn = db.get_connection()
     cur = conn.cursor()
 
+=======
+@f_app.route('/scraped')
+def view_scraped():
+    uporabnik_id = 1  # FIXED user ID
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+
+>>>>>>> c64c010 (Moje lokalne spremembe)
     try:
         cur.execute("""
             SELECT naslov, url, datum_shranjevanja
