@@ -8,6 +8,23 @@
 </head>
 <body>
   {% include 'header.html' %}
+  <!-- TIMER KONTROLE -->
+  <div class="timer-controls">
+    <input type="text" id="timer-input" placeholder="vpišite čas v minutah" />
+    <button id="start-btn">Start</button>
+    <button id="stop-btn">Stop</button>
+    <button id="reset-btn">Reset</button>
+
+    <div class="timer-status">
+      <span>Ostane še: <span id="nav-timer">0</span></span>
+    </div>
+  </div>
+
+  <!-- DODANO SPOROČILO O ZAKLJUČKU -->
+  <p id="timer-finished-msg" style="display: none; color: red; font-weight: bold; text-align: center; margin-top: 10px;">
+    Čas kuhanja je potekel!
+  </p>
+
   <main>
     <section class="section recipe-detail">
       <div class="recipe-header">
@@ -93,5 +110,59 @@
     }
   </script>
   <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  <script>
+    let startCountdown = 0;
+    let countSeconds = 0;
+    let displayMinutes = 0;
+    let displaySeconds = 0;
+    let active = false;
+
+    const timerElement = document.getElementById('nav-timer');
+    const startButton = document.getElementById('start-btn');
+    const stopButton = document.getElementById('stop-btn');
+    const resetButton = document.getElementById('reset-btn');
+    const timerInput = document.getElementById('timer-input');
+    const finishedMsg = document.getElementById('timer-finished-msg');
+
+    setInterval(() => {
+      if (active) {
+        countSeconds--;
+        displayMinutes = Math.floor(countSeconds / 60);
+        displaySeconds = countSeconds - (displayMinutes * 60);
+        timerElement.textContent = `${displayMinutes} min ${displaySeconds} sek`;
+        if (countSeconds <= 0) {
+          active = false;
+          finishedMsg.style.display = 'block'; // pokaži sporočilo
+        }
+      }
+    }, 1000);
+
+    startButton.addEventListener('click', () => {
+      active = true;
+      if (countSeconds <= 0) {
+        const inputMinutes = parseInt(timerInput.value);
+        if (!isNaN(inputMinutes) && inputMinutes > 0) {
+          startCountdown = inputMinutes * 60;
+          countSeconds = startCountdown;
+          finishedMsg.style.display = 'none'; // skrij sporočilo, če je bilo prej vidno
+        } else {
+          alert("Vnesite veljavno število minut.");
+          active = false;
+        }
+      }
+    });
+
+    stopButton.addEventListener('click', () => {
+      active = false;
+    });
+
+    resetButton.addEventListener('click', () => {
+      active = false;
+      countSeconds = 0;
+      timerElement.textContent = '0';
+      timerInput.value = '';
+      finishedMsg.style.display = 'none'; // skrij sporočilo
+    });
+  </script>
 </body>
 </html>

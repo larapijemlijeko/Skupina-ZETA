@@ -961,3 +961,30 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.timer-controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  margin: 20px auto;
+  max-width: 600px;
+  padding: 10px;
+}
+
+.timer-controls input,
+.timer-controls button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  background-color: #f6f6f6;
+}
+
+.timer-controls input {
+  width: 180px;
+}
+
+.timer-status {
+  margin-left: 20px;
+  font-size: 16px; 
+}
