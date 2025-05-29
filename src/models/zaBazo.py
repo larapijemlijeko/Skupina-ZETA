@@ -2,12 +2,7 @@ import db
 import psycopg2
 
 # Uvoz funkcij za ustvarjanje tabel
-<<<<<<< HEAD
 from . import uporabniki, recepti, sestavine, oznake, favourite, vsecki, nagradneigre, scraped, faq, nagradnaigra, zakalorije, regija
-=======
-from . import uporabniki, recepti, sestavine, oznake, favourite, vsecki, nagradneigre, regije
-
->>>>>>> c613293 (Dodana svetovna kuhinja: HTML in controller)
 
 def create_tables():
     """Ustvari vse potrebne tabele v bazi, če še ne obstajajo."""
@@ -27,16 +22,11 @@ def create_tables():
         favourite.create_table(cur)
         vsecki.create_table(cur)
         nagradneigre.create_table(cur)
-<<<<<<< HEAD
         scraped.create_table(cur)
         faq.create_faq_table(cur)
         nagradnaigra.create_table(cur)
         zakalorije.create_user_data_table(cur)
         regija.create_table(cur)
-=======
-        regije.create_table(cur)
-
->>>>>>> c613293 (Dodana svetovna kuhinja: HTML in controller)
 
         conn.commit()
         print("Tabele so bile uspešno ustvarjene.")
