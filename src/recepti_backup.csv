@@ -1,1 +1,12 @@
+<<<<<<< HEAD
 id,naslov,opis,priprava,cas_priprave,tezavnost,slika_url,uporabnik_id,datum_kreiranja
+=======
+id,naslov,opis,priprava,cas_priprave,tezavnost,slika_url,uporabnik_id,datum_kreiranja
+3,Testni recept,To je testni recept za regijo Europe,"Sestavine: krompir, jajce. Navodila: vse skuhaj.",30,,https://example.com/testna-slika.jpg,,2025-05-27 12:22:20.895353
+4,Testni recept,To je testni recept za regijo Europe,"Sestavine: krompir, jajce. Navodila: vse skuhaj.",30,,https://example.com/testna-slika.jpg,,2025-05-27 12:23:29.263457
+5,Testni recept,To je testni recept za regijo Europe,"Sestavine: krompir, jajce. Navodila: vse skuhaj.",30,,https://example.com/testna-slika.jpg,,2025-05-27 12:24:45.429086
+6,Testni recept,To je testni recept za regijo Europe,"Sestavine: krompir, jajce. Navodila: vse skuhaj.",30,,https://example.com/testna-slika.jpg,,2025-05-27 12:24:54.049025
+8,Testni recept,To je testni recept za regijo Europe,"Sestavine: krompir, jajce. Navodila: vse skuhaj.",30,,https://example.com/testna-slika.jpg,,2025-05-27 12:26:51.863108
+10,Testni recept,To je testni recept za regijo Europe,"Sestavine: krompir, jajce. Navodila: vse skuhaj.",30,,https://example.com/testna-slika.jpg,,2025-05-27 12:28:35.368481
+11,Testni recept,To je testni recept za regijo Europe,"Sestavine: krompir, jajce. Navodila: vse skuhaj.",30,,https://example.com/testna-slika.jpg,,2025-05-27 12:28:54.798976
+>>>>>>> c613293 (Dodana svetovna kuhinja: HTML in controller)

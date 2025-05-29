@@ -788,6 +788,7 @@ body {
   transition: width 0.3s ease;
 }
 
+<<<<<<< HEAD
 /*Posamezni recept - LIKE IN DISLIKE GUMB*/
 .like-btn,
 .dislike-btn {
@@ -991,3 +992,122 @@ body {
   margin-left: 20px;
   font-size: 16px; 
 }
+=======
+/* ========== Interaktivna mapa: stil za SVG in izpis regije ========== */
+
+#map-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  overflow: visible; /* ← to prepreči rezanje pri kontejnerju */
+}
+
+svg {
+  width: 100%;
+  height: auto;
+  max-height: none;
+  display: block;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+
+
+
+svg path {
+  cursor: pointer;
+  transition: fill 0.3s ease;
+}
+
+svg path:hover {
+  fill: #cccccc;
+}
+
+.selected {
+  fill: #ff7043 !important; /* Delish Bites oranžna */
+}
+
+.region-highlight {
+  fill: #ffe0d1 !important; /* svetlejša oranžna za ostale države v regiji */
+}
+
+#output {
+  margin-top: 30px;
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #444;
+  text-align: center;
+}
+
+/* Zoom gumbi */
+.zoom-buttons {
+  text-align: center;
+  margin: 10px 0 20px;
+}
+
+.zoom-buttons button {
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin: 0 5px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.zoom-buttons button:hover {
+  background-color: #e95e2f;
+}
+
+/* ========== Odzivna velikost mape na manjših napravah ========== */
+
+@media (max-width: 768px) {
+  svg {
+    max-height: 400px;
+  }
+
+  #output {
+    font-size: 1.1em;
+  }
+
+  .zoom-buttons button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}
+
+
+/* ========== Dodatne izboljšave za interaktivno mapo ========== */
+
+.recipe-list {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff4ec;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.recipe-item {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.recipe-item h3 {
+  color: #ff7043;
+  margin-bottom: 8px;
+}
+
+.recipe-item p {
+  margin: 0;
+  color: #444;
+  font-size: 14px;
+}
+
+
+
+
+>>>>>>> c613293 (Dodana svetovna kuhinja: HTML in controller)

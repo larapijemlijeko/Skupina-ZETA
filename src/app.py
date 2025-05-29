@@ -18,6 +18,7 @@ import controllers.anketa
 import controllers.nakljucniRecepti
 from models.zaBazo import create_tables
 from models.dbBackup import initializeScheduler
+from controllers import svetovna_kuhinja
 
 
 
@@ -86,6 +87,7 @@ def scrape():
             if not title:
                 raise ValueError("Recipe title could not be extracted.")
 
+<<<<<<< HEAD
             recipe_data = {
                 'title': title,
                 'url': url,
@@ -95,6 +97,17 @@ def scrape():
             }
         except Exception as e:
             error = f"Failed to scrape the recipe: {str(e)}"
+=======
+@f_app.route("/svetovnakuhinjamapa")
+def svetovnakuhinjamapa():
+    return render_template("svetovnakuhinjamapa.html")
+
+@f_app.route("/recepti/regija/<ime_regije>")
+def recepti_po_regiji(ime_regije):
+    return svetovna_kuhinja.recepti_po_regiji(ime_regije)
+
+
+>>>>>>> c613293 (Dodana svetovna kuhinja: HTML in controller)
 
     return render_template('scraper.html', recipe=recipe_data, error=error)
 
