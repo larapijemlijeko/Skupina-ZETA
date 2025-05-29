@@ -8,13 +8,14 @@
 </head>
 <body class="recipes-page">
   {% include 'header.html' %}
-  <main>
-    <section class="section">
+  <main class="recipes-layout">
+    <div class="main-content">
       <div class="recipes-header">
         <h2>Recepti</h2>
         <a href="/oddajrecept" class="submit-recipe-btn">📄 Oddaj svoj recept</a>
       </div>
-      <div class="recipes">
+
+      <div class="recipe-grid">
         {% if recepti %}
           {% for recept in recepti %}
             <a href="{{ url_for('recepti.prikazi_recept', slug=recept.slug) }}" class="recipe-link">
@@ -42,7 +43,52 @@
           </div>
         {% endif %}
       </div>
-    </section>
+    </div>
+
+    <aside class="filter-sidebar">
+      <h3>Filtri</h3>
+
+      <div class="filter-section">
+        <h4>Tip jedi</h4>
+        <div class="filter-tags">
+          <span>Mesne</span>
+          <span>Zelenjavne</span>
+          <span>Testenine</span>
+          <span>Sladice</span>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <h4>Čas kuhanja</h4>
+        <div class="filter-tags">
+          <span>do 30 min</span>
+          <span>30 do 60 min</span>
+          <span>več kot 60 min</span>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <h4>Težavnost</h4>
+        <div class="filter-tags">
+          <span>🍳</span>
+          <span>🍳🍳</span>
+          <span>🍳🍳🍳</span>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <h4>Sezonskost</h4>
+        <div class="filter-tags">
+          <span>Pomlad</span>
+          <span>Poletje</span>
+          <span>Jesen</span>
+          <span>Zima</span>
+        </div>
+      </div>
+
+      <!-- Lahko se doda še več filtrov -->
+
+    </aside>
   </main>
   
   <footer>
