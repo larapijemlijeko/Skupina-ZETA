@@ -490,6 +490,7 @@ body {
   background-color: #f0f0f0;
   border-radius: 8px;
   padding: 15px;
+  margin-bottom: 15px;
 }
 
 .scraper-page ul, 
@@ -840,8 +841,9 @@ body {
   transition: transform 0.2s ease;
 }
 
-.no-recipes {
-  text-align: center;
+.no-recipes,
+.no-faq {
+  text-align: center; 
   color: #888;
   font-style: italic;
 }
@@ -988,8 +990,9 @@ body {
   margin-left: 20px;
   font-size: 16px; 
 }
-/* ========== Interaktivna mapa: stil za SVG in izpis regije ========== */
 
+/* ==================== svetovnakuhinjamapa.html ====================*/
+/* ========== Interaktivna mapa: stil za SVG in izpis regije ========== */
 #map-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -1006,9 +1009,6 @@ svg {
   margin: 0 auto;
   overflow: visible;
 }
-
-
-
 
 svg path {
   cursor: pointer;
@@ -1101,7 +1101,4 @@ svg path:hover {
   color: #444;
   font-size: 14px;
 }
-
-
-
 

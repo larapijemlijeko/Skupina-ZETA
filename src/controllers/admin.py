@@ -53,7 +53,7 @@ def dodaj_testne_podatke():
                 VALUES (%s, %s);
             """, (recept_id, oznaka))
 
-         # ➕ DODAJ VPRAŠANJA V TABELA FAQ
+        # DODAJ VPRAŠANJA V TABELO FAQ
         faq_data = [
             ("Kako lahko dodam svoj recept?", "Za dodajanje recepta se prijavite in kliknite 'Oddaj recept'."),
             ("Ali lahko uporabljam recepte brez registracije?", "Da, brskanje po receptih je omogočeno tudi brez prijave."),

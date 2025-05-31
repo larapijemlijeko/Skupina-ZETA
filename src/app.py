@@ -57,6 +57,10 @@ def kontakt():
 def vprasanja():
     return controllers.vprasanja.vprasanja()
 
+@f_app.route('/anketa')
+def anketa():
+    return controllers.anketa.anketa()
+
 @f_app.route('/prijava')
 def prijava():
     return controllers.prijava.prijava()
