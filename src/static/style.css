@@ -435,7 +435,9 @@ body {
   text-align: left;
 }
 
-.submit-recipe-btn {
+.submit-recipe-btn,
+.scrape-btn,
+.podprte-strani-btn {
   background-color: #ff7043;
   color: white;
   text-decoration: none;
@@ -491,6 +493,27 @@ body {
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 15px;
+}
+
+.ingredients {
+  width: 50px;  
+  height: 28px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin: 0 8px;
+  background-color: white;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.ingredients:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
 .scraper-page ul, 

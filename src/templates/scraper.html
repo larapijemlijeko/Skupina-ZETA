@@ -14,10 +14,10 @@
     <h2>🔍 Scrape a Recipe</h2>
     <form method="post" action="/scraper">
       <input type="text" name="url" placeholder="Paste a recipe URL..." required>
-      <button type="submit">Scrape</button>
+      <button type="submit" class="scrape-btn">Scrape</button>
     </form>
     <a href="{{ url_for('static', filename='podprteStrani.txt') }}" target="_blank" class="supported-sites-btn">
-        <button type="button">📄 Podprte strani</button>
+        <button type="button" class="podprte-strani-btn">📄 Podprte strani</button>
     </a>
 
     {% if recipe %}

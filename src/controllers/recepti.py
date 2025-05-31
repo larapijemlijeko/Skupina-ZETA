@@ -122,12 +122,27 @@ def prikazi_recept(slug):
                     WHERE recept_id = %s
                 """, (recept_data['id'],))
                 sestavine = cur.fetchall()
-                # Shranimo število oseb (če obstaja vsaj ena sestavina z navedenim številom oseb)
-                if sestavine and sestavine[0][3] is not None:
-                    recept_data['st_oseb'] = sestavine[0][3]
-                else:
-                    recept_data['st_oseb'] = None
-                recept_data['sestavine'] = [f"{kolicina} {enota} {ime}" for ime, kolicina, enota, _ in sestavine]
+
+                # Funkcija za varno pretvorbo količine
+                def format_kolicina(kolicina):
+                    try:
+                        return float(kolicina)
+                    except:
+                        return 0.0
+
+                # Obdelaj sestavine za JS logiko
+                surovine = []
+                for ime, kolicina, enota, st_oseb in sestavine:
+                    surovina = {
+                        'ime': ime,
+                        'kolicina': format_kolicina(kolicina),
+                        'enota': enota,
+                        'st_oseb': st_oseb or 1
+                    }
+                    surovine.append(surovina)
+
+                recept_data['surovine'] = surovine
+                recept_data['st_oseb'] = surovine[0]['st_oseb'] if surovine else 1  # Vzemi iz prve sestavine
 
 
                 # Pridobi oznake

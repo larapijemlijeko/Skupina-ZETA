@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, url_for
 import db
 import controllers.index
+
 def oddajrecept():
     if request.method == "POST":
         conn = db.get_connection()
@@ -26,13 +27,14 @@ def oddajrecept():
             imena = request.form.getlist("sestavina_ime[]")
             kolicine = request.form.getlist("sestavina_kolicina[]")
             enote = request.form.getlist("sestavina_enota[]")
-            osebe = request.form.getlist("st_oseb")
+            st_oseb = request.form.get("st_oseb", 1)  # default 1 če ni podano
 
-            for ime, kolicina, enota, st_oseb in zip(imena, kolicine, enote, osebe):
-                cur.execute("""
-                    INSERT INTO sestavine (recept_id, ime, kolicina, enota, st_oseb)
-                    VALUES (%s, %s, %s, %s, %s);
-                """, (recept_id, ime, kolicina, enota, st_oseb))
+            for ime, kolicina, enota in zip(imena, kolicine, enote):
+                if ime.strip():  # preveri da ime ni prazno
+                    cur.execute("""
+                        INSERT INTO sestavine (recept_id, ime, kolicina, enota, st_oseb)
+                        VALUES (%s, %s, %s, %s, %s);
+                    """, (recept_id, ime, kolicina, enota, st_oseb))
 
             # --- oznaka ---
             oznaka = request.form.get("oznaka", "").strip()
@@ -43,11 +45,15 @@ def oddajrecept():
                 """, (recept_id, oznaka))
 
             conn.commit()
-            return controllers.index.home()  # Changed from index to home to match your main route
+            print("Recept uspešno shranjen!")
+            return controllers.index.home()
 
         except Exception as e:
             conn.rollback()
             print("Napaka:", e)
+            # Dodaj več informacij o napaki
+            import traceback
+            traceback.print_exc()
         finally:
             cur.close()
             conn.close()

@@ -66,22 +66,35 @@
 
       <div class="recipe-content">
           <div class="recipe-ingredients">
-            <h2>
-              Sestavine
-              {% if recept.st_oseb %}
-                za {{ recept.st_oseb }} {{ '👤' if recept.st_oseb == 1 else '👥' }}
-              {% endif %}
-            </h2>
-            {% if recept.sestavine and recept.sestavine|length > 0 %}
-              <ul>
-                {% for sestavina in recept.sestavine %}
-                  <li>{{ sestavina }}</li>
-                {% endfor %}
-              </ul>
-            {% else %}
-              <p>Za ta recept sestavine niso navedene.</p>
+          <h2>
+            Sestavine
+            {% if recept.st_oseb %}
+              za <input type="number" id="st-oseb" min="1" value="{{ recept.st_oseb }}" oninput="posodobiSestavine()" class="ingredients">
+              {{ '👤' if recept.st_oseb == 1 else '👥' }}
             {% endif %}
-          </div>
+          </h2>
+
+          {% if recept.surovine and recept.surovine|length > 0 %}
+            <ul id="sestavine-seznam">
+              {% for sestavina in recept.surovine %}
+                <li 
+                  data-ime="{{ sestavina.ime }}"
+                  data-enota="{{ sestavina.enota }}"
+                  data-kolicina="{{ sestavina.kolicina }}"
+                  data-stoseb="{{ sestavina.st_oseb }}"
+                >
+                  {% set kolicina = sestavina.kolicina %}
+                  {% if kolicina == kolicina|int %}
+                    {{ kolicina|int }}
+                  {% else %}
+                    {{ "%.2f"|format(kolicina) }}
+                  {% endif %} {{ sestavina.enota }} {{ sestavina.ime }}
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p>Za ta recept sestavine niso navedene.</p>
+          {% endif %}
         </div>
 
         <div class="recipe-instructions">
@@ -169,6 +182,34 @@
       timerInput.value = '';
       finishedMsg.style.display = 'none'; // skrij sporočilo
     });
+
+    // Pretvorba sestavin glede na število ljudi
+    function zaokroziKolicino(kolicina) {
+        const zaokrozeno = Math.round(kolicina * 10) / 10;
+        if (Number.isInteger(zaokrozeno)) {
+            return zaokrozeno.toString();
+        }
+        if (zaokrozeno * 10 % 10 === 0) {
+            return zaokrozeno.toFixed(1);
+        }
+        return zaokrozeno.toFixed(1);
+    }
+
+    function posodobiSestavine() {
+        const stOseb = parseFloat(document.getElementById('st-oseb').value);
+        const elementi = document.querySelectorAll('#sestavine-seznam li');
+
+        elementi.forEach(el => {
+            const ime = el.dataset.ime;
+            const enota = el.dataset.enota;
+            const kolicina = parseFloat(el.dataset.kolicina);
+            const izvornoStOseb = parseFloat(el.dataset.stoseb) || 1;
+
+            const novaKolicina = (kolicina / izvornoStOseb) * stOseb;
+            const prikaz = zaokroziKolicino(novaKolicina);
+            el.textContent = `${prikaz} ${enota} ${ime}`;
+        });
+    }
   </script>
 </body>
 </html>
