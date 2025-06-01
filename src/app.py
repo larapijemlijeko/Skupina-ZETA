@@ -173,5 +173,44 @@ def view_scraped():
 
     return render_template('scraped.html', recipes=scraped_recipes)
 
+@f_app.route('/report', methods=['GET','POST'])
+def report():
+
+    submitted = False
+
+    if request.method == 'POST':
+       tip_problema = request.form['problemType']
+       opis = request.form['description']
+
+       conn = None
+       try:
+           conn =  db.get_connection()
+           cur = conn.cursor()
+           cur.execute("""
+                INSERT INTO napake (tip_problema, opis)
+                VALUES (%s, %s)       
+            """, (tip_problema, opis))
+           
+           conn.commit()
+           cur.close()
+           conn.close()
+           submitted = True
+
+           # lets go back to home page if everything is ok
+           return redirect(url_for('home'))
+           
+       except Exception as e:
+           print(f"Error in /report: {e}")
+           return "There was an error processing your report.", 500
+       finally:
+           if conn:
+               conn.close()
+           else:
+               submitted = False
+    elif request.method == 'POST':  
+        return render_template('prijavi-napaka.html')       
+    return render_template('prijavi-napaka.html', submitted=submitted) 
+
+
 if __name__ == "__main__":
     f_app.run(port=5000, debug=True)

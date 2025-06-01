@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="sl" id="html-root" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pogosta vprašanja</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="report-body">
+
+  {% include 'header.html' %}
+  <main>
+    <form id="reportForm" class="report-form" method="POST" action="/report">
+      <h2>Report a Problem</h2>
+
+      <label for="problemType">Type of Problem:</label>
+      <select id="problemType" name="problemType" required>
+        <option value="">-- Please select --</option>
+        <option value="broken_link">Broken link</option>
+        <option value="typo">Typo or grammatical error</option>
+        <option value="slow">Website is slow</option>
+        <option value="not_working">Feature not working</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="description">Describe the problem:</label>
+      <textarea id="description" name="description" rows="5" placeholder="Write here..." required></textarea>
+
+      <button type="submit">Submit</button>
+    </form>
+    <div id="thankYouMessage" class="thank-you-message">Thank you for taking your time to report the problem!</div>
+  </main>
+
+  <script>
+    const root = document.getElementById('html-root');
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    console.log("Trenutno shranjena tema: ", savedTheme);
+    root.setAttribute('data-theme', savedTheme);
+  </script>
+
+</body>
