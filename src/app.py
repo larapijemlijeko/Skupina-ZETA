@@ -21,7 +21,6 @@ from models.dbBackup import initializeScheduler
 from controllers import svetovna_kuhinja
 
 
-
 f_app = Flask(__name__)
 f_app.secret_key = "dev"  # Add a secret key if sessions are used
 
@@ -37,9 +36,11 @@ initializeScheduler()
 def home():
     return controllers.index.home()
 
-@f_app.get('/recepti')
+# SPREMENJENA RUTA ZA RECEPTI - zdaj podpira filter po oznaki (sezoni)
+@f_app.route('/recepti')
 def recepti():
-    return redirect(url_for('recepti.seznam_receptov'))
+    oznaka = request.args.get('oznaka', None)
+    return controllers.recepti.seznam_receptov(oznaka)
 
 @f_app.route('/oddajrecept', methods=['GET', 'POST'])
 def oddajrecept():

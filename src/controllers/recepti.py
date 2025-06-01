@@ -1,25 +1,35 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, request
 import db
 import re
 from zoneinfo import ZoneInfo
-
 
 recepti_bp = Blueprint('recepti', __name__)
 
 @recepti_bp.route('/recepti')
 def seznam_receptov():
+    oznaka = request.args.get('oznaka')
+    
     conn = db.get_connection()
     cur = conn.cursor()
     try:
-        cur.execute("""
-            SELECT id, naslov, opis, cas_priprave, slika_url
-            FROM recepti
-            ORDER BY datum_kreiranja DESC
-        """)
+        if oznaka:
+            cur.execute("""
+                SELECT r.id, r.naslov, r.opis, r.cas_priprave, r.slika_url
+                FROM recepti r
+                JOIN oznake o ON r.id = o.recept_id
+                WHERE o.oznaka = %s
+                ORDER BY r.datum_kreiranja DESC
+            """, (oznaka,))
+        else:
+            cur.execute("""
+                SELECT id, naslov, opis, cas_priprave, slika_url
+                FROM recepti
+                ORDER BY datum_kreiranja DESC
+            """)
+            
         recepti = cur.fetchall()
         seznam_receptov = []
         for recept in recepti:
-            # Ustvarimo slug za url iz naslova
             slug = ustvari_slug(recept[1])
             seznam_receptov.append({
                 'id': recept[0],
@@ -42,7 +52,6 @@ def prikazi_recept(slug):
     conn = db.get_connection()
     cur = conn.cursor()
     try:
-        # Preveri, kateri stolpci obstajajo v tabeli recepti
         cur.execute("""
             SELECT column_name 
             FROM information_schema.columns 
@@ -50,7 +59,6 @@ def prikazi_recept(slug):
         """)
         columns = [col[0] for col in cur.fetchall()]
         
-        # Stolpci, ki jih želimo pridobiti
         select_fields = ['id', 'naslov', 'opis']
         if 'cas_priprave' in columns:
             select_fields.append('cas_priprave')
@@ -65,7 +73,6 @@ def prikazi_recept(slug):
         if 'tezavnost' in columns:
             select_fields.append('tezavnost')
             
-        # Sestavimo poizvedbo
         query = f"""
             SELECT {', '.join(select_fields)}
             FROM recepti
@@ -75,20 +82,17 @@ def prikazi_recept(slug):
         recepti = cur.fetchall()
         recept_data = None
         
-        # Indeks stolpcev za lažje indeksiranje po tuple
         column_index = {field: i for i, field in enumerate(select_fields)}
         
         for recept in recepti:
             recept_slug = ustvari_slug(recept[column_index['naslov']])
             if recept_slug == slug:
-                # Osnovni podatki
                 recept_data = {
                     'id': recept[column_index['id']],
                     'naslov': recept[column_index['naslov']],
                     'opis': recept[column_index['opis']],
                 }
 
-                # Opcijski podatki, če obstajajo
                 if 'cas_priprave' in column_index:
                     recept_data['cas_priprave'] = recept[column_index['cas_priprave']]
                 if 'slika_url' in column_index:
@@ -115,7 +119,6 @@ def prikazi_recept(slug):
                 else:
                     recept_data['tezavnost'] = None
 
-                # Pridobi sestavine
                 cur.execute("""
                     SELECT ime, kolicina, enota, st_oseb
                     FROM sestavine
@@ -123,14 +126,12 @@ def prikazi_recept(slug):
                 """, (recept_data['id'],))
                 sestavine = cur.fetchall()
 
-                # Funkcija za varno pretvorbo količine
                 def format_kolicina(kolicina):
                     try:
                         return float(kolicina)
                     except:
                         return 0.0
 
-                # Obdelaj sestavine za JS logiko
                 surovine = []
                 for ime, kolicina, enota, st_oseb in sestavine:
                     surovina = {
@@ -142,10 +143,8 @@ def prikazi_recept(slug):
                     surovine.append(surovina)
 
                 recept_data['surovine'] = surovine
-                recept_data['st_oseb'] = surovine[0]['st_oseb'] if surovine else 1  # Vzemi iz prve sestavine
+                recept_data['st_oseb'] = surovine[0]['st_oseb'] if surovine else 1
 
-
-                # Pridobi oznake
                 cur.execute("""
                     SELECT oznaka
                     FROM oznake
@@ -168,7 +167,6 @@ def prikazi_recept(slug):
         conn.close()
 
 def ustvari_slug(naslov):
-    """Ustvari URL-friendly slug iz naslova recepta"""
     if not naslov:
         return "recept"
         

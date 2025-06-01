@@ -76,15 +76,17 @@
         </div>
       </div>
 
-      <div class="filter-section">
-        <h4>📅Sezona</h4>
-        <div class="filter-tags">
-          <span>Pomlad</span>
-          <span>Poletje</span>
-          <span>Jesen</span>
-          <span>Zima</span>
-        </div>
+     <div class="filter-section">
+      <h4>📅Sezona</h4>
+      <div class="filter-tags">
+        <a href="{{ url_for('recepti.seznam_receptov') }}?oznaka=pomladni"><span>Pomlad</span></a>
+        <a href="{{ url_for('recepti.seznam_receptov') }}?oznaka=poletni"><span>Poletje</span></a>
+        <a href="{{ url_for('recepti.seznam_receptov') }}?oznaka=jesenski"><span>Jesen</span></a>
+        <a href="{{ url_for('recepti.seznam_receptov') }}?oznaka=zimski"><span>Zima</span></a>
+        <a href="{{ url_for('recepti.seznam_receptov') }}" class="reset-filter">Ponastavi filtre</a>
       </div>
+    </div>
+
 
       <!-- Lahko se doda še več filtrov -->
 
