@@ -58,12 +58,18 @@ body {
 }
 
 .card {
-  background: white;
+  background: var(--bg-color);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   text-align: center;
+  color: var(--text-color);
+  box-shadow: var(--box-shadow);
 }
+
+.recipes-page {
+  background: var(--bg-color);
+} 
 
 /* Recipes page specific styles */
 .recipes-page h2 {
@@ -74,10 +80,10 @@ body {
 .container {
   max-width: 800px;
   margin: auto;
-  background-color: #fff;
+  background: var(--bg-color);
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
 }
 
 .news-item {
@@ -108,7 +114,7 @@ body {
 
 /* Login page styles */
 .login-body {
-  background-color: #f2f2f2;
+  background-color: var(--bg-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -117,7 +123,7 @@ body {
 }
 
 .login-container {
-  background-color: white;
+  background-color: var(--bg-color);
   padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -127,14 +133,14 @@ body {
 .login-body h2 {
   text-align: center;
   margin-bottom: 25px;
-  color: #111;
+  color: var(--text-color);
 }
 
 .login-body label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #333;
+  color: var(--text-color);
 }
 
 .form-group {
@@ -203,7 +209,8 @@ body {
 /* Forgot password page styles */
 .forgot-password-body {
   font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -211,11 +218,12 @@ body {
 }
 
 .forgot-container {
-  background-color: white;
+  background: var(--bg-color);
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: var(--box-shadow);;
   width: 350px;
+  color: var(--text-color);
 }
 
 .forgot-password-body h2 {
@@ -281,7 +289,8 @@ body {
 /* Register page styles */
 .register-body {
   font-family: Arial, sans-serif;
-  background-color: #f2f2f2;
+  background-color: var(--bg-color);
+  color: var(--text-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -289,11 +298,12 @@ body {
 }
 
 .register-container {
-  background-color: white;
+  background-color: var(--bg-color);
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: var(--box-shadow);
   width: 300px;
+  color: var(--text-color);
 }
 
 .register-body h2 {
@@ -343,7 +353,7 @@ body {
 }
 
 .faq-item {
-  background-color: white;
+  background-color: var(--bg-color);
   margin-bottom: 15px;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -366,8 +376,8 @@ body {
 .faq-answer {
   padding: 15px 20px;
   display: none;
-  background-color: #fff;
-  color: #333;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 /* Scraper page styles */
@@ -415,7 +425,7 @@ body {
 
 /* New styles for the two-column layout */
 .recipe-card {
-  background-color: #fff;
+  background-color: var(--bg-color);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -489,7 +499,7 @@ body {
 }
 
 .recipe-ingredients, .recipe-instructions {
-  background-color: #f0f0f0;
+  background-color: var(--bg-color);
   border-radius: 8px;
   padding: 15px;
   margin-bottom: 15px;
@@ -505,7 +515,7 @@ body {
   border-radius: 6px;
   padding: 4px 8px;
   margin: 0 8px;
-  background-color: white;
+  background-color: var(--bg-color);
   vertical-align: middle;
   line-height: 1;
 }
@@ -579,7 +589,7 @@ body {
   right: 0;
   width: 400px; /* popravljeno */
   height: 100vh;
-  background-color: white;
+  background-color: var(--bg-color);
   box-shadow: -4px 0 12px rgba(0,0,0,0.2);
   padding: 30px;
   z-index: 9999;
@@ -846,6 +856,8 @@ body {
   margin: 0 auto;
   padding: 30px 20px;
   flex-wrap: wrap;
+  background: var(--bg-color);
+  color: var(--text-color);
 }
 
 .main-content {
@@ -872,9 +884,9 @@ body {
 }
 
 .card {
-  background: white;
+  background: var(--bg-color);
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--box-shadow);
   padding: 20px;
   text-align: center;
   transition: transform 0.2s ease;
@@ -882,7 +894,7 @@ body {
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  box-shadow:var(--box-shadow);;
 }
 
 .recipe-image-preview {
@@ -919,10 +931,10 @@ body {
 /* === Desni filter === */
 .filter-sidebar {
   flex: 1 1 250px;
-  background: white;
+  background: var(--bg-color);
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: var(--box-shadow);
   position: sticky;
   top: 100px;
   align-self: flex-start;
@@ -931,7 +943,7 @@ body {
 .filter-sidebar h3 {
   margin-top: 0;
   font-size: 1.3rem;
-  color: #333;
+  color: var(--text-color);
 }
 
 .filter-section {
@@ -951,7 +963,7 @@ body {
 }
 
 .filter-tags span {
-  background-color: #ffe0d1;
+  background-color: var(--span-color);
   padding: 6px 10px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -961,7 +973,7 @@ body {
 
 .filter-tags span:hover {
   background-color: #ff7043;
-  color: white;
+  color: var(--text-color);
 }
 
 /* Odzivnost */
@@ -1123,5 +1135,130 @@ svg path:hover {
   margin: 0;
   color: #444;
   font-size: 14px;
+}
+
+:root {
+  --bg-light: #ffffff;
+  --text-light: #000000;
+  --bg-dark: #121212;
+  --text-dark: #f1f1f1;
+}
+
+html[data-theme="light"] {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+html[data-theme="dark"] {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+  --box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+}
+
+
+html[data-theme='light'] {
+    --bg-color: white;
+    --text-color: black;
+    --span-color: #ffe0d1;
+}
+
+/* Dark theme */
+
+html[data-theme='dark'] {
+    --bg-color: #121212;
+    --text-color: white;
+    --span-color: gray;
+}    
+
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+/* Example for other elements */
+button {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+}
+
+.report-form label {
+  display: block;
+  margin-top: 1rem;
+}
+
+.report-form select,
+.report-form textarea,
+.report-form button {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+}
+
+.thank-you-message {
+  display: none;
+  text-align: center;
+  margin-top: 2rem;
+  font-weight: bold;
+  color: green;
+}
+
+
+/*
+* Dark / Light mode switch styling
+*/
+
+.theme-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+}
+
+/* Hide the checkbox */
+.theme-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 32px;
+}
+
+/* The circle inside */
+.slider::before {
+  position: absolute;
+  content: "";
+  height: 25px; width: 25px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.theme-switch input:checked + .slider {
+  background-color: #ff7043; 
+}
+
+.theme-switch input:checked + .slider::before {
+  transform: translateX(28px);
+}
+
+.toggle-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
 }
 

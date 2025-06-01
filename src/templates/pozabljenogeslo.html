@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sl">
+<html lang="sl" id="html-root" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <title>Pozabljeno geslo</title>
@@ -20,6 +20,22 @@
     Že veš geslo? <a href="/prijava">Prijavi se.</a>
   </div>
 </div>
+
+  <script>
+    const root = document.getElementById('html-root');
+    const toggle = document.getElementById('toggle-theme');
+
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    root.setAttribute('data-theme', savedTheme);
+
+    toggle.addEventListener('click', () => {
+        const current = root.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+    });
+  </script>
 
 </body>
 </html>

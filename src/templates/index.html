@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="html-root" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -10,6 +10,19 @@
 
   {% include 'header.html' %}
 
+  <div class="toggle-wrapper">
+    <label class="theme-switch">
+        <input type="checkbox" id="toggle-theme">
+        <span class="slider"></span>
+    </label>
+  </div>
+
+  <section>
+    <div id="quote-box" class="card">
+        <p id="quote-text"></p>
+        <p id="quote-author"></p>
+    </div>
+  </section>
 
   <main>
     <!-- Gumb za prikaz modala -->
@@ -200,5 +213,48 @@
 
   </script>
 
+  <script>
+    const root = document.getElementById('html-root');
+    const toggle = document.getElementById('toggle-theme');
+
+    // Load saved theme or default to light
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    root.setAttribute('data-theme', savedTheme);
+
+    toggle.addEventListener('click', () => {
+        const current = root.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+    });
+  </script>
+
+  <script>
+    window.quoteData = {{ quotes | tojson | safe }};
+  </script>
+
+  <script type="text/javascript">
+    // quotes is safely inserted as a JavaScript object/array
+    //window.quoteData = {{ quotes | tojson | safe }};
+    const quotes = window.quoteData;
+
+    let current = 0;
+
+    function showQuote(index) {
+      const quote = quotes[index];
+      document.getElementById('quote-text').innerText = `"${quote.navedek}"`;
+      document.getElementById('quote-author').innerText = quote.avtor ? `— ${quote.avtor}` : '';
+    }
+
+    function cycleQuotes() {
+      showQuote(current);
+      current = (current + 1) % quotes.length;
+    }
+
+    if (quotes.length > 0) {
+      showQuote(0);
+      setInterval(cycleQuotes, 5000);
+    }
+  </script>
 </body>
 </html>
