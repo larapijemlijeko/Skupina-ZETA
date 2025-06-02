@@ -19,6 +19,7 @@ import controllers.nakljucniRecepti
 from models.zaBazo import create_tables
 from models.dbBackup import initializeScheduler
 from controllers import svetovna_kuhinja
+import controllers.forum
 
 
 f_app = Flask(__name__)
@@ -212,6 +213,15 @@ def report():
         return render_template('prijavi-napaka.html')       
     return render_template('prijavi-napaka.html', submitted=submitted) 
 
+@f_app.route("/forums")
+def forum_site():
+    return controllers.forum.forum_site()
+@f_app.route('/forum/<int:forum_id>')
+def forum_display(forum_id):
+    return controllers.forum.forum_display(forum_id)
+@f_app.route("/api/forums")
+def get_all_forums():
+    return controllers.forum.get_all_forums()
 
 if __name__ == "__main__":
     f_app.run(port=5000, debug=True)

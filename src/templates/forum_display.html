@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="sl" id="html-root" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum Stran</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+    
+    <main style="max-width: 700px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px;">
+        <article>
+            <h1 style="margin-bottom: 8px;">{{ forum.title }}</h1>
+            <div style="color: #888; font-size: 0.95em; margin-bottom: 16px;">
+                Objavljeno: {{ forum.date }}
+            </div>
+            <div style="font-size: 1.15em; margin-bottom: 32px;">
+                {{ forum.content }}
+            </div>
+        </article>
+
+        <section>
+            <h2 style="margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 4px;">Komentarji</h2>
+            {% if comments %}
+                <ul style="list-style: none; padding: 0;">
+                    {% for comment in comments %}
+                        <li style="margin-bottom: 20px; padding: 16px; background: #f7f7fa; border-radius: 6px; box-shadow: 0 1px 3px #0001;">
+                            <div style="color: #555; font-size: 0.95em;">
+                                <strong>Uporabnik #{{ comment.user_id }}</strong> | {{ comment.date }}
+                            </div>
+                            <div style="margin-top: 8px; font-size: 1.05em;">
+                                {{ comment.content }}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p style="color: #888;">Ni komentarjev.</p>
+            {% endif %}
+        </section>
+    </main>
+  
+  <footer>
+    &copy; 2025 DelishBites. All rights reserved.
+  </footer>
+</body>
+</html>

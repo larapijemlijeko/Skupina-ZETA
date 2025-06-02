@@ -2,7 +2,7 @@ import db
 import psycopg2
 
 # Uvoz funkcij za ustvarjanje tabel
-from . import uporabniki, recepti, sestavine, oznake, favourite, vsecki, nagradneigre, scraped, faq, nagradnaigra, zakalorije, regija, napake, navedki
+from . import uporabniki, recepti, sestavine, oznake, favourite, vsecki, nagradneigre, scraped, faq, nagradnaigra, zakalorije, regija, napake, navedki, forum
 
 def create_tables():
     """Ustvari vse potrebne tabele v bazi, če še ne obstajajo."""
@@ -29,6 +29,7 @@ def create_tables():
         regija.create_table(cur)
         napake.create_table(cur)
         navedki.create_table(cur)
+        forum.create_table(cur)
 
         conn.commit()
         print("Tabele so bile uspešno ustvarjene.")

@@ -8,3 +8,9 @@ def create_table(cur):
             datum_registracije TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """)
+    
+    cur.execute("""
+        INSERT INTO uporabniki (id,uporabnisko_ime, email, geslo)
+        VALUES (0,'admin0', 'admin0@delicusbites.xyz', 'WeAreGoodFood');
+    """)
+    cur.commit()

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="sl" id="html-root" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Forum Stran</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+    <h1>Forum Plošča</h1>
+    
+    <p>Dobrodošli na forum DelishBites! Tukaj lahko delite svoje misli, vprašanja in izkušnje s kulinariko.</p>
+    <div id="forum-list"></div>
+    <script>
+    let offset = 0;
+    const limit = 5; // Število forumov na stran
+    let loading = false;
+
+    function loadForums() {
+        if (loading) return;
+        loading = true;
+        fetch(`/api/forums?offset=${offset}&limit=${limit}`)
+            .then(res => res.json())
+            .then(forums => {
+                const list = document.getElementById('forum-list');
+                forums.forEach(forum => {
+                    const div = document.createElement('div');
+                    div.style.border = '1px solid #ccc';
+                    div.style.borderRadius = '8px';
+                    div.style.margin = '16px 0';
+                    div.style.padding = '16px';
+                    div.style.width = '100%';
+                    div.style.boxSizing = 'border-box';
+                    div.style.background = '#fff';
+                    div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
+                    div.style.cursor = 'pointer';
+
+                    div.addEventListener('click', () => {
+                        window.location.href = `/forum/${forum.id}`;
+                    });
+
+                    const title = document.createElement('div');
+                    title.textContent = forum.title;
+                    title.style.fontWeight = 'bold';
+                    title.style.fontSize = '1.2em';
+                    title.style.marginBottom = '8px';
+
+                    const content = document.createElement('div');
+                    content.textContent = forum.content || '';
+                    content.style.marginLeft = '0';
+
+                    div.appendChild(title);
+                    div.appendChild(content);
+                    list.appendChild(div);
+                });
+                offset += forums.length;
+                loading = false;
+            });
+    }
+
+    window.addEventListener('scroll', () => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100) {
+            loadForums();
+        }
+    });
+
+    // Initial load
+    loadForums();
+    </script>
+  
+  <footer>
+    &copy; 2025 DelishBites. All rights reserved.
+  </footer>
+</body>
+</html>
