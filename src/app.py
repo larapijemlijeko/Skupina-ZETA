@@ -117,18 +117,11 @@ def svetovnakuhinjamapa():
 def recepti_po_regiji(ime_regije):
     return svetovna_kuhinja.recepti_po_regiji(ime_regije)
 
-
-@f_app.route('/randomrecept')
-def randomrecept():
-    return render_template('nakljucnirecepti.html')
-
-
 @f_app.route('/nakljucen-recept')
 def nakljucen_recept():
     conn = db.get_connection()
     cur = conn.cursor()
 
-    # Get all recipe IDs
     cur.execute("SELECT id FROM recepti")
     ids = [row[0] for row in cur.fetchall()]
     
@@ -137,15 +130,12 @@ def nakljucen_recept():
 
     nakljucni_id = random.choice(ids)
 
-    # Get the recipe
     cur.execute("SELECT * FROM recepti WHERE id = %s", (nakljucni_id,))
     recept = cur.fetchone()
 
-    # Get ingredients
     cur.execute("SELECT * FROM sestavine WHERE recept_id = %s", (nakljucni_id,))
     surovine = cur.fetchall()
 
-    # Format into dicts (simplified)
     recept_dict = {
         "id": recept[0],
         "naslov": recept[1],
@@ -166,7 +156,6 @@ def nakljucen_recept():
     }
 
     return render_template("nakljucni-podrobno.html", recept=recept_dict)
-
 
 @f_app.route('/add_favorites', methods=['POST'])
 def favorite_scraped():

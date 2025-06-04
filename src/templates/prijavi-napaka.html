@@ -1,43 +1,41 @@
 <!DOCTYPE html>
 <html lang="sl" id="html-root" data-theme="light">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Pogosta vprašanja</title>
+  <title>Prijava težave</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
-<body class="report-body">
-
+<body>
   {% include 'header.html' %}
   <main>
-    <form id="reportForm" class="report-form" method="POST" action="/report">
-      <h2>Report a Problem</h2>
+    <div class="report-container">
+      <form id="reportForm" class="report-form" method="POST" action="/report">
+        <h2>Prijavi težavo</h2>
 
-      <label for="problemType">Type of Problem:</label>
-      <select id="problemType" name="problemType" required>
-        <option value="">-- Please select --</option>
-        <option value="broken_link">Broken link</option>
-        <option value="typo">Typo or grammatical error</option>
-        <option value="slow">Website is slow</option>
-        <option value="not_working">Feature not working</option>
-        <option value="other">Other</option>
-      </select>
+        <label for="problemType">Vrsta težave:</label>
+        <select id="problemType" name="problemType" required>
+          <option value="">-- Izberi možnost --</option>
+          <option value="broken_link">Pokvarjena povezava</option>
+          <option value="typo">Tipkarska ali slovnična napaka</option>
+          <option value="slow">Spletna stran je počasna</option>
+          <option value="not_working">Funkcija ne deluje</option>
+          <option value="other">Drugo</option>
+        </select>
 
-      <label for="description">Describe the problem:</label>
-      <textarea id="description" name="description" rows="5" placeholder="Write here..." required></textarea>
+        <label for="description">Opis težave:</label>
+        <textarea id="description" name="description" rows="5" placeholder="Opišite težavo..." required></textarea>
 
-      <button type="submit">Submit</button>
-    </form>
-    <div id="thankYouMessage" class="thank-you-message">Thank you for taking your time to report the problem!</div>
-  </main>
+        <button type="submit">Pošlji</button>
+      </form>
+    </div>
 
   <script>
+    // Nastavi temo iz localStorage
     const root = document.getElementById('html-root');
     const savedTheme = localStorage.getItem('theme') || 'light';
-    console.log("Trenutno shranjena tema: ", savedTheme);
     root.setAttribute('data-theme', savedTheme);
   </script>
 
-</body>
+</body> 
