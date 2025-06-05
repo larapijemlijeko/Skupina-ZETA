@@ -1,6 +1,6 @@
 def create_table(cur):
     cur.execute("""
-    CREATE TABLE scraped (
+    CREATE TABLE IF NOT EXISTS scraped (
     id SERIAL PRIMARY KEY,
     uporabnik_id INTEGER NOT NULL,
     naslov TEXT NOT NULL,
