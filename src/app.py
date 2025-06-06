@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from recipe_scrapers import scrape_me
 from controllers.admin import admin_bp
 from controllers.recepti import recepti_bp
+from controllers.kalorije import kalorije_bp
 import db
 import random
 from models import recepti
@@ -28,6 +29,7 @@ f_app.secret_key = "dev"  # Add a secret key if sessions are used
 f_app.register_blueprint(admin_bp)
 f_app.secret_key = "mojaTajnaVrednost123"  
 f_app.register_blueprint(recepti_bp)
+f_app.register_blueprint(kalorije_bp)
 
 create_tables()
 

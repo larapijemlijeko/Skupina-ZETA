@@ -113,6 +113,20 @@
         </div>
       {% endif %}
       
+      <h3>Komentarji</h3>
+
+      <div id="komentarji-seznam">
+          <!-- Komentarji bodo tukaj prikazani -->
+      </div>
+
+      <h4>Dodaj komentar</h4>
+      <form id="komentar-form">
+          <input type="text" id="avtor" name="avtor" placeholder="Tvoje ime" required><br><br>
+          <textarea id="komentar" name="komentar" rows="4" cols="50" placeholder="Vnesi komentar..." required></textarea><br><br>
+          <button type="submit">Objavi komentar</button>
+      </form>
+
+
       <div class="translate-section">
         <span>Translate page</span>
         <div id="google_translate_element"></div>
@@ -211,6 +225,60 @@
         });
     }
   </script>
+
+  <script>
+    const receptId = "{{ recept.id }}";
+    const komentarjiSeznam = document.getElementById("komentarji-seznam");
+    const komentarForm = document.getElementById("komentar-form");
+
+    function naloziKomentarje() {
+        fetch(`/komentarji/${receptId}`)
+            .then(res => res.json())
+            .then(komentarji => {
+                komentarjiSeznam.innerHTML = "";
+                komentarji.forEach(k => {
+                    const div = document.createElement("div");
+                    div.innerHTML = `
+                        <div style="border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 10px;">
+                            <strong>${k.avtor || "Anonimno"}</strong> 
+                            <small style="color: #666;">(${k.datum || ''})</small><br>
+                            ${k.komentar}
+                        </div>
+                    `;
+                    komentarjiSeznam.appendChild(div);
+                });
+            });
+    }
+
+    komentarForm.addEventListener("submit", e => {
+        e.preventDefault();
+        const avtor = document.getElementById("avtor").value;
+        const komentar = document.getElementById("komentar").value;
+
+        fetch('/dodaj-komentar', {  // Popravljen URL
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ 
+                recept_id: receptId,  // Dodajte recept_id
+                avtor: avtor,         // Dodajte avtor
+                komentar: komentar 
+            })
+        }).then(res => {
+            if (res.ok) {
+                komentarForm.reset();
+                naloziKomentarje();
+            } else {
+                alert("Napaka pri pošiljanju komentarja.");
+            }
+        });
+    });
+
+    // Ob nalaganju strani naloži komentarje
+    document.addEventListener("DOMContentLoaded", naloziKomentarje);
+</script>
+
 
   <script>
     const root = document.getElementById('html-root');
