@@ -1383,3 +1383,179 @@ button {
   background-color: var(--btn-hover-bg);
   transform: translateY(-1px);
 }
+
+/* === KOMENTARJI SEKCIJA === */
+.komentarji-sekcija {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.komentarji-naslov {
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e8f4f8;
+    font-size: 1.5rem;
+}
+
+/* === SEZNAM KOMENTARJEV === */
+.komentarji-seznam {
+    margin-bottom: 2rem;
+    min-height: 100px;
+}
+
+.komentar-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.3s ease;
+}
+
+.komentar-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.komentar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.komentar-avtor {
+    color: #ff7043;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.komentar-datum {
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.komentar-vsebina {
+    color: #495057;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* === DODAJANJE KOMENTARJA === */
+.dodaj-komentar-sekcija {
+    border-top: 1px solid #e9ecef;
+    padding-top: 2rem;
+}
+
+.dodaj-komentar-naslov {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.komentar-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-skupina {
+    display: flex;
+    flex-direction: column;
+}
+
+.avtor-input {
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    max-width: 300px;
+}
+
+.avtor-input:focus {
+    outline: none;
+    border-color: #ff7043;
+    box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+}
+
+.komentar-textarea {
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.komentar-textarea:focus {
+    outline: none;
+    border-color: #ff7043;
+    box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+}
+
+.gumb-skupina {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.objavi-gumb {
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.objavi-gumb:hover {
+    background: #e95e2f;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+}
+
+.objavi-gumb:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(44, 90, 160, 0.3);
+}
+
+.komentarji-seznam:empty::before {
+    content: "Še ni komentarjev. Bodite prvi, ki komentirate!";
+    color: #6c757d;
+    font-style: italic;
+    display: block;
+    text-align: center;
+    padding: 2rem;
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .komentarji-sekcija {
+        margin: 1rem 0;
+        padding: 1rem;
+    }
+    
+    .avtor-input {
+        max-width: 100%;
+    }
+    
+    .komentar-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}

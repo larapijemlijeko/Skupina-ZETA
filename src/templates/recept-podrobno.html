@@ -113,19 +113,28 @@
         </div>
       {% endif %}
       
-      <h3>Komentarji</h3>
+      <section class="komentarji-sekcija">
+          <h2 class="komentarji-naslov">Komentarji</h2>
 
-      <div id="komentarji-seznam">
-          <!-- Komentarji bodo tukaj prikazani -->
-      </div>
+          <div id="komentarji-seznam" class="komentarji-seznam">
+              <!-- Komentarji bodo tukaj prikazani -->
+          </div>
 
-      <h4>Dodaj komentar</h4>
-      <form id="komentar-form">
-          <input type="text" id="avtor" name="avtor" placeholder="Tvoje ime" required><br><br>
-          <textarea id="komentar" name="komentar" rows="4" cols="50" placeholder="Vnesi komentar..." required></textarea><br><br>
-          <button type="submit">Objavi komentar</button>
-      </form>
-
+          <div class="dodaj-komentar-sekcija">
+              <h4 class="dodaj-komentar-naslov">Dodaj komentar</h4>
+              <form id="komentar-form" class="komentar-form">
+                  <div class="input-skupina">
+                      <input type="text" id="avtor" name="avtor" placeholder="Tvoje ime" class="avtor-input" required>
+                  </div>
+                  <div class="input-skupina">
+                      <textarea id="komentar" name="komentar" rows="4" placeholder="Vnesi komentar..." class="komentar-textarea" required></textarea>
+                  </div>
+                  <div class="gumb-skupina">
+                      <button type="submit" class="objavi-gumb">Objavi komentar</button>
+                  </div>
+              </form>
+          </div>
+      </section>
 
       <div class="translate-section">
         <span>Translate page</span>
@@ -232,22 +241,31 @@
     const komentarForm = document.getElementById("komentar-form");
 
     function naloziKomentarje() {
-        fetch(`/komentarji/${receptId}`)
-            .then(res => res.json())
-            .then(komentarji => {
-                komentarjiSeznam.innerHTML = "";
-                komentarji.forEach(k => {
-                    const div = document.createElement("div");
-                    div.innerHTML = `
-                        <div style="border-bottom: 1px solid #eee; padding: 10px; margin-bottom: 10px;">
-                            <strong>${k.avtor || "Anonimno"}</strong> 
-                            <small style="color: #666;">(${k.datum || ''})</small><br>
-                            ${k.komentar}
-                        </div>
-                    `;
-                    komentarjiSeznam.appendChild(div);
-                });
-            });
+      fetch(`/komentarji/${receptId}`)
+          .then(res => {
+              if (!res.ok) {
+                  throw new Error(`HTTP error! status: ${res.status}`);
+              }
+              return res.json();
+          })
+          .then(komentarji => {
+              komentarjiSeznam.innerHTML = "";
+              komentarji.forEach(k => {
+                  const komentarDiv = document.createElement("div");
+                  komentarDiv.className = "komentar-item";
+                  komentarDiv.innerHTML = `
+                      <div class="komentar-header">
+                          <strong class="komentar-avtor">${k.avtor || "Anonimno"}</strong> 
+                          <small class="komentar-datum">(${k.datum || ''})</small>
+                      </div>
+                      <div class="komentar-vsebina">${k.komentar}</div>
+                  `;
+                  komentarjiSeznam.appendChild(komentarDiv);
+              });
+          })
+          .catch(error => {
+              console.error('Napaka pri nalaganju komentarjev:', error);
+          });
     }
 
     komentarForm.addEventListener("submit", e => {
