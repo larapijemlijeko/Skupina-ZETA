@@ -133,23 +133,19 @@
         document.getElementById("header-placeholder").innerHTML = data;
       });
 
-    const quizData = [
-    {
-      question: "What is the capital of France?",
-      options: ["London", "Berlin", "Paris", "Rome"],
-      answer: "Paris"
-    },
-    {
-      question: "Which planet is known as the Red Planet?",
-      options: ["Earth", "Mars", "Jupiter", "Saturn"],
-      answer: "Mars"
-    },
-    {
-      question: "What is the largest ocean on Earth?",
-      options: ["Atlantic", "Indian", "Arctic", "Pacific"],
-      answer: "Pacific"
-    }
-  ];
+    let quizData = [];
+
+    fetch('/kviz')
+      .then(response => response.json())
+      .then(data => {
+        quizData = data;
+        if (quizWidget.style.display === "block" && currentQuestion === 0) {
+          loadQuestion();
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching quiz data:', error);
+      });
 
   let currentQuestion = 0;
   let score = 0;
