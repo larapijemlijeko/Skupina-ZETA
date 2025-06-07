@@ -18,6 +18,7 @@ import controllers.pozabljenogeslo
 import controllers.nagradneigre
 import controllers.anketa
 import controllers.nakljucniRecepti
+import controllers.kviz
 from models.zaBazo import create_tables
 from models.dbBackup import initializeScheduler
 from controllers import svetovna_kuhinja
@@ -252,7 +253,11 @@ def report():
                submitted = False
     elif request.method == 'POST':  
         return render_template('prijavi-napaka.html')       
-    return render_template('prijavi-napaka.html', submitted=submitted) 
+    return render_template('prijavi-napaka.html', submitted=submitted)
+
+@f_app.route('/kviz')
+def kviz_api():
+    return controllers.kviz.get_kviz_questions()
 
 
 if __name__ == "__main__":

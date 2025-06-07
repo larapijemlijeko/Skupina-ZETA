@@ -10,18 +10,53 @@ def create_table(cur):
 
 INSERT INTO quiz_questions (question, options, answer) VALUES
 (
-    'What is the capital of France?',
-    ARRAY['London', 'Berlin', 'Paris', 'Rome'],
-    'Paris'
+    'Which country is famous for inventing pizza?',
+    ARRAY['France', 'Italy', 'USA', 'Germany'],
+    'Italy'
 ),
 (
-    'Which planet is known as the Red Planet?',
-    ARRAY['Earth', 'Mars', 'Jupiter', 'Saturn'],
-    'Mars'
+    'What is the main ingredient in guacamole?',
+    ARRAY['Tomato', 'Avocado', 'Cucumber', 'Pepper'],
+    'Avocado'
 ),
 (
-    'What is the largest ocean on Earth?',
-    ARRAY['Atlantic', 'Indian', 'Arctic', 'Pacific'],
-    'Pacific'
-); 
+    'Which vitamin is most prevalent in oranges?',
+    ARRAY['Vitamin A', 'Vitamin B', 'Vitamin C', 'Vitamin D'],
+    'Vitamin C'
+),
+(
+    'What type of food is Brie?',
+    ARRAY['Bread', 'Cheese', 'Fruit', 'Pasta'],
+    'Cheese'
+),
+(
+    'Sushi originates from which country?',
+    ARRAY['China', 'Japan', 'Thailand', 'South Korea'],
+    'Japan'
+),
+(
+    'Which grain is used to make risotto?',
+    ARRAY['Basmati rice', 'Brown rice', 'Arborio rice', 'Jasmine rice'],
+    'Arborio rice'
+),
+(
+    'What is tofu made from?',
+    ARRAY['Cheese', 'Rice', 'Soybeans', 'Wheat'],
+    'Soybeans'
+),
+(
+    'Which sauce is traditionally used on eggs benedict?',
+    ARRAY['Béchamel', 'Marinara', 'Hollandaise', 'Pesto'],
+    'Hollandaise'
+),
+(
+    'Which country is the largest producer of coffee in the world?',
+    ARRAY['Colombia', 'Vietnam', 'Brazil', 'Ethiopia'],
+    'Brazil'
+),
+(
+    'What kind of nuts are used to make marzipan?',
+    ARRAY['Walnuts', 'Almonds', 'Cashews', 'Hazelnuts'],
+    'Almonds'
+);
     """)
