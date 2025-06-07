@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, request
+from flask import Blueprint, render_template, abort, request, jsonify
 import db
 import re
 from zoneinfo import ZoneInfo
@@ -188,3 +188,54 @@ def ustvari_slug(naslov):
     slug = re.sub(r'\s+', '-', slug)
     slug = slug.strip('-')
     return slug if slug else "recept"
+
+@recepti_bp.route('/dodaj-komentar', methods=['POST'])
+def dodaj_komentar():
+    data = request.get_json()
+    recept_id = data.get('recept_id')
+    komentar = data.get('komentar')
+    avtor = data.get('avtor', 'Anonimno')  # Uporabite avtor iz forme
+
+    if not recept_id or not komentar:
+        return jsonify({'status': 'error', 'message': 'Manjkajoči podatki.'}), 400
+
+    conn = db.get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            INSERT INTO komentarji (recept_id, avtor, komentar)
+            VALUES (%s, %s, %s)
+        """, (recept_id, avtor, komentar))
+        conn.commit()
+        return jsonify({'status': 'success'})
+    except Exception as e:
+        print("Napaka pri dodajanju komentarja:", e)
+        return jsonify({'status': 'error'}), 500
+    finally:
+        cur.close()
+        conn.close()
+
+@recepti_bp.route('/komentarji/<int:recept_id>')
+def komentarji_za_recept(recept_id):
+    conn = db.get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            SELECT avtor, komentar, 
+                   TO_CHAR(datum AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Ljubljana', 'DD.MM.YYYY HH24:MI') as formatted_datum
+            FROM komentarji
+            WHERE recept_id = %s
+            ORDER BY datum DESC
+        """, (recept_id,))
+        komentarji = cur.fetchall()
+        return jsonify([{
+            'avtor': k[0], 
+            'komentar': k[1], 
+            'datum': k[2]
+        } for k in komentarji])
+    except Exception as e:
+        print("Napaka pri branju komentarjev:", e)
+        return jsonify([])
+    finally:
+        cur.close()
+        conn.close()

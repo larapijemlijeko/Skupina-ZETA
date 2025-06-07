@@ -66,6 +66,39 @@
       <div id="quiz-result"></div>
     </div>
 
+    <section id="kalorije-kalkulator" class="kalorije-card">
+      <h3 class="kalkulator-naslov">Kalkulator kalorij</h3>
+      <form id="kalorije-form" class="kalorije-form">
+        <label for="spol" class="kalorije-label">Spol:</label>
+        <select id="spol" name="spol" class="kalorije-select" required>
+          <option value="moski">Moški</option>
+          <option value="zenska">Ženska</option>
+        </select>
+
+        <label for="starost" class="kalorije-label">Starost (leta):</label>
+        <input type="number" id="starost" name="starost" class="kalorije-input" min="0" required>
+
+        <label for="visina" class="kalorije-label">Višina (cm):</label>
+        <input type="number" id="visina" name="visina" class="kalorije-input" min="0" required>
+
+        <label for="teza" class="kalorije-label">Teža (kg):</label>
+        <input type="number" step="0.1" id="teza" name="teza" class="kalorije-input" min="0" required>
+
+        <label for="aktivnost" class="kalorije-label">Raven aktivnosti:</label>
+        <select id="aktivnost" name="aktivnost" class="kalorije-select" required>
+          <option value="malo">Malo ali nič</option>
+          <option value="lahka">Lahka aktivnost</option>
+          <option value="zmerna">Zmerna aktivnost</option>
+          <option value="visoka">Visoka aktivnost</option>
+          <option value="zelo_visoka">Zelo visoka aktivnost</option>
+        </select>
+
+        <button type="submit" class="kalorije-btn">Izračunaj</button>
+      </form>
+
+      <div id="rezultat-kalorij" class="kalorije-rezultat"></div>
+    </section>
+
   </main>
 
   <footer>
@@ -256,5 +289,125 @@
       setInterval(cycleQuotes, 5000);
     }
   </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("kalorije-form");
+    const rezultatDiv = document.getElementById("rezultat-kalorij"); // Popravljen ID
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Pridobi vrednosti
+        const starost = parseInt(document.getElementById("starost").value);
+        const visina = parseInt(document.getElementById("visina").value);
+        const teza = parseFloat(document.getElementById("teza").value);
+        const spol = document.getElementById("spol").value;
+        const aktivnost = document.getElementById("aktivnost").value;
+
+        // Validacija podatkov
+        if (!spol || !aktivnost) {
+            prikaziNapako("Prosim, izpolni vsa polja.");
+            return;
+        }
+
+        if (starost < 10 || starost > 120) {
+            prikaziNapako("Starost mora biti med 10 in 120 let.");
+            return;
+        }
+
+        if (visina < 100 || visina > 250) {
+            prikaziNapako("Višina mora biti med 100 in 250 cm.");
+            return;
+        }
+
+        if (teza < 30 || teza > 300) {
+            prikaziNapako("Teža mora biti med 30 in 300 kg.");
+            return;
+        }
+
+        // Mapiranje aktivnosti v faktorje
+        const faktorjiAktivnosti = {
+            malo: 1.2,
+            lahka: 1.375,
+            zmerna: 1.55,
+            visoka: 1.725,
+            zelo_visoka: 1.9
+        };
+
+        const faktor = faktorjiAktivnosti[aktivnost];
+
+        // Izračun BMR (Mifflin-St Jeor formula)
+        let bmr;
+        if (spol === "moski") {
+            bmr = 10 * teza + 6.25 * visina - 5 * starost + 5;
+        } else {
+            bmr = 10 * teza + 6.25 * visina - 5 * starost - 161;
+        }
+
+        // Izračun dnevnih potreb
+        const vzdrzevanje = Math.round(bmr * faktor);
+        const hujsanje = Math.round(vzdrzevanje - 500);
+        const pridobivanje = Math.round(vzdrzevanje + 300);
+
+        // Prikaz rezultatov
+        rezultatDiv.innerHTML = `
+            <div class="rezultat-item">
+                <p>🎯 <strong>Za vzdrževanje teže:</strong></p>
+                <p><strong>${vzdrzevanje} kcal/dan</strong></p>
+            </div>
+            <div class="rezultat-item">
+                <p>📉 <strong>Za hujšanje:</strong></p>
+                <p><strong>${hujsanje} kcal/dan</strong></p>
+            </div>
+            <div class="rezultat-item">
+                <p>📈 <strong>Za pridobivanje teže:</strong></p>
+                <p><strong>${pridobivanje} kcal/dan</strong></p>
+            </div>
+        `;
+
+        rezultatDiv.classList.add('show');
+
+        // Shrani podatke (če imaš backend)
+        shraniPodatke({
+            starost,
+            visina,
+            teza,
+            spol,
+            aktivnost,
+            kalorije_za_vzdrzevanje: vzdrzevanje,
+            kalorije_za_hujsanje: hujsanje,
+            kalorije_za_pridobivanje: pridobivanje
+        });
+    });
+
+    function prikaziNapako(sporocilo) {
+        rezultatDiv.innerHTML = `<div class="error">${sporocilo}</div>`;
+        rezultatDiv.classList.add('show');
+    }
+
+    function shraniPodatke(podatki) {
+        fetch("/shrani_kalorije", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                starost: podatki.starost,
+                visina: podatki.visina,
+                teza: podatki.teza,
+                spol: podatki.spol,
+                aktivnost: podatki.aktivnost,
+                kalorije_vzdrzevanje: podatki.kalorije_za_vzdrzevanje,
+                kalorije_hujsanje: podatki.kalorije_za_hujsanje
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log("Shranjeno:", data))
+        .catch(error => console.error("Napaka pri shranjevanju:", error));
+        
+        console.log("Podatki za shranjevanje:", podatki);
+    }
+    });
+  </script>
+
 </body>
 </html>
