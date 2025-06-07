@@ -1,6 +1,16 @@
 from flask import render_template, request, redirect, url_for
 import db
 import controllers.index
+import os
+from werkzeug.utils import secure_filename
+from datetime import datetime
+
+UPLOAD_FOLDER = "static/uploads"  # ali kamor želiš shraniti slike
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+
+
+def dovoljeno_ime(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def oddajrecept():
     if request.method == "POST":
@@ -13,14 +23,13 @@ def oddajrecept():
             priprava = request.form["priprava"]
             cas = request.form.get("cas_priprave")
             tezavnost = request.form.get("tezavnost")
-            slika_url = request.form["slika_url"]
-            uporabnik_id = 244  # začasno fiksno
+            uporabnik_id = 1  # začasno fiksno
 
             # --- vstavi recept ---
             cur.execute("""
-                INSERT INTO recepti (naslov, opis, priprava, cas_priprave, tezavnost, slika_url, uporabnik_id)
-                VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id;
-            """, (naslov, opis, priprava, cas, tezavnost, slika_url, uporabnik_id))
+                INSERT INTO recepti (naslov, opis, priprava, cas_priprave, tezavnost, uporabnik_id)
+                VALUES (%s, %s, %s, %s, %s, %s) RETURNING id;
+            """, (naslov, opis, priprava, cas, tezavnost, uporabnik_id))
             recept_id = cur.fetchone()[0]
 
             # --- podatki o sestavinah (seznami) ---
@@ -49,6 +58,24 @@ def oddajrecept():
                     INSERT INTO oznake (recept_id, oznaka)
                     VALUES (%s, %s);
                 """, (recept_id, oznaka))
+
+             # --- slike ---
+            slike = request.files.getlist("slike")
+            if slike:
+                os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+                
+                for slika in slike:
+                    if slika and slika.filename and dovoljeno_ime(slika.filename):
+                        filename = secure_filename(slika.filename)
+                        timestamp = datetime.now().strftime("%Y%m%d%H%M%S%f")
+                        unique_filename = f"{timestamp}_{filename}"
+                        filepath = os.path.join(UPLOAD_FOLDER, unique_filename)
+                        slika.save(filepath)
+                        
+                        cur.execute("""
+                            INSERT INTO recept_slike (recept_id, slika_pot)
+                            VALUES (%s, %s);
+                        """, (recept_id, filepath))
 
             # --- alergeni ---
             alergeni_id = request.form.getlist("alergeni[]")
