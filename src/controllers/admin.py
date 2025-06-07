@@ -52,6 +52,24 @@ def dodaj_testne_podatke():
                 INSERT INTO oznake (recept_id, oznaka)
                 VALUES (%s, %s);
             """, (recept_id, oznaka))
+            # Tukaj dodaš alergene za "moke"
+            if sest_ime == "moke":
+                cur.execute("""
+                    INSERT INTO alergeni (ime) VALUES ('Gluten')
+                    ON CONFLICT (ime) DO NOTHING;
+                """)
+                cur.execute("SELECT id FROM alergeni WHERE ime = 'Gluten'")
+                alergen_id = cur.fetchone()[0]
+
+                cur.execute("""
+                    SELECT id FROM sestavine WHERE recept_id = %s AND ime = %s
+                """, (recept_id, sest_ime))
+                sestavina_id = cur.fetchone()[0]
+
+                cur.execute("""
+                    INSERT INTO sestavine_alergeni (sestavina_id, alergen_id)
+                    VALUES (%s, %s);
+                """, (sestavina_id, alergen_id))
 
         # 3. FAQ
         faq_data = [

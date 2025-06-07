@@ -1383,3 +1383,46 @@ button {
   background-color: var(--btn-hover-bg);
   transform: translateY(-1px);
 }
+
+/* ======= Popup za alergene ======= */
+#alergeni-popup {
+  display: block; /* Vedno block, kontroliramo le opacity */
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ffe0e0;
+  color: #c62828;
+  border: 1px solid #c62828;
+  border-radius: 5px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none; /* Ko je skrit, naj ne moti klikanja */
+  transition: opacity 0.5s ease;
+}
+
+#alergeni-popup.show {
+  opacity: 1;
+  pointer-events: auto; /* Ko je prikazan, omogoči klikanje */
+}
+
+#alergeni-popup ul {
+  margin: 5px 0 0 15px;
+  padding: 0;
+}
+
+#alergeni-popup .close-btn {
+  float: right;
+  font-weight: bold;
+  cursor: pointer;
+  color: #c62828;
+}
+
+
+
+
+
+
+

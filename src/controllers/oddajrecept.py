@@ -14,7 +14,7 @@ def oddajrecept():
             cas = request.form.get("cas_priprave")
             tezavnost = request.form.get("tezavnost")
             slika_url = request.form["slika_url"]
-            uporabnik_id = 1  # začasno fiksno
+            uporabnik_id = 244  # začasno fiksno
 
             # --- vstavi recept ---
             cur.execute("""
@@ -35,6 +35,12 @@ def oddajrecept():
                         INSERT INTO sestavine (recept_id, ime, kolicina, enota, st_oseb)
                         VALUES (%s, %s, %s, %s, %s);
                     """, (recept_id, ime, kolicina, enota, st_oseb))
+            
+            # --- PRIDOBI ID-je vseh sestavin tega recepta ---
+            cur.execute("""
+                SELECT id FROM sestavine WHERE recept_id = %s;
+            """, (recept_id,))
+            sestavina_ids = [row[0] for row in cur.fetchall()]
 
             # --- oznaka ---
             oznaka = request.form.get("oznaka", "").strip()
@@ -43,6 +49,15 @@ def oddajrecept():
                     INSERT INTO oznake (recept_id, oznaka)
                     VALUES (%s, %s);
                 """, (recept_id, oznaka))
+
+            # --- alergeni ---
+            alergeni_id = request.form.getlist("alergeni[]")
+            for alergen_id in alergeni_id:
+                for sestavina_id in sestavina_ids:
+                    cur.execute("""
+                        INSERT INTO sestavine_alergeni (sestavina_id, alergen_id)
+                        VALUES (%s, %s)
+                    """, (sestavina_id, alergen_id))
 
             conn.commit()
             print("Recept uspešno shranjen!")
@@ -58,5 +73,13 @@ def oddajrecept():
             cur.close()
             conn.close()
 
+     # GET zahteva: naloži alergene za seznam v obrazcu
+    conn = db.get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, ime FROM alergeni ORDER BY ime;")
+    alergeni = cur.fetchall()
+    cur.close()
+    conn.close()
+
     # If GET request or if POST failed, render the form template
-    return render_template("oddajrecept.html")
+    return render_template("oddajrecept.html", alergeni=alergeni)

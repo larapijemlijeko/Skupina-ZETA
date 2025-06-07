@@ -97,6 +97,18 @@
           {% endif %}
         </div>
 
+        {% if recept.alergeni %}
+        <div id="alergeni-popup" class="fade-in">
+          <h3>⚠️ Alergeni</h3>
+          <ul>
+            {% for alergen in recept.alergeni %}
+              <li>{{ alergen }}</li>
+            {% endfor %}
+          </ul>
+          <span class="close-btn" onclick="this.parentElement.style.display='none'">x</span>
+        </div>
+        {% endif %}
+
         <div class="recipe-instructions">
           <h2>Postopek priprave</h2>
           {% if recept.priprava %}
@@ -122,6 +134,7 @@
   <footer>
     &copy; 2025 DelishBites. Vse pravice pridržane.
   </footer> 
+  
 
   <script type="text/javascript">
     function googleTranslateElementInit() {
@@ -227,6 +240,35 @@
         localStorage.setItem('theme', next);
     });
   </script>
+  
+ <script>
+  window.addEventListener('DOMContentLoaded', () => {
+    // Prikaži alergene po 2 sekundah
+    setTimeout(() => {
+      const popup = document.getElementById('alergeni-popup');
+      if (popup) {
+        popup.classList.add('show');
+      }
+    }, 2000);
+
+    // Funkcija za zapiranje popupa
+    function zapriAlergeniPopup() {
+      const popup = document.getElementById('alergeni-popup');
+      if (popup) {
+        popup.classList.remove('show');
+      }
+    }
+
+    // Če imaš 'x' gumb, poveži ga z zapri funkcijo
+    const closeBtn = document.querySelector('#alergeni-popup .close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', zapriAlergeniPopup);
+    }
+  });
+</script>
+
+
+  
 
 </body>
 </html>

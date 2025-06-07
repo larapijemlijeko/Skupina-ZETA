@@ -126,6 +126,18 @@ def prikazi_recept(slug):
                 """, (recept_data['id'],))
                 sestavine = cur.fetchall()
 
+                # Pridobi alergene povezane s temi sestavinami
+                cur.execute("""
+                    SELECT DISTINCT a.ime
+                    FROM sestavine_alergeni sa
+                    JOIN alergeni a ON sa.alergen_id = a.id
+                    JOIN sestavine s ON sa.sestavina_id = s.id
+                    WHERE s.recept_id = %s
+                """, (recept_data['id'],))
+                alergeni = [row[0] for row in cur.fetchall()]
+                recept_data['alergeni'] = alergeni
+
+
                 def format_kolicina(kolicina):
                     try:
                         return float(kolicina)

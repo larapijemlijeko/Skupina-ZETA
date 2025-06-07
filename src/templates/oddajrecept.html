@@ -66,6 +66,19 @@
           <option value="spomladanski">Spomladanski</option>
         </select><br><br>
 
+        <h3>Alergeni</h3>
+        {% if alergeni %}
+          <div>
+            {% for alergen in alergeni %}
+              <label>
+                <input type="checkbox" name="alergeni[]" value="{{ alergen[0] }}"> {{ alergen[1] }}
+             </label><br>
+           {% endfor %}
+         </div>
+       {% else %}
+         <p>Trenutno ni vnešenih alergenov.</p>
+       {% endif %}
+
 
         <button type="submit">Shrani recept</button>
     </form>
