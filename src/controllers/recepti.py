@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, request, jsonify
+from flask import Blueprint, render_template, abort, request, jsonify, url_for
 import db
 import re
 from zoneinfo import ZoneInfo
@@ -14,29 +14,40 @@ def seznam_receptov():
     try:
         if oznaka:
             cur.execute("""
-                SELECT r.id, r.naslov, r.opis, r.cas_priprave, r.slika_url
+                SELECT r.id, r.naslov, r.opis, r.cas_priprave, s.slika_pot
                 FROM recepti r
                 JOIN oznake o ON r.id = o.recept_id
+                LEFT JOIN (
+                    SELECT DISTINCT ON (recept_id) recept_id, slika_pot
+                    FROM recept_slike
+                    ORDER BY recept_id, id
+                ) s ON r.id = s.recept_id
                 WHERE o.oznaka = %s
-                ORDER BY r.datum_kreiranja DESC
+                ORDER BY r.datum_kreiranja DESC, r.id DESC
             """, (oznaka,))
         else:
             cur.execute("""
-                SELECT id, naslov, opis, cas_priprave, slika_url
-                FROM recepti
-                ORDER BY datum_kreiranja DESC
+                SELECT r.id, r.naslov, r.opis, r.cas_priprave, s.slika_pot
+                FROM recepti r
+                LEFT JOIN (
+                    SELECT DISTINCT ON (recept_id) recept_id, slika_pot
+                    FROM recept_slike
+                    ORDER BY recept_id, id
+                ) s ON r.id = s.recept_id
+                ORDER BY r.datum_kreiranja DESC, r.id DESC
             """)
             
         recepti = cur.fetchall()
         seznam_receptov = []
         for recept in recepti:
-            slug = ustvari_slug(recept[1])
+            slug = ustvari_slug(recept[1], recept[0])  # Dodajte ID kot drugi parameter
+            slika = recept[4] if recept[4] else url_for('static', filename='img/default-recipe.jpg')
             seznam_receptov.append({
                 'id': recept[0],
                 'naslov': recept[1],
                 'opis': recept[2],
                 'cas_priprave': recept[3],
-                'slika_url': recept[4],
+                'slika_url': slika,
                 'slug': slug
             })
         return render_template('recepti.html', recepti=seznam_receptov)
@@ -85,7 +96,7 @@ def prikazi_recept(slug):
         column_index = {field: i for i, field in enumerate(select_fields)}
         
         for recept in recepti:
-            recept_slug = ustvari_slug(recept[column_index['naslov']])
+            recept_slug = ustvari_slug(recept[column_index['naslov']], recept[column_index['id']])  # Dodajte ID
             if recept_slug == slug:
                 recept_data = {
                     'id': recept[column_index['id']],
@@ -165,6 +176,15 @@ def prikazi_recept(slug):
                 oznake = cur.fetchall()
                 recept_data['oznake'] = [oznaka[0] for oznaka in oznake]
 
+                #Slike
+                cur.execute("""
+                    SELECT slika_pot
+                    FROM recept_slike
+                    WHERE recept_id = %s
+                    ORDER BY id
+                """, (recept_data['id'],))
+                slike = cur.fetchall()
+                recept_data['slike'] = [s[0] for s in slike] if slike else []
                 break
         
         if recept_data:
@@ -178,15 +198,19 @@ def prikazi_recept(slug):
         cur.close()
         conn.close()
 
-def ustvari_slug(naslov):
+def ustvari_slug(naslov, recept_id=None):
     if not naslov:
-        return "recept"
+        return f"recept-{recept_id}" if recept_id else "recept"
         
     slug = naslov.lower()
     slug = slug.replace('č', 'c').replace('š', 's').replace('ž', 'z').replace('ć', 'c').replace('đ', 'd')
     slug = re.sub(r'[^a-z0-9\s]', '', slug)
     slug = re.sub(r'\s+', '-', slug)
     slug = slug.strip('-')
+    
+    if recept_id:
+        slug = f"{slug}-{recept_id}" if slug else f"recept-{recept_id}"
+    
     return slug if slug else "recept"
 
 @recepti_bp.route('/dodaj-komentar', methods=['POST'])
