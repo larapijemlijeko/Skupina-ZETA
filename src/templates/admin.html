@@ -4,26 +4,48 @@
     <meta charset="UTF-8">
     <title>Admin Plošča</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        body { font-family: Arial, sans-serif; }
-        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
-    </style>
 </head>
 <body>
     {% include 'header.html' %}
-    <h1>🛠️ Admin Plošča</h1>
-    <form action="/admin/dodaj" method="get">
-        <button type="submit">➕ Dodaj testne podatke</button>
-    </form>
-    <form action="/admin/izbrisi_podatke" method="get">
-        <button type="submit">🗑️ Izbriši vse podatke</button>
-    </form>
-    <form action="/admin/izbrisi_tabele" method="get">
-        <button type="submit">💥 Izbriši vse tabele</button>
-    </form>
-    <form action="/admin/backup_podatki" method="get">
-        <button type="submit">💥 Backup podatkov v csv</button>
-    </form>
+    
+    <div class="admin-container">
+        <h1 class="admin-title">🛠️ Admin Plošča</h1>
+        
+        <div class="admin-warning">
+            <h3>⚠️ Pozor!</h3>
+            <p>Nekatere operacije so nepovratne in lahko trajno izgubijo podatke. Bodite previdni!</p>
+        </div>
+        
+        <div class="admin-buttons">
+            <form action="/admin/dodaj" method="get" class="admin-form">
+                <button type="submit" class="admin-btn add-data">
+                    <span class="icon">➕</span>
+                    Dodaj testne podatke
+                </button>
+            </form>
+            
+            <form action="/admin/backup_podatki" method="get" class="admin-form">
+                <button type="submit" class="admin-btn backup-data">
+                    <span class="icon">💾</span>
+                    Backup podatkov v CSV
+                </button>
+            </form>
+            
+            <form action="/admin/izbrisi_podatke" method="get" class="admin-form">
+                <button type="submit" class="admin-btn delete-data">
+                    <span class="icon">🗑️</span>
+                    Izbriši vse podatke
+                </button>
+            </form>
+            
+            <form action="/admin/izbrisi_tabele" method="get" class="admin-form">
+                <button type="submit" class="admin-btn delete-tables">
+                    <span class="icon">💥</span>
+                    Izbriši vse tabele
+                </button>
+            </form>
+        </div>
+    </div>
 
     <script>
     // Naloži header.html v placeholder
@@ -42,13 +64,15 @@
         const savedTheme = localStorage.getItem('theme') || 'light';
         root.setAttribute('data-theme', savedTheme);
 
-        toggle.addEventListener('click', () => {
-            const current = root.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            root.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-        });
-  </script>
+        if (toggle) {
+            toggle.addEventListener('click', () => {
+                const current = root.getAttribute('data-theme');
+                const next = current === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                localStorage.setItem('theme', next);
+            });
+        }
+    </script>
   
 </body>
 </html>

@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 
 UPLOAD_FOLDER = "static/uploads"  # ali kamor želiš shraniti slike
-ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif"}
+ALLOWED_EXTENSIONS = {"png", "jpg", "gif"}
 
 
 def dovoljeno_ime(filename):
@@ -59,7 +59,7 @@ def oddajrecept():
                     VALUES (%s, %s);
                 """, (recept_id, oznaka))
 
-             # --- slike ---
+            # --- slike ---
             slike = request.files.getlist("slike")
             if slike:
                 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

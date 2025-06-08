@@ -284,6 +284,7 @@
   </script>
 
   <script>
+    //===KOMENTARJI===
     const receptId = "{{ recept.id }}";
     const komentarjiSeznam = document.getElementById("komentarji-seznam");
     const komentarForm = document.getElementById("komentar-form");
@@ -343,8 +344,7 @@
 
     // Ob nalaganju strani naloži komentarje
     document.addEventListener("DOMContentLoaded", naloziKomentarje);
-</script>
-
+  </script>
 
   <script>
     const root = document.getElementById('html-root');
@@ -362,38 +362,41 @@
     });
   </script>
   
- <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    // Prikaži alergene po 2 sekundah
-    setTimeout(() => {
-      const popup = document.getElementById('alergeni-popup');
-      if (popup) {
-        popup.classList.add('show');
+  <script>
+    //===ALERGENI===
+    window.addEventListener('DOMContentLoaded', () => {
+      // Prikaži alergene po 2 sekundah
+      setTimeout(() => {
+        const popup = document.getElementById('alergeni-popup');
+        if (popup) {
+          popup.classList.add('show');
+        }
+      }, 2000);
+
+      // Funkcija za zapiranje popupa
+      function zapriAlergeniPopup() {
+        const popup = document.getElementById('alergeni-popup');
+        if (popup) {
+          popup.classList.remove('show');
+        }
       }
-    }, 2000);
 
-    // Funkcija za zapiranje popupa
-    function zapriAlergeniPopup() {
-      const popup = document.getElementById('alergeni-popup');
-      if (popup) {
-        popup.classList.remove('show');
+      // Če imaš 'x' gumb, poveži ga z zapri funkcijo
+      const closeBtn = document.querySelector('#alergeni-popup .close-btn');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', zapriAlergeniPopup);
       }
-    }
+    });
+  </script>
 
-    // Če imaš 'x' gumb, poveži ga z zapri funkcijo
-    const closeBtn = document.querySelector('#alergeni-popup .close-btn');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', zapriAlergeniPopup);
-    }
-  });
-</script>
-
-<script>
+  <script>
+    //===SLIKE===
     // SLIDESHOW FUNKCIONALNOST
     let currentSlide = 0;
-    const slides = document.querySelectorAll('.galerija img');
-    const indicators = document.querySelectorAll('.indicator');
-    const totalSlides = slides.length;
+    let slides = [];
+    let indicators = [];
+    let totalSlides = 0;
+    let autoSlideInterval;
 
     // Posodobi prikaz trenutne slike
     function updateSlideDisplay() {
@@ -451,31 +454,9 @@
       }
     }
 
-    // Dodaj event listener za kazalce
-    document.addEventListener('DOMContentLoaded', () => {
-      updateSlideDisplay();
-      
-      // Dodaj event listener za kazalce
-      const indicators = document.querySelectorAll('.indicator');
-      indicators.forEach((indicator, index) => {
-        indicator.addEventListener('click', () => {
-          goToSlide(index);
-        });
-      });
-      
-      // Opcijsko: začni avtomatski slideshow
-      // startAutoSlide();
-      
-      // Ustavi avtomatski slideshow ob hover
-      const gallery = document.querySelector('.galerija');
-      gallery?.addEventListener('mouseenter', stopAutoSlide);
-      gallery?.addEventListener('mouseleave', startAutoSlide);
-    });
-
-    // Avtomatski slideshow (opcijsko)
-    let autoSlideInterval;
-
+    // Avtomatski slideshow
     function startAutoSlide() {
+      stopAutoSlide(); // Počisti obstoječi interval
       if (totalSlides > 1) {
         autoSlideInterval = setInterval(() => {
           changeSlide(1);
@@ -486,32 +467,33 @@
     function stopAutoSlide() {
       if (autoSlideInterval) {
         clearInterval(autoSlideInterval);
+        autoSlideInterval = null;
       }
     }
 
-    // Tipkovnica navigacija
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        changeSlide(-1);
-      } else if (e.key === 'ArrowRight') {
-        changeSlide(1);
-      } else if (e.key === 'Escape') {
-        closeModal();
+    // MODAL FUNKCIONALNOST
+    function openModal(imageSrc) {
+      const modal = document.getElementById('image-modal');
+      const modalImage = document.getElementById('modal-image');
+      
+      if (modal && modalImage) {
+        modalImage.src = imageSrc;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Prepreči scrollanje
       }
-    });
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto'; // Omogoči scrollanje
+      }
+    }
 
     // Touch/swipe podpora za mobilne naprave
     let touchStartX = 0;
     let touchEndX = 0;
-
-    document.querySelector('.galerija')?.addEventListener('touchstart', (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    });
-
-    document.querySelector('.galerija')?.addEventListener('touchend', (e) => {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
-    });
 
     function handleSwipe() {
       const swipeThreshold = 50;
@@ -526,40 +508,67 @@
       }
     }
 
-    // MODAL FUNKCIONALNOST
-    function openModal(imageSrc) {
-      const modal = document.getElementById('image-modal');
-      const modalImage = document.getElementById('modal-image');
-      
-      modalImage.src = imageSrc;
-      modal.classList.add('show');
-      document.body.style.overflow = 'hidden'; // Prepreči scrollanje
-    }
-
-    function closeModal() {
-      const modal = document.getElementById('image-modal');
-      modal.classList.remove('show');
-      document.body.style.overflow = 'auto'; // Omogoči scrollanje
-    }
-
-    // Zapri modal pri kliku zunaj slike
-    document.getElementById('image-modal')?.addEventListener('click', (e) => {
-      if (e.target.id === 'image-modal') {
-        closeModal();
-      }
-    });
-
     // Inicializacija ob nalaganju strani
     document.addEventListener('DOMContentLoaded', () => {
+      // Inicializiraj elemente
+      slides = document.querySelectorAll('.galerija img');
+      indicators = document.querySelectorAll('.indicator');
+      totalSlides = slides.length;
+      
+      // Če ni slik, ne nadaljuj
+      if (totalSlides === 0) return;
+      
+      // Začetni prikaz
       updateSlideDisplay();
       
-      // Opcijsko: začni avtomatski slideshow
-      // startAutoSlide();
+      // Dodaj event listener za kazalce
+      indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+          goToSlide(index);
+        });
+      });
       
-      // Ustavi avtomatski slideshow ob hover
+      // Galerija event listenerji
       const gallery = document.querySelector('.galerija');
-      gallery?.addEventListener('mouseenter', stopAutoSlide);
-      gallery?.addEventListener('mouseleave', startAutoSlide);
+      if (gallery) {
+        // Touch eventi
+        gallery.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+
+        gallery.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          handleSwipe();
+        });
+        
+        // Hover eventi za avtomatski slideshow
+        gallery.addEventListener('mouseenter', stopAutoSlide);
+        gallery.addEventListener('mouseleave', startAutoSlide);
+      }
+      
+      // Modal event listener
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target.id === 'image-modal') {
+            closeModal();
+          }
+        });
+      }
+      
+      // Tipkovnica navigacija
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          changeSlide(-1);
+        } else if (e.key === 'ArrowRight') {
+          changeSlide(1);
+        } else if (e.key === 'Escape') {
+          closeModal();
+        }
+      });
+      
+      // ZAČNI AVTOMATSKI SLIDESHOW
+      startAutoSlide();
     });
   </script>
   

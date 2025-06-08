@@ -168,6 +168,7 @@ def prikazi_recept(slug):
                 recept_data['surovine'] = surovine
                 recept_data['st_oseb'] = surovine[0]['st_oseb'] if surovine else 1
 
+                #Oznake
                 cur.execute("""
                     SELECT oznaka
                     FROM oznake
