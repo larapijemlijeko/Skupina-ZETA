@@ -43,6 +43,23 @@
             <input type="number" id="tezavnost" name="tezavnost" min="1" max="3" class="form-input">
           </div>
 
+          <!-- 🟩 Dopolnjeno: regija -->
+          <div class="form-group">
+            <label for="regija">Izberi regijo:</label>
+            <select name="regija" id="regija" class="form-select" required>
+              <option value="">-- izberi --</option>
+              {% for regija in regije %}
+                <option value="{{ regija[0] }}">{{ regija[1] }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- 🟩 Dopolnjeno: drzava -->
+          <div class="form-group">
+            <label for="drzava">Država:</label>
+            <input type="text" id="drzava" name="drzava" class="form-input" placeholder="Vnesi državo" required>
+          </div>
+
           <div class="image-upload-section">
             <h3>Slike</h3>
             <div class="image-upload-container">

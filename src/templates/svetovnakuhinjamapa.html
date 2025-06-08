@@ -404,7 +404,7 @@
         data.forEach(recept => {
           const item = document.createElement('div');
           item.classList.add('recipe-item');
-          item.innerHTML = `<h3>${recept.naslov}</h3><p>${recept.opis}</p>`;
+          item.innerHTML = `<h3>${recept.naslov}</h3><p>${recept.opis}</p><p><strong>Država:</strong> ${recept.drzava || 'Ni podatka'}</p>`;
           seznam.appendChild(item);
         });
       })

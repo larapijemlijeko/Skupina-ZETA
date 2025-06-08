@@ -25,12 +25,27 @@ def oddajrecept():
             tezavnost = request.form.get("tezavnost")
             uporabnik_id = 1  # začasno fiksno
 
+             # 🟩 Dopolnjeno: polje drzava
+            drzava = request.form.get("drzava")
+
             # --- vstavi recept ---
             cur.execute("""
-                INSERT INTO recepti (naslov, opis, priprava, cas_priprave, tezavnost, uporabnik_id)
-                VALUES (%s, %s, %s, %s, %s, %s) RETURNING id;
-            """, (naslov, opis, priprava, cas, tezavnost, uporabnik_id))
+                INSERT INTO recepti (naslov, opis, priprava, cas_priprave, tezavnost, uporabnik_id, drzava)
+                VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id;
+            """, (naslov, opis, priprava, cas, tezavnost, uporabnik_id, drzava))
             recept_id = cur.fetchone()[0]
+
+            
+
+            # 🟩 Dopolnjeno: regija_id
+            regija_id = request.form.get("regija")
+            if regija_id:
+                cur.execute("""
+                    INSERT INTO recepti_regije (recept_id, regija_id)
+                    VALUES (%s, %s);
+                """, (recept_id, regija_id))
+
+            
 
             # --- podatki o sestavinah (seznami) ---
             imena = request.form.getlist("sestavina_ime[]")
@@ -105,8 +120,15 @@ def oddajrecept():
     cur = conn.cursor()
     cur.execute("SELECT id, ime FROM alergeni ORDER BY ime;")
     alergeni = cur.fetchall()
+    
+    
+
+     # 🟩 Dopolnjeno: naloži regije
+    cur.execute("SELECT id, ime FROM regije ORDER BY ime;")
+    regije = cur.fetchall()
+
     cur.close()
     conn.close()
 
     # If GET request or if POST failed, render the form template
-    return render_template("oddajrecept.html", alergeni=alergeni)
+    return render_template("oddajrecept.html", alergeni=alergeni, regije=regije)
