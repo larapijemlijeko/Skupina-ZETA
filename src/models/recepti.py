@@ -12,3 +12,15 @@ def create_table(cur):
             datum_kreiranja TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """)
+
+    cur.execute("""
+        DO $$
+        BEGIN
+            IF NOT EXISTS (
+                SELECT 1 FROM information_schema.columns
+                WHERE table_name='recepti' AND column_name='drzava'
+            ) THEN
+                ALTER TABLE recepti ADD COLUMN drzava VARCHAR(100);
+            END IF;
+        END$$;
+    """)

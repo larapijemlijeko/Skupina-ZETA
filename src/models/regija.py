@@ -13,20 +13,13 @@ def create_table(cur):
         );
     """)
 
-def inicializiraj_regije_in_povezave():
-    from . import db  # če db ni še uvožen
-    conn = db.get_connection()
-    cur = conn.cursor()
-    
-    # Dodaj regije
-    regije = ["Europe", "North America", "Asia", "Africa", "South America"]
+    regije = ["Europe", "North America", "North Asia", "South Asia", "Africa and the Middle East", "South America",]
     for regija in regije:
-        cur.execute("INSERT INTO regije (ime) VALUES (%s) ON CONFLICT (ime) DO NOTHING", (regija,))
-    
-    # Poveži prvi recept z Evropo (primer)
-    cur.execute("SELECT id FROM regije WHERE ime = %s", ("Europe",))
-    regija_id = cur.fetchone()[0]
-    cur.execute("INSERT INTO recepti_regije (recept_id, regija_id) VALUES (%s, %s)", (1, regija_id))
+        cur.execute("""
+            INSERT INTO regije (ime) VALUES (%s)
+            ON CONFLICT (ime) DO NOTHING
+        """, (regija,))
+        print("Vstavil regijo:", regija)
 
-    conn.commit()
-    conn.close()
+    print("Tabele regije in privzete regije so pripravljene.")
+
