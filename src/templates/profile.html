@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="sl">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Moj profil</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+  {% include 'header.html' %}
+
+  <main>
+    <div class="container">
+      <h2>Moj profil</h2>
+      <p>Uporabniško ime: {{ current_user.username }}</p>
+      <p>Email: {{ current_user.email }}</p>
+
+      <h3>Všečkani recepti</h3>
+      {% if liked_recipes %}
+      <ul>
+        {% for recipe in liked_recipes %}
+        <li>
+          <a href="/recept/{{ recipe.id }}">{{ recipe.naslov }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p>Še niste všečkali nobenega recepta.</p>
+      {% endif %}
+    </div>
+  </main>
+
+  <footer>
+    &copy; 2025 DelishBites. All rights reserved.
+  </footer>
+</body>
+
+</html>

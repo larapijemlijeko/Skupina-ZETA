@@ -2,14 +2,19 @@
   <h1>DelishBites</h1>
   <nav>
     <a href="/">Domov</a>
-    <a href="/recepti">Recepti</a>
-    <a href="/scraper">Strgalnik</a>
     <a href="/novice">Novice</a>
     <a href="/vprasanja">Pogosta vprašanja</a>
     <a href="/kontakt">Kontakt</a>
-    <a href="/prijava">Prijava</a>
     <a href="/anketa">Anketa</a>
-    <a href="/svetovnakuhinjamapa">Kuhinje po svetu</a>
     <a href="/report">Prijava napake</a>
+    {% if current_user.is_authenticated %}
+      <a href="/svetovnakuhinjamapa">Kuhinje po svetu</a>
+      <a href="/recepti">Recepti</a>
+      <a href="/scraper">Strgalnik</a>
+      <a href="/profil">{{ current_user.username }}</a>
+      <a href="/odjava">Odjava</a>
+    {% else %}
+      <a href="/prijava">Prijava</a>
+    {% endif %}
   </nav>
 </header>
