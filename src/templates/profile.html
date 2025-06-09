@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="sl">
-
 <head>
   <meta charset="UTF-8">
   <title>Moj profil</title>
@@ -12,29 +11,37 @@
   {% include 'header.html' %}
 
   <main>
-    <div class="container">
-      <h2>Moj profil</h2>
-      <p>Uporabniško ime: {{ current_user.username }}</p>
-      <p>Email: {{ current_user.email }}</p>
+    <div class="profile-container">
+      <h2 class="profile-title">Moj profil</h2>
+      
+      <div class="user-info">
+        <p><strong>Uporabniško ime:</strong> {{ current_user.username }}</p>
+        <p><strong>Email:</strong> {{ current_user.email }}</p>
+      </div>
 
-      <h3>Všečkani recepti</h3>
-      {% if liked_recipes %}
-      <ul>
-        {% for recipe in liked_recipes %}
-        <li>
-          <a href="/recept/{{ recipe.id }}">{{ recipe.naslov }}</a>
-        </li>
-        {% endfor %}
-      </ul>
-      {% else %}
-      <p>Še niste všečkali nobenega recepta.</p>
-      {% endif %}
+      <div class="liked-recipes-section">
+        <h3 class="liked-recipes-title">Všečkani recepti</h3>
+        
+        {% if liked_recipes %}
+        <ul class="liked-recipes-list">
+          {% for recipe in liked_recipes %}
+          <li class="liked-recipe-item">
+            <a href="/recept/{{ recipe.id }}" class="liked-recipe-link">{{ recipe.naslov }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <div class="empty-message">
+          <p>Še niste všečkali nobenega recepta.</p>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </main>
 
   <footer>
     &copy; 2025 DelishBites. All rights reserved.
   </footer>
+  
 </body>
-
 </html>
