@@ -140,6 +140,9 @@ def delete_forum(forum_id):
         conn.close()
         return redirect(url_for('forums.forum_display', forum_id=forum_id))
     try:
+        # Najprej izbriši vse komentarje povezane s forumom
+        cur.execute("DELETE FROM komentarji_forum WHERE forum_id = %s", (forum_id,))
+        # Nato izbriši forum
         cur.execute("DELETE FROM forum WHERE id = %s", (forum_id,))
         conn.commit()
     except Exception as e:
