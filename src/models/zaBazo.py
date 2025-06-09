@@ -12,8 +12,6 @@ def create_tables():
         cur = conn.cursor()
         print("Vzpostavljena povezava z bazo.")
 
-       
-
         # Ustvari tabele
         uporabniki.create_table(cur)
         recepti.create_table(cur)
@@ -30,8 +28,6 @@ def create_tables():
         napake.create_table(cur)
         navedki.create_table(cur)
         forum.create_table(cur)
-
-
         
         komentarji.create_table(cur)
         alergeni.create_table(cur)
