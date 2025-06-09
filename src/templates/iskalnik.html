@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <title>Iskalnik receptov</title>
+</head>
+<body>
+
+  <h1>Iskalnik receptov</h1>
+
+  <input type="text" id="search-input" placeholder="Vpiši jed...">
+  <button id="searchBtn">Išči</button>
+
+  <div id="results"></div>
+
+  <script>
+    const searchBtn = document.getElementById('searchBtn');
+
+    searchBtn.addEventListener('click', () => {
+      const searchInput = document.getElementById('search-input').value.trim();
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+
+      let search = '';
+
+      //if (!searchInput) {
+      //  alert('Prosim, vnesite iskalni niz.');
+      //  return;
+      //}
+
+      if (searchInput) {
+        search = encodeURIComponent(searchInput);
+      }
+
+      //fetch(`/api/recipes?title=${encodeURIComponent(searchInput)}`)
+      fetch(`/api/recipes?title=${(search)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.length === 0) {
+            resultsDiv.innerHTML = '<p>Ni najdenih receptov.</p>';
+          } else {
+            data.forEach(recipe => {
+              const card = document.createElement('div');
+              card.innerHTML = `
+                <h3>${recipe.naslov}</h3>
+                <p>${recipe.opis}</p>
+                <p><strong>Čas priprave:</strong> ${recipe.cas_priprave}</p>
+                ${recipe.slika_url ? `<img src="${recipe.slika_url}" alt="Slika recepta" width="200">` : ''}
+                <hr>
+              `;
+              resultsDiv.appendChild(card);
+            });
+          }
+        })
+        .catch(error => {
+          console.error('Napaka pri iskanju:', error);
+          resultsDiv.innerHTML = '<p>Prišlo je do napake pri iskanju.</p>';
+        });
+    });
+  </script>
+
+</body>
+</html>

@@ -358,5 +358,46 @@ def forum_display(forum_id):
 def get_all_forums():
     return controllers.forum.get_all_forums()
 
+
+@f_app.route("/iskalnik")
+def iskalnik():
+    return render_template("iskalnik.html")
+
+@f_app.route("/api/recipes")
+def api_recipes():
+    title = request.args.get("title", "")
+    conn = db.get_connection()
+    cur = conn.cursor()
+    try:
+        if len(title) > 0:
+            cur.execute("""
+                SELECT id, naslov, opis, cas_priprave, slika_url
+                FROM recepti
+                WHERE naslov ILIKE %s
+            """, (f"%{title}%",))
+        else:
+            cur.execute("""
+                SELECT id, naslov, opis, cas_priprave, slika_url
+                FROM recepti
+               WHERE id >= 0""")
+          
+        rows = cur.fetchall()
+        results = []
+        for row in rows:
+            results.append({
+                "id": row[0],
+                "naslov": row[1],
+                "opis": row[2],
+                "cas_priprave": row[3],
+                "slika_url": row[4]
+            })
+        return jsonify(results)
+    except Exception as e:
+        print("Napaka pri iskanju:", e)
+        return jsonify([]), 500
+    finally:
+        cur.close()
+        conn.close()
+
 if __name__ == "__main__":
     f_app.run(port=5000, debug=True)

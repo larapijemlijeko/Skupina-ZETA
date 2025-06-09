@@ -8,6 +8,7 @@ recepti_bp = Blueprint('recepti', __name__)
 @recepti_bp.route('/recepti')
 def seznam_receptov():
     oznaka = request.args.get('oznaka')
+    ime_recepta = request.args.get('recept')
     
     conn = db.get_connection()
     cur = conn.cursor()
@@ -25,6 +26,18 @@ def seznam_receptov():
                 WHERE o.oznaka = %s
                 ORDER BY r.datum_kreiranja DESC, r.id DESC
             """, (oznaka,))
+        elif ime_recepta:
+            cur.execute("""
+                SELECT r.id, r.naslov, r.opis, r.cas_priprave, s.slika_pot
+                FROM recepti r
+                LEFT JOIN (
+                    SELECT DISTINCT ON (recept_id) recept_id, slika_pot
+                    FROM recept_slike
+                    ORDER BY recept_id, id
+                ) s ON r.id = s.recept_id
+                WHERE LOWER(r.naslov) LIKE LOWER(%s)
+                ORDER BY r.datum_kreiranja DESC, r.id DESC
+            """, ('%' + ime_recepta + '%',))
         else:
             cur.execute("""
                 SELECT r.id, r.naslov, r.opis, r.cas_priprave, s.slika_pot

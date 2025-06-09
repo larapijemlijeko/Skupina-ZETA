@@ -29,7 +29,7 @@ def create_tables():
         regija.create_table(cur)
         napake.create_table(cur)
         navedki.create_table(cur)
-                forum.create_table(cur)
+        forum.create_table(cur)
 
 
         

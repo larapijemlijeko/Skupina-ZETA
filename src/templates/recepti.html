@@ -12,13 +12,16 @@
     <div class="main-content">
       <div class="recipes-header">
         <h2>Recepti</h2>
+        <!--<form method="get" action="/recepti" class="search-box">-->
+        <input id="search-input" type="text" class="search-box-input" placeholder="Išči jed ..." value="{{ iskani_izraz }}">
+        <button class="search-box-button" id="searchBtn">Išči</button>
         <div class="recipe-button-group">
           <a href="/oddajrecept" class="submit-recipe-btn">📄 Oddaj svoj recept</a>
           <a href="/nakljucen-recept" class="random-recipe-btn">🎲 Naključni recept</a>
         </div>
       </div>
 
-      <div class="recipe-grid">
+      <div id="results" class="recipe-grid">
         {% if recepti %}
           {% for recept in recepti %}
             <a href="{{ url_for('recepti.prikazi_recept', slug=recept.slug) }}" class="recipe-link">
@@ -34,7 +37,7 @@
                 <p>{{ recept.opis|truncate(100) }}</p>
                 <div class="recipe-time">
                   {% if recept.cas_priprave %}
-                    <span>⏱️ {{ recept.cas_priprave }} min</span>
+                    <span⏱️ {{ recept.cas_priprave }} min</span>
                   {% endif %}
                 </div>
               </div>
@@ -114,5 +117,22 @@
         localStorage.setItem('theme', next);
     });
   </script>
+
+<script>
+    const searchBtn = document.getElementById('searchBtn');
+
+    searchBtn.addEventListener('click', () => {
+    const searchInput = document.getElementById('search-input').value.trim();
+    if (searchInput) {
+      const newUrl = `${window.location.pathname}?recept=${encodeURIComponent(searchInput)}`;
+      window.location.href = newUrl;
+    }
+    else {
+      const newUrl = `${window.location.pathname}`;
+      window.location.href = newUrl;
+    }
+  });
+  </script>
+
 </body>
 </html>
