@@ -11,7 +11,7 @@ def forum_site():
 def get_all_forums():
     try:
         offset = int(request.args.get('offset', 0))
-        limit = int(request.args.get('limit', 20))
+        limit = int(request.args.get('limit', 5))
         forums = get_db_all_forums(offset=offset, limit=limit)
     except Exception as e:
         return jsonify({"error": str(e)}), 500    
@@ -19,7 +19,7 @@ def get_all_forums():
         return jsonify({"message": "No forums found"}), 404
     return jsonify(forums), 200
 
-def get_db_all_forums(offset=0, limit=20):
+def get_db_all_forums(offset=0, limit=5):
     conn = db.get_connection()
     cur = conn.cursor()
     cur.execute(
@@ -34,7 +34,6 @@ def get_db_all_forums(offset=0, limit=20):
     conn.close()
     return forums
 
-@admin_bp.route('/forum/<int:forum_id>')
 @admin_bp.route('/forum/<int:forum_id>')
 def forum_display(forum_id):
     try:
