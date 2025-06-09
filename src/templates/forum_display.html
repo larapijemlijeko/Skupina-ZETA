@@ -42,7 +42,7 @@
                         {% for comment in comments %}
                             <li style="margin-bottom: 20px; padding: 16px; background: #f7f7fa; border-radius: 6px; box-shadow: 0 1px 3px #0001;">
                                 <div style="color: #555; font-size: 0.95em;">
-                                    <strong>Uporabnik #{{ comment.user_id }}</strong> | {{ comment.date }}
+                                    <strong>{{ comment.username }}</strong> | {{ comment.date }}
                                 </div>
                                 <div style="margin-top: 8px; font-size: 1.05em;">
                                     {{ comment.content }}
@@ -54,6 +54,14 @@
                     <p style="color: #888;">Ni komentarjev.</p>
                 {% endif %}
             </section>
+            {% if current_user.is_authenticated %}
+                <form method="POST" action="{{ url_for('forums.add_comment', forum_id=forum.id) }}" style="margin-top: 24px;">
+                    <textarea name="comment" rows="3" style="width: 100%; resize: vertical;" placeholder="Dodaj komentar ..." required></textarea>
+                    <button type="submit" style="margin-top: 8px;">Objavi komentar</button>
+                </form>
+            {% else %}
+                <p style="color: #888; margin-top: 24px;">Za dodajanje komentarjev se morate prijaviti.</p>
+            {% endif %}
         </div>
     </main>
   

@@ -78,16 +78,20 @@ def forum_display(forum_id):
             "user_id": row[5]
         }
 
-        cur.execute(
-            "SELECT id, uporabnik_id, vsebina, datum_objave FROM komentarji WHERE forum_id = %s ORDER BY datum_objave ASC",
-            (forum_id,)
-        )
+        cur.execute("""
+            SELECT k.id, k.uporabnik_id, u.uporabnisko_ime, k.vsebina, k.datum_objave
+            FROM komentarji_forum k
+            LEFT JOIN uporabniki u ON k.uporabnik_id = u.id
+            WHERE k.forum_id = %s
+            ORDER BY k.datum_objave ASC
+        """, (forum_id,))
         comments = [
             {
                 "id": row[0],
                 "user_id": row[1],
-                "content": row[2],
-                "date": row[3].isoformat()
+                "username": row[2] or "System",
+                "content": row[3],
+                "date": row[4].isoformat()
             }
             for row in cur.fetchall()
         ]
@@ -144,3 +148,23 @@ def delete_forum(forum_id):
         cur.close()
         conn.close()
     return redirect(url_for('forums.forum_site'))
+
+@forum_bp.route('/forum/<int:forum_id>/comment', methods=['POST'])
+@login_required
+def add_comment(forum_id):
+    content = request.form.get('comment', '').strip()
+    if not content:
+        return redirect(url_for('forums.forum_display', forum_id=forum_id))
+    try:
+        conn = db.get_connection()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO komentarji_forum (forum_id, uporabnik_id, vsebina) VALUES (%s, %s, %s)",
+            (forum_id, current_user.id, content)
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"Napaka pri dodajanju komentarja: {e}")
+    return redirect(url_for('forums.forum_display', forum_id=forum_id))
