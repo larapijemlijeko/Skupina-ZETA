@@ -2789,3 +2789,112 @@ button {
 .search-box button:hover {
   background-color: #e25d34;
 }
+
+/* Admin forms questions */
+.admin-form-container {
+            max-width: 420px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px #0002;
+            padding: 32px 28px 24px 28px;
+        }
+        .admin-form-container h2 {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .admin-form label {
+            font-weight: bold;
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+        .admin-form input[type="email"],
+        .admin-form textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 8px;
+            box-sizing: border-box;
+        }
+        .admin-form textarea {
+            resize: vertical;
+        }
+        .admin-form button {
+            background: #ff7043;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 24px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s;
+            width: 100%;
+        }
+        .admin-form button:hover {
+            background: #ff5722;
+        }
+        .flash-messages {
+            margin-top: 18px;
+            padding: 0;
+            list-style: none;
+        }
+        .flash-messages li {
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            font-size: 0.97em;
+        }
+        .flash-messages .success { background: #e0f7e9; color: #218838; }
+        .flash-messages .danger { background: #ffeaea; color: #c62828; }
+
+/* Admin questions showed */
+.questions-list {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px #0002;
+            padding: 32px 28px 24px 28px;
+        }
+        .questions-list h2 {
+            text-align: center;
+            margin-bottom: 28px;
+            font-size: 2em;
+            color: #ff7043;
+        }
+        .question-item {
+            border-bottom: 1px solid #eee;
+            padding: 18px 0 10px 0;
+            margin-bottom: 8px;
+            transition: background 0.2s;
+        }
+        .question-item:last-child {
+            border-bottom: none;
+        }
+        .question-email {
+            color: #ff7043;
+            font-weight: bold;
+            font-size: 1em;
+        }
+        .question-date {
+            color: #aaa;
+            font-size: 0.95em;
+            float: right;
+            margin-left: 10px;
+        }
+        .question-content {
+            margin: 10px 0 0 0;
+            font-size: 1.13em;
+            color: #222;
+            white-space: pre-line;
+        }
+        @media (max-width: 800px) {
+            .questions-list {
+                max-width: 98vw;
+                padding: 18px 6vw 12px 6vw;
+            }
+        }

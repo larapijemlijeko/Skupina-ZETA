@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="sl" id="html-root" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Questions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="admin-form-container">
+        <h2>Pošlji vprašanje administratorju</h2>
+        <form class="admin-form" method="POST" action="{{ url_for('admin_questions.admin_questions_site') }}">
+            <label for="email">Vaš email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="question">Vaše vprašanje:</label>
+            <textarea id="question" name="question" rows="4" required></textarea>
+            <button type="submit">Pošlji</button>
+        </form>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flash-messages">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

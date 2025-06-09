@@ -167,4 +167,16 @@ def backup_podatki():
     createBackup()
 
     return redirect(url_for('admin.admin_panel'))
-       
+
+@admin_bp.route('/admin/questions')
+def admin_questions_showed():
+    conn = db.get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT email, question, date FROM admin_questions ORDER BY date DESC")
+    questions = [
+        {"email": row[0], "question": row[1], "date": row[2].strftime("%Y-%m-%d %H:%M")}
+        for row in cur.fetchall()
+    ]
+    cur.close()
+    conn.close()
+    return render_template('admin_questions_showed.html', questions=questions)

@@ -25,6 +25,7 @@ import controllers.kviz
 import controllers.forum
 from controllers.forum import forum_bp
 from controllers import svetovna_kuhinja
+from controllers.admin_questions import admin_questions_bp
 
 # Import user management modules
 from models.uporabniki import User
@@ -55,6 +56,7 @@ f_app.register_blueprint(recepti_bp)
 f_app.register_blueprint(kalorije_bp)
 f_app.register_blueprint(auth_bp)  # Add user authentication
 f_app.register_blueprint(forum_bp)
+f_app.register_blueprint(admin_questions_bp)
 
 # Initialize database and scheduler
 create_tables()

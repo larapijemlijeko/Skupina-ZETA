@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="sl" id="html-root" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Questions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="questions-list">
+        <h2>Vsa vprašanja uporabnikov</h2>
+        {% if questions %}
+            {% for q in questions %}
+                <div class="question-item">
+                    <div>
+                        <span class="question-email">{{ q.email }}</span>
+                        <span class="question-date">{{ q.date }}</span>
+                    </div>
+                    <div class="question-content">{{ q.question }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #888; text-align: center;">Ni vprašanj.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
