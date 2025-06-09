@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash
 from flask_login import login_required, current_user
+from datetime import datetime
 import db
 
 forum_bp = Blueprint('forums', __name__)
@@ -170,4 +171,66 @@ def add_comment(forum_id):
         conn.close()
     except Exception as e:
         print(f"Napaka pri dodajanju komentarja: {e}")
+    return redirect(url_for('forums.forum_display', forum_id=forum_id))
+
+@forum_bp.route('/forum/<int:forum_id>/report', methods=['POST'])
+@login_required
+def report_forum(forum_id):
+    reason = request.form.get('reason', '').strip()
+    if not reason:
+        flash("Vnesite razlog za prijavo.", "danger")
+        return redirect(url_for('forums.forum_display', forum_id=forum_id))
+    try:
+        conn = db.get_connection()
+        cur = conn.cursor()
+        # Prepreči podvojene prijave istega uporabnika za isti forum
+        cur.execute(
+            "SELECT 1 FROM reported_content WHERE content_type = %s AND content_id = %s AND reported_by = %s",
+            ('forum', forum_id, current_user.id)
+        )
+        if cur.fetchone():
+            flash("Ta forum ste že prijavili.", "warning")
+        else:
+            cur.execute(
+                "INSERT INTO reported_content (content_type, content_id, reason, reported_by, date_reported) VALUES (%s, %s, %s, %s, %s)",
+                ('forum', forum_id, reason, current_user.id, datetime.now())
+            )
+            conn.commit()
+            flash("Forum je bil prijavljen administratorju.", "success")
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"Napaka pri prijavi foruma: {e}")
+        flash("Napaka pri prijavi foruma.", "danger")
+    return redirect(url_for('forums.forum_display', forum_id=forum_id))
+
+@forum_bp.route('/forum/<int:forum_id>/comment/<int:comment_id>/report', methods=['POST'])
+@login_required
+def report_comment(forum_id, comment_id):
+    reason = request.form.get('reason', '').strip()
+    if not reason:
+        flash("Vnesite razlog za prijavo komentarja.", "danger")
+        return redirect(url_for('forums.forum_display', forum_id=forum_id))
+    try:
+        conn = db.get_connection()
+        cur = conn.cursor()
+        # Prepreči podvojene prijave istega uporabnika za isti komentar
+        cur.execute(
+            "SELECT 1 FROM reported_content WHERE content_type = %s AND content_id = %s AND reported_by = %s",
+            ('comment', comment_id, current_user.id)
+        )
+        if cur.fetchone():
+            flash("Ta komentar ste že prijavili.", "warning")
+        else:
+            cur.execute(
+                "INSERT INTO reported_content (content_type, content_id, reason, reported_by, date_reported) VALUES (%s, %s, %s, %s, %s)",
+                ('comment', comment_id, reason, current_user.id, datetime.now())
+            )
+            conn.commit()
+            flash("Komentar je bil prijavljen administratorju.", "success")
+        cur.close()
+        conn.close()
+    except Exception as e:
+        print(f"Napaka pri prijavi komentarja: {e}")
+        flash("Napaka pri prijavi komentarja.", "danger")
     return redirect(url_for('forums.forum_display', forum_id=forum_id))

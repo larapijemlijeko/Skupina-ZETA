@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="sl" id="html-root" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <title>Reported Content</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .reported-list {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px #0002;
+            padding: 32px 28px 24px 28px;
+        }
+        .reported-list h2 {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .reported-item {
+            border-bottom: 1px solid #eee;
+            padding: 16px 0;
+        }
+        .reported-item:last-child {
+            border-bottom: none;
+        }
+        .reported-type {
+            font-weight: bold;
+            color: #ff7043;
+        }
+        .reported-date {
+            color: #aaa;
+            font-size: 0.95em;
+            float: right;
+        }
+        .reported-reason {
+            margin: 8px 0 0 0;
+            font-size: 1.08em;
+            color: #222;
+            white-space: pre-line;
+        }
+        .reported-link {
+            margin-top: 4px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="reported-list">
+        <h2>Vsa prijavljena vsebina</h2>
+        {% if reported %}
+            {% for r in reported %}
+                <div class="reported-item">
+                    <div>
+                        <span class="reported-type">
+                            {% if r.content_type == 'comment' %}
+                                Komentar
+                            {% elif r.content_type == 'forum' %}
+                                Forum
+                            {% else %}
+                                {{ r.content_type|capitalize }}
+                            {% endif %}
+                        </span>
+                        <span class="reported-date">{{ r.date_reported }}</span>
+                    </div>
+                    <div class="reported-reason">
+                        <strong>Razlog:</strong> {{ r.reason }}
+                    </div>
+                    <div class="reported-link">
+                        {% if r.content_type == 'comment' %}
+                            <a href="{{ url_for('forums.forum_display', forum_id=r.content_id) }}">Poglej forum s tem komentarjem</a>
+                        {% elif r.content_type == 'forum' %}
+                            <a href="{{ url_for('forums.forum_display', forum_id=r.content_id) }}">Poglej prijavljen forum</a>
+                        {% endif %}
+                    </div>
+                    <div style="color:#888; font-size:0.97em; margin-top:4px;">
+                        Prijavil uporabnik z ID: {{ r.reported_by }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #888; text-align: center;">Ni prijavljene vsebine.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -206,6 +206,21 @@ body {
   text-decoration: underline;
 }
 
+.flash-messages {
+  margin-bottom: 16px;
+}
+.flash-message {
+  padding: 10px 14px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  font-size: 1em;
+}
+.flash-message.success { background: #e0f7e9; color: #218838; }
+.flash-message.danger { background: #ffeaea; color: #c62828; }
+.flash-message.info { background: #e3f2fd; color: #1976d2; }
+.flash-message.warning { background: #fff8e1; color: #ff9800; }
+
+
 /* Forgot password page styles */
 .forgot-password-body {
   font-family: Arial, sans-serif;

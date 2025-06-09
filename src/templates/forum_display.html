@@ -14,9 +14,19 @@
     
     <main style="max-width: 100vw; margin: 0; background: #f6f6f6; border-radius: 0; box-shadow: none;">
         <div style="max-width: 100%; margin: 40px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px; position: relative;">
+            {% if current_user.is_authenticated %}
+                <!-- Gumb za prijavo foruma (report) -->
+                <form method="POST" action="{{ url_for('forums.report_forum', forum_id=forum.id) }}" style="position: absolute; top: 20px; right: 20px; z-index: 2;">
+                    <input type="text" name="reason" placeholder="Razlog prijave" required>
+                    <button type="submit"
+                            style="background: #ffb300; color: #fff; border: none; border-radius: 5px; padding: 8px 18px; font-size: 1em; cursor: pointer; margin-bottom: 8px;">
+                        Prijavi forum
+                    </button>
+                </form>
+            {% endif %}
             {% if current_user.is_authenticated and current_user.id == forum.user_id %}
                 <!-- Gumb za brisanje foruma -->
-                <form method="POST" action="{{ url_for('forums.delete_forum', forum_id=forum.id) }}" style="position: absolute; top: 20px; right: 20px;">
+                <form method="POST" action="{{ url_for('forums.delete_forum', forum_id=forum.id) }}" style="position: absolute; top: 60px; right: 20px;">
                     <button type="submit" 
                             onclick="return confirm('Ali res želite izbrisati ta forum?');"
                             style="background: #e53935; color: #fff; border: none; border-radius: 5px; padding: 8px 18px; font-size: 1em; cursor: pointer;">
@@ -47,6 +57,12 @@
                                 <div style="margin-top: 8px; font-size: 1.05em;">
                                     {{ comment.content }}
                                 </div>
+                                <form method="POST" action="{{ url_for('forums.report_comment', forum_id=forum.id, comment_id=comment.id) }}" style="display:inline;">
+                                    <input type="text" name="reason" placeholder="Reason" required>
+                                    <button type="submit" style="background:#ffb300; color:#fff; border:none; border-radius:5px; padding:4px 10px; font-size:0.95em; cursor:pointer;">
+                                        Report
+                                    </button>
+                                </form>
                             </li>
                         {% endfor %}
                     </ul>

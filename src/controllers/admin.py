@@ -180,3 +180,4 @@ def admin_questions_showed():
     cur.close()
     conn.close()
     return render_template('admin_questions_showed.html', questions=questions)
+
