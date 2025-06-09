@@ -23,6 +23,7 @@ import controllers.anketa
 import controllers.nakljucniRecepti
 import controllers.kviz
 import controllers.forum
+from controllers.forum import forum_bp
 from controllers import svetovna_kuhinja
 
 # Import user management modules
@@ -53,6 +54,7 @@ f_app.register_blueprint(admin_bp)
 f_app.register_blueprint(recepti_bp)
 f_app.register_blueprint(kalorije_bp)
 f_app.register_blueprint(auth_bp)  # Add user authentication
+f_app.register_blueprint(forum_bp)
 
 # Initialize database and scheduler
 create_tables()
@@ -345,20 +347,9 @@ def profile():
 @f_app.errorhandler(404)
 def not_found_error(error):
     return render_template('errors/404.html'), 404
-
 @f_app.errorhandler(500)
 def internal_error(error):
     return render_template('errors/500.html'), 500
-@f_app.route("/forums")
-def forum_site():
-    return controllers.forum.forum_site()
-@f_app.route('/forum/<int:forum_id>')
-def forum_display(forum_id):
-    return controllers.forum.forum_display(forum_id)
-@f_app.route("/api/forums")
-def get_all_forums():
-    return controllers.forum.get_all_forums()
-
 
 @f_app.route("/iskalnik")
 def iskalnik():

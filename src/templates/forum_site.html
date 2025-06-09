@@ -5,19 +5,226 @@
     <title>Forum Stran</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        body { font-family: Arial, sans-serif; }
-        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        /* --- Forum List Styling --- */
+        #forum-list {
+            max-width: 80%;
+            margin: 32px auto 80px auto;
+            padding: 0 16px;
+        }
+        #forum-list > div {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin: 18px 0;
+            padding: 20px 28px;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s;
+            cursor: pointer;
+        }
+        #forum-list > div:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            background: #f5faff;
+        }
+        #forum-list .forum-title {
+            font-weight: 600;
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: #1a2330;
+        }
+        #forum-list .forum-content {
+            color: #444;
+            font-size: 1em;
+        }
+
+        /* --- Forum Header (Title + Button) --- */
+        .forum-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1100px;
+            margin: 32px auto 0 auto;
+            padding: 0 16px;
+            width: 100%;
+            gap: 24px;
+        }
+        .forum-header h1 {
+            margin: 0;
+            color: #2d3e50;
+            font-size: 2em;
+            font-weight: 600;
+            text-align: left;
+            flex: 0 0 auto;
+        }
+        .forum-header #open-forum-popup {
+            background: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 32px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-left: 24px;
+            flex-shrink: 0;
+        }
+        .forum-header #open-forum-popup:hover {
+            background: #388e3c;
+        }
+
+        /* --- Welcome Message --- */
+        .forum-welcome {
+            max-width: 1100px;
+            margin: 12px auto 0 auto;
+            padding: 0 16px;
+        }
+
+        /* --- Popup Styling --- */
+        #forum-popup {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%,0);
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 24px;
+            z-index: 1000;
+            min-width: 320px;
+            max-width: 90vw;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        }
+        #forum-popup h2 {
+            margin-top: 0;
+            color: #2d3e50;
+        }
+        #forum-popup input[type="text"],
+        #forum-popup textarea {
+            border: 1px solid #bdbdbd;
+            border-radius: 5px;
+            padding: 8px;
+            margin-bottom: 12px;
+            font-size: 1em;
+            width: 100%;
+            box-sizing: border-box;
+            background: #fafbfc;
+        }
+        #forum-popup textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        #forum-popup button[type="submit"] {
+            background: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            font-size: 1em;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #forum-popup button[type="submit"]:hover {
+            background: #125ea2;
+        }
+        #forum-popup button[type="button"] {
+            background: #e0e0e0;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #forum-popup button[type="button"]:hover {
+            background: #bdbdbd;
+        }
+        #forum-error {
+            color: #d32f2f;
+            font-size: 0.98em;
+            margin-top: 10px;
+        }
+        #popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.2);
+            z-index: 999;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 1200px) {
+            #forum-list {
+                max-width: 98vw;
+                padding: 0 2vw;
+            }
+            #forum-popup {
+                min-width: 90vw;
+                padding: 12px;
+            }
+            .forum-header, .forum-welcome {
+                max-width: 98vw;
+                padding: 0 2vw;
+            }
+        }
+        @media (max-width: 700px) {
+            .forum-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .forum-header #open-forum-popup {
+                margin-left: 0;
+                margin-top: 12px;
+            }
+        }
     </style>
 </head>
 <body>
     {% include 'header.html' %}
-    <h1>Forum Plošča</h1>
-    
-    <p>Dobrodošli na forum DelishBites! Tukaj lahko delite svoje misli, vprašanja in izkušnje s kulinariko.</p>
+
+    <!-- Forum Title and Create Button -->
+    <div class="forum-header">
+        <h1>Forum Plošča</h1>
+        {% if current_user.is_authenticated %}
+            <button id="open-forum-popup">Ustvari nov forum</button>
+        {% endif %}
+    </div>
+
+    <!-- Welcome Message -->
+    <div class="forum-welcome">
+        <h4>Dobrodošli na forum DelishBites! Tukaj lahko delite svoje misli, vprašanja in izkušnje s kulinariko.</h4>
+    </div>
+
+    <!-- Popup for Creating New Forum (only for logged-in users) -->
+    {% if current_user.is_authenticated %}
+        <div id="forum-popup">
+            <h2>Ustvari nov forum</h2>
+            <form id="create-forum-form" method="POST" action="/forums">
+                <label for="forum-title">Naslov:</label><br>
+                <input type="text" id="forum-title" name="title" required><br>
+                <label for="forum-content">Vsebina:</label><br>
+                <textarea id="forum-content" name="content" required></textarea><br>
+                <button type="submit">Objavi</button>
+                <button type="button" id="close-forum-popup" onclick="document.getElementById('forum-popup').style.display='none';document.getElementById('popup-overlay').style.display='none';">Prekliči</button>
+            </form>
+            <div id="forum-error"></div>
+        </div>
+        <div id="popup-overlay"></div>
+    {% endif %}
+
+    <!-- Forum List -->
     <div id="forum-list"></div>
+
+    <!-- Forum List Loader Script -->
     <script>
+    // Infinite scroll and forum loading
     let offset = 0;
-    const limit = 5; // Število forumov na stran
+    const limit = 10;
     let loading = false;
 
     function loadForums() {
@@ -29,29 +236,18 @@
                 const list = document.getElementById('forum-list');
                 forums.forEach(forum => {
                     const div = document.createElement('div');
-                    div.style.border = '1px solid #ccc';
-                    div.style.borderRadius = '8px';
-                    div.style.margin = '16px 0';
-                    div.style.padding = '16px';
-                    div.style.width = '100%';
-                    div.style.boxSizing = 'border-box';
-                    div.style.background = '#fff';
-                    div.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)';
-                    div.style.cursor = 'pointer';
-
+                    div.className = "forum-entry";
                     div.addEventListener('click', () => {
                         window.location.href = `/forum/${forum.id}`;
                     });
 
                     const title = document.createElement('div');
                     title.textContent = forum.title;
-                    title.style.fontWeight = 'bold';
-                    title.style.fontSize = '1.2em';
-                    title.style.marginBottom = '8px';
+                    title.className = "forum-title";
 
                     const content = document.createElement('div');
                     content.textContent = forum.content || '';
-                    content.style.marginLeft = '0';
+                    content.className = "forum-content";
 
                     div.appendChild(title);
                     div.appendChild(content);
@@ -71,9 +267,28 @@
     // Initial load
     loadForums();
     </script>
-  
-  <footer>
+
+    <!-- Popup Logic Script (only for logged-in users) -->
+    {% if current_user.is_authenticated %}
+    <script>
+        // Popup open/close logic
+        document.getElementById('open-forum-popup').onclick = function() {
+            document.getElementById('forum-popup').style.display = 'block';
+            document.getElementById('popup-overlay').style.display = 'block';
+        };
+        document.getElementById('close-forum-popup').onclick = function() {
+            document.getElementById('forum-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+        };
+        document.getElementById('popup-overlay').onclick = function() {
+            document.getElementById('forum-popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+        };
+        
+    </script>
+    {% endif %}
+<footer>
     &copy; 2025 DelishBites. All rights reserved.
-  </footer>
+</footer>
 </body>
 </html>

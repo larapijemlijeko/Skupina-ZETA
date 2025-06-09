@@ -12,36 +12,49 @@
 <body>
     {% include 'header.html' %}
     
-    <main style="max-width: 700px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px;">
-        <article>
-            <h1 style="margin-bottom: 8px;">{{ forum.title }}</h1>
-            <div style="color: #888; font-size: 0.95em; margin-bottom: 16px;">
-                Objavljeno: {{ forum.date }}
-            </div>
-            <div style="font-size: 1.15em; margin-bottom: 32px;">
-                {{ forum.content }}
-            </div>
-        </article>
-
-        <section>
-            <h2 style="margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 4px;">Komentarji</h2>
-            {% if comments %}
-                <ul style="list-style: none; padding: 0;">
-                    {% for comment in comments %}
-                        <li style="margin-bottom: 20px; padding: 16px; background: #f7f7fa; border-radius: 6px; box-shadow: 0 1px 3px #0001;">
-                            <div style="color: #555; font-size: 0.95em;">
-                                <strong>Uporabnik #{{ comment.user_id }}</strong> | {{ comment.date }}
-                            </div>
-                            <div style="margin-top: 8px; font-size: 1.05em;">
-                                {{ comment.content }}
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p style="color: #888;">Ni komentarjev.</p>
+    <main style="max-width: 100vw; margin: 0; background: #f6f6f6; border-radius: 0; box-shadow: none;">
+        <div style="max-width: 100%; margin: 40px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px; position: relative;">
+            {% if current_user.is_authenticated and current_user.id == forum.user_id %}
+                <!-- Gumb za brisanje foruma -->
+                <form method="POST" action="{{ url_for('forums.delete_forum', forum_id=forum.id) }}" style="position: absolute; top: 20px; right: 20px;">
+                    <button type="submit" 
+                            onclick="return confirm('Ali res želite izbrisati ta forum?');"
+                            style="background: #e53935; color: #fff; border: none; border-radius: 5px; padding: 8px 18px; font-size: 1em; cursor: pointer;">
+                        Odstrani forum
+                    </button>
+                </form>
             {% endif %}
-        </section>
+            <article>
+                <h1 style="margin-bottom: 8px;">{{ forum.title }}</h1>
+                <div style="color: #888; font-size: 0.95em; margin-bottom: 16px;">
+                    Objavljeno: {{ forum.date }}
+                    <br>
+                    Avtor: <strong>{{ forum.author }}</strong>
+                </div>
+                <div style="font-size: 1.15em; margin-bottom: 32px;">
+                    {{ forum.content }}
+                </div>
+            </article>
+            <section>
+                <h2 style="margin-bottom: 12px; border-bottom: 1px solid #eee; padding-bottom: 4px;">Komentarji</h2>
+                {% if comments %}
+                    <ul style="list-style: none; padding: 0;">
+                        {% for comment in comments %}
+                            <li style="margin-bottom: 20px; padding: 16px; background: #f7f7fa; border-radius: 6px; box-shadow: 0 1px 3px #0001;">
+                                <div style="color: #555; font-size: 0.95em;">
+                                    <strong>Uporabnik #{{ comment.user_id }}</strong> | {{ comment.date }}
+                                </div>
+                                <div style="margin-top: 8px; font-size: 1.05em;">
+                                    {{ comment.content }}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p style="color: #888;">Ni komentarjev.</p>
+                {% endif %}
+            </section>
+        </div>
     </main>
   
   <footer>
