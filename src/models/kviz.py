@@ -1,7 +1,7 @@
 
 def create_table(cur):
     cur.execute("""
-        CREATE TABLE quiz_questions (
+        CREATE TABLE IF NOT EXISTS quiz_questions (
     id SERIAL PRIMARY KEY,
     question TEXT NOT NULL,
     options TEXT[] NOT NULL,
