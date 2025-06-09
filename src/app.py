@@ -22,6 +22,7 @@ import controllers.nagradneigre
 import controllers.anketa
 import controllers.nakljucniRecepti
 import controllers.kviz
+import controllers.forum
 from controllers import svetovna_kuhinja
 
 # Import user management modules
