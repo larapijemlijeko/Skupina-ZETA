@@ -4,19 +4,6 @@
   <meta charset="UTF-8">
   <title>Oddaj recpet</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <script>
-        function dodajSestavino() {
-            const container = document.getElementById("sestavine");
-            const html = `
-                <div class="sestavina">
-                    <label>Ime:</label><input type="text" name="sestavina_ime[]" required>
-                    <label>Količina:</label><input type="text" name="sestavina_kolicina[]">
-                    <label>Enota:</label><input type="text" name="sestavina_enota[]">
-                    <hr>
-                </div>`;
-            container.insertAdjacentHTML("beforeend", html);
-        }
-    </script>
 </head>
 <body>
 
@@ -24,51 +11,133 @@
 
   <main>
     <div class="container">
-    <h2>Oddaj svoj recept</h2>
-    <div>Veseli smo, da želite deliti svoje kulinarične mojstrovine z našo skupnostjo! Na DelishBites cenimo edinstvene recepte in osebne kuharske zgodbe. Vaš recept bo navdihnil druge kuharske navdušence in obogatil našo zbirko.</div>
-    <form method="post" action="/oddajrecept">
-        <label>Naslov:</label><br>
-        <input type="text" name="naslov" required><br><br>
+      <div class="recipe-form-container">
+        <h2>Oddaj svoj recept</h2>
+        <div class="recipe-form-intro">
+          Veseli smo, da želite deliti svoje kulinarične mojstrovine z našo skupnostjo! Na DelishBites cenimo edinstvene recepte in osebne kuharske zgodbe. Vaš recept bo navdihnil druge kuharske navdušence in obogatil našo zbirko.
+        </div>
+        
+        <form method="post" action="/oddajrecept" enctype="multipart/form-data" class="recipe-form">
+          <div class="form-group">
+            <label for="naslov">Naslov:</label>
+            <input type="text" id="naslov" name="naslov" class="form-input" required>
+          </div>
 
-        <label>Opis:</label><br>
-        <textarea name="opis"></textarea><br><br>
+          <div class="form-group">
+            <label for="opis">Opis:</label>
+            <textarea id="opis" name="opis" class="form-textarea"></textarea>
+          </div>
 
-        <label>Priprava:</label><br>
-        <textarea name="priprava" required></textarea><br><br>
+          <div class="form-group">
+            <label for="priprava">Priprava:</label>
+            <textarea id="priprava" name="priprava" class="form-textarea" required></textarea>
+          </div>
 
-        <label>Čas priprave (min):</label><br>
-        <input type="number" name="cas_priprave"><br><br>
+          <div class="form-group">
+            <label for="cas_priprave">Čas priprave (min):</label>
+            <input type="number" id="cas_priprave" name="cas_priprave" class="form-input">
+          </div>
 
-        <label>Težavnost (1-3):</label><br>
-        <input type="number" name="tezavnost" min="1" max="3"><br><br>
+          <div class="form-group">
+            <label for="tezavnost">Težavnost (1-3):</label>
+            <input type="number" id="tezavnost" name="tezavnost" min="1" max="3" class="form-input">
+          </div>
 
-        <label>URL slike:</label><br>
-        <input type="text" name="slika_url"><br><br>
+          <!-- 🟩 Dopolnjeno: regija -->
+          <div class="form-group">
+            <label for="regija">Izberi regijo:</label>
+            <select name="regija" id="regija" class="form-select" required>
+              <option value="">-- izberi --</option>
+              {% for regija in regije %}
+                <option value="{{ regija[0] }}">{{ regija[1] }}</option>
+              {% endfor %}
+            </select>
+          </div>
 
-        <h3>Sestavine</h3>
-        <div id="sestavine">
-            <div class="sestavina">
-                <label>Ime:</label><input type="text" name="sestavina_ime[]" required>
-                <label>Količina:</label><input type="text" name="sestavina_kolicina[]">
-                <label>Enota:</label><input type="text" name="sestavina_enota[]">
-                <hr>
+          <!-- 🟩 Dopolnjeno: drzava -->
+          <div class="form-group">
+            <label for="drzava">Država:</label>
+            <input type="text" id="drzava" name="drzava" class="form-input" placeholder="Vnesi državo" required>
+          </div>
+
+          <div class="image-upload-section">
+            <h3>Slike</h3>
+            <div class="image-upload-container">
+              <div class="image-upload-input">
+                <input type="file" id="image-input" accept="image/*" onchange="dodajSliko(this)">
+                <div class="upload-text">
+                  <strong>Kliknite za dodajanje slike</strong><br>
+                  <small>Podprte: JPG, PNG, GIF (max 5MB)</small>
+                </div>
+              </div>
+              
+              <div class="images-preview" id="images-preview"></div>
+              
+              <div class="images-count" id="images-count" style="display: none;">
+                Dodanih slik: <span id="count-number">0</span>
+              </div>
             </div>
-        </div>  
-        <button type="button" onclick="dodajSestavino()">+ Dodaj še eno sestavino</button><br><br>
-        <label for="oznaka">Število oseb:</label><br>
-        <input type="number" name="st_oseb" required><br><br>
-        <label for="oznaka">Oznaka (letni čas):</label><br>
-        <select name="oznaka" id="oznaka">
-          <option value="">-- izberi --</option>
-          <option value="poletni">Poletni</option>
-          <option value="zimski">Zimski</option>
-          <option value="jesenski">Jesenski</option>
-          <option value="spomladanski">Spomladanski</option>
-        </select><br><br>
+            
+            <!-- Hidden inputs za form submission -->
+            <div class="hidden-file-inputs" id="hidden-file-inputs"></div>
+          </div>
 
+          <div class="ingredients-section">
+            <h3>Sestavine</h3>
+            <div id="sestavine">
+              <div class="ingredient-item sestavina">
+                <div class="ingredient-field">
+                  <label>Ime:</label>
+                  <input type="text" name="sestavina_ime[]" class="ingredient-input" required>
+                </div>
+                <div class="ingredient-field">
+                  <label>Količina:</label>
+                  <input type="text" name="sestavina_kolicina[]" class="ingredient-input">
+                </div>
+                <div class="ingredient-field">
+                  <label>Enota:</label>
+                  <input type="text" name="sestavina_enota[]" class="ingredient-input">
+                </div>
+              </div>
+            </div>  
+            <button type="button" onclick="dodajSestavino()" class="add-ingredient-btn">+ Dodaj še eno sestavino</button>
+          </div>
 
-        <button type="submit">Shrani recept</button>
-    </form>
+          <div class="form-group">
+            <label for="st_oseb">Število oseb:</label>
+            <input type="number" id="st_oseb" name="st_oseb" class="form-input" required>
+          </div>
+
+          <div class="form-group">
+            <label for="oznaka">Oznaka (letni čas):</label>
+            <select name="oznaka" id="oznaka" class="form-select">
+              <option value="">-- izberi --</option>
+              <option value="poletni">Poletni</option>
+              <option value="zimski">Zimski</option>
+              <option value="jesenski">Jesenski</option>
+              <option value="spomladanski">Spomladanski</option>
+            </select>
+          </div>
+
+          <div class="allergens-section">
+            <h3>Alergeni</h3>
+            {% if alergeni %}
+              <div class="allergens-grid">
+                {% for alergen in alergeni %}
+                  <div class="allergen-checkbox">
+                    <input type="checkbox" id="alergen_{{ alergen[0] }}" name="alergeni[]" value="{{ alergen[0] }}">
+                    <label for="alergen_{{ alergen[0] }}">{{ alergen[1] }}</label>
+                  </div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <p>Trenutno ni vnešenih alergenov.</p>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="submit-btn">Shrani recept</button>
+        </form>
+      </div>
     </div>
   </main>
 
@@ -83,9 +152,8 @@
       .then(data => {
         document.getElementById("header-placeholder").innerHTML = data;
       });
-  </script>
 
-  <script>
+    //===THEME===
     const root = document.getElementById('html-root');
     const toggle = document.getElementById('toggle-theme');
 
@@ -98,6 +166,181 @@
         const next = current === 'dark' ? 'light' : 'dark';
         root.setAttribute('data-theme', next);
         localStorage.setItem('theme', next);
+    });
+
+    //===DODAJANJE SESTAVIN===
+    function dodajSestavino() {
+      const container = document.getElementById("sestavine");
+      const html = `
+          <div class="ingredient-item sestavina">
+              <div class="ingredient-field">
+                  <label>Ime:</label>
+                  <input type="text" name="sestavina_ime[]" class="ingredient-input" required>
+              </div>
+              <div class="ingredient-field">
+                  <label>Količina:</label>
+                  <input type="text" name="sestavina_kolicina[]" class="ingredient-input">
+              </div>
+              <div class="ingredient-field">
+                  <label>Enota:</label>
+                  <input type="text" name="sestavina_enota[]" class="ingredient-input">
+              </div>
+          </div>`;
+      container.insertAdjacentHTML("beforeend", html);
+    }
+  </script>
+  <script>
+    // Array za shranjevanje dodanih slik
+    let dodaneSlike = [];
+    let slikaCounter = 0;
+
+    function dodajSliko(input) {
+        const file = input.files[0];
+        if (!file) return;
+        
+        // Preveri velikost datoteke (5MB limit)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Slika je prevelika! Maksimalna velikost je 5MB.');
+            input.value = '';
+            return;
+        }
+        
+        // Preveri tip datoteke
+        if (!file.type.startsWith('image/')) {
+            alert('Prosimo, izberite sliko (JPG, PNG, GIF).');
+            input.value = '';
+            return;
+        }
+        
+        // Dodaj sliko v array
+        const slikaObj = {
+            id: slikaCounter++,
+            file: file,
+            name: file.name,
+            size: formatBytes(file.size)
+        };
+        
+        dodaneSlike.push(slikaObj);
+        
+        // Prikazi predogled
+        prikaziPredogled();
+        
+        // Ustvari hidden input za form submission
+        ustvariHiddenInput(slikaObj);
+        
+        // Pocisti input
+        input.value = '';
+        
+        // Posodobi stevec
+        posodobiStevec();
+    }
+
+    function prikaziPredogled() {
+        const container = document.getElementById('images-preview');
+        container.innerHTML = '';
+        
+        dodaneSlike.forEach(slika => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const div = document.createElement('div');
+                div.className = 'image-preview-item';
+                div.innerHTML = `
+                    <img src="${e.target.result}" alt="${slika.name}" class="image-preview">
+                    <div class="image-info">
+                        <div class="image-name">${slika.name}</div>
+                        <div class="image-size">${slika.size}</div>
+                    </div>
+                    <button type="button" class="remove-image-btn" onclick="odstranSliko(${slika.id})" title="Odstrani sliko">×</button>
+                `;
+                container.appendChild(div);
+            };
+            reader.readAsDataURL(slika.file);
+        });
+    }
+
+    function odstranSliko(slikaId) {
+        // Odstrani iz array
+        dodaneSlike = dodaneSlike.filter(slika => slika.id !== slikaId);
+        
+        // Odstrani hidden input
+        const hiddenInput = document.getElementById(`hidden-image-${slikaId}`);
+        if (hiddenInput) {
+            hiddenInput.remove();
+        }
+        
+        // Posodobi predogled
+        prikaziPredogled();
+        
+        // Posodobi stevec
+        posodobiStevec();
+    }
+
+    function ustvariHiddenInput(slikaObj) {
+        const container = document.getElementById('hidden-file-inputs');
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.name = 'slike';
+        input.id = `hidden-image-${slikaObj.id}`;
+        input.style.display = 'none';
+        
+        // Transfer file to hidden input
+        const dt = new DataTransfer();
+        dt.items.add(slikaObj.file);
+        input.files = dt.files;
+        
+        container.appendChild(input);
+    }
+
+    function posodobiStevec() {
+        const countElement = document.getElementById('images-count');
+        const countNumber = document.getElementById('count-number');
+        
+        if (dodaneSlike.length > 0) {
+            countElement.style.display = 'block';
+            countNumber.textContent = dodaneSlike.length;
+        } else {
+            countElement.style.display = 'none';
+        }
+    }
+
+    function formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+        
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
+    // Drag and drop funkcionalnost
+    const uploadInput = document.querySelector('.image-upload-input');
+
+    uploadInput.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '#ff7043';
+        this.style.backgroundColor = 'rgba(255, 112, 67, 0.1)';
+    });
+
+    uploadInput.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '';
+        this.style.backgroundColor = '';
+    });
+
+    uploadInput.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.style.borderColor = '';
+        this.style.backgroundColor = '';
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            const input = document.getElementById('image-input');
+            input.files = files;
+            dodajSliko(input);
+        }
     });
   </script>
 

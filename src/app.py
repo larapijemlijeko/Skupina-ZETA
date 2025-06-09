@@ -1,9 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, g
+from flask_login import LoginManager, login_required, current_user
 from recipe_scrapers import scrape_me
+import os
+from datetime import timedelta
+import random
+
+# Import existing controllers
 from controllers.admin import admin_bp
 from controllers.recepti import recepti_bp
-import db
-
+from controllers.kalorije import kalorije_bp
 import controllers.index
 import controllers.prijava
 import controllers.recepti
@@ -16,23 +21,68 @@ import controllers.pozabljenogeslo
 import controllers.nagradneigre
 import controllers.anketa
 import controllers.nakljucniRecepti
+import controllers.kviz
+from controllers import svetovna_kuhinja
+
+# Import user management modules
+from models.uporabniki import User
+from controllers.auth_controller import auth_bp
+
+# Import database and utility modules
+import db
+from models import recepti
 from models.zaBazo import create_tables
 from models.dbBackup import initializeScheduler
-from controllers import svetovna_kuhinja
-import controllers.forum
-
 
 f_app = Flask(__name__)
-f_app.secret_key = "dev"  # Add a secret key if sessions are used
 
+# Configuration
+f_app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'mojaTajnaVrednost123')
+f_app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
+
+# Inicializacija Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(f_app)
+login_manager.login_view = 'auth.login'
+login_manager.login_message = 'Za dostop do te strani se morate prijaviti.'
+login_manager.login_message_category = 'info'
+
+# Blueprint registracija
 f_app.register_blueprint(admin_bp)
-f_app.secret_key = "mojaTajnaVrednost123"  
 f_app.register_blueprint(recepti_bp)
+f_app.register_blueprint(kalorije_bp)
+f_app.register_blueprint(auth_bp)  # Add user authentication
 
+# Initialize database and scheduler
 create_tables()
-
 initializeScheduler()
 
+# Flask-Login uporabniški nalagalnik
+@login_manager.user_loader
+def load_user(user_id):
+    """Load user for Flask-Login"""
+    conn = db.get_connection()
+    user = User.get(conn, user_id)
+    conn.close()
+    return user
+
+# DB povezava za vsako prošnjo
+@f_app.before_request
+def before_request():
+    g.db = db.get_connection()
+
+@f_app.teardown_request
+def teardown_request(exception):
+    db_conn = getattr(g, 'db', None)
+    if db_conn is not None:
+        db_conn.close()
+
+@f_app.context_processor
+def inject_user():
+    """Inject current user into templates"""
+    return dict(current_user=current_user)
+
+# Main routes
 @f_app.get('/')
 def home():
     return controllers.index.home()
@@ -44,6 +94,7 @@ def recepti():
     return controllers.recepti.seznam_receptov(oznaka)
 
 @f_app.route('/oddajrecept', methods=['GET', 'POST'])
+@login_required  # potrebna prijava
 def oddajrecept():
     return controllers.oddajrecept.oddajrecept()
 
@@ -63,23 +114,25 @@ def vprasanja():
 def anketa():
     return controllers.anketa.anketa()
 
-@f_app.route('/prijava')
-def prijava():
-    return controllers.prijava.prijava()
+# Naslednje rute so komentirane ker se uporabljajo novi auth blueprinti
+# @f_app.route('/prijava')
+# def prijava():
+#     return controllers.prijava.prijava()
 
-@f_app.route('/registracija')
-def registracija():
-    return controllers.registracija.registracija()
+# @f_app.route('/registracija')
+# def registracija():
+#     return controllers.registracija.registracija()
 
-@f_app.route('/pozabljenogeslo')
-def pozabljenogeslo():
-    return controllers.pozabljenogeslo.pozabljenogeslo()
+# @f_app.route('/pozabljenogeslo')
+# def pozabljenogeslo():
+#     return controllers.pozabljenogeslo.pozabljenogeslo()
 
 @f_app.route("/nagradneigre", methods=["GET", "POST"])
 def nagradneigre():
     return controllers.nagradneigre.nagradne_igre()
 
 @f_app.route('/scraper', methods=['GET', 'POST'])
+@login_required  # Add login requirement
 def scrape():
     recipe_data = None
     error = None
@@ -117,8 +170,49 @@ def svetovnakuhinjamapa():
 def recepti_po_regiji(ime_regije):
     return svetovna_kuhinja.recepti_po_regiji(ime_regije)
 
+@f_app.route('/nakljucen-recept')
+def nakljucen_recept():
+    conn = g.db
+    cur = conn.cursor()
+
+    cur.execute("SELECT id FROM recepti")
+    ids = [row[0] for row in cur.fetchall()]
+    
+    if not ids:
+        return "Ni receptov."
+
+    nakljucni_id = random.choice(ids)
+
+    cur.execute("SELECT * FROM recepti WHERE id = %s", (nakljucni_id,))
+    recept = cur.fetchone()
+
+    cur.execute("SELECT * FROM sestavine WHERE recept_id = %s", (nakljucni_id,))
+    surovine = cur.fetchall()
+
+    recept_dict = {
+        "id": recept[0],
+        "naslov": recept[1],
+        "opis": recept[2],
+        "priprava": recept[3],
+        "cas_priprave": recept[4],
+        "tezavnost": recept[5],
+        "slika_url": recept[6],
+        "datum_kreiranja": recept[8],
+        "surovine": [
+            {
+                "ime": s[2],
+                "kolicina": s[3],
+                "enota": s[4],
+                "st_oseb": s[5]
+            } for s in surovine
+        ]
+    }
+
+    cur.close()
+    return render_template("nakljucni-podrobno.html", recept=recept_dict)
 
 @f_app.route('/add_favorites', methods=['POST'])
+@login_required  # Add login requirement
 def favorite_scraped():
     data = request.get_json()
     recipe = data.get('recipe')
@@ -126,9 +220,10 @@ def favorite_scraped():
     if not recipe or 'title' not in recipe or 'url' not in recipe:
         return jsonify({'status': 'error', 'message': 'Invalid recipe data'}), 400
 
-    uporabnik_id = 1  # FIXED user ID, ker še nimaš login sistema
+    # Use current authenticated user instead of fixed ID
+    uporabnik_id = current_user.id
 
-    conn = db.get_connection()
+    conn = g.db
     cur = conn.cursor()
 
     try:
@@ -149,13 +244,14 @@ def favorite_scraped():
         return jsonify({'status': 'error', 'message': 'Failed to save recipe.'}), 500
     finally:
         cur.close()
-        conn.close()
 
 @f_app.route('/scraped')
+@login_required  # Add login requirement
 def view_scraped():
-    uporabnik_id = 1  # FIXED user ID
+    # Use current authenticated user instead of fixed ID
+    uporabnik_id = current_user.id
 
-    conn = db.get_connection()
+    conn = g.db
     cur = conn.cursor()
 
     try:
@@ -171,7 +267,6 @@ def view_scraped():
         scraped_recipes = []
     finally:
         cur.close()
-        conn.close()
 
     return render_template('scraped.html', recipes=scraped_recipes)
 
@@ -186,7 +281,7 @@ def report():
 
        conn = None
        try:
-           conn =  db.get_connection()
+           conn = g.db
            cur = conn.cursor()
            cur.execute("""
                 INSERT INTO napake (tip_problema, opis)
@@ -195,7 +290,6 @@ def report():
            
            conn.commit()
            cur.close()
-           conn.close()
            submitted = True
 
            # lets go back to home page if everything is ok
@@ -206,13 +300,54 @@ def report():
            return "There was an error processing your report.", 500
        finally:
            if conn:
-               conn.close()
+               pass  # Connection will be closed by teardown_request
            else:
                submitted = False
     elif request.method == 'POST':  
         return render_template('prijavi-napaka.html')       
-    return render_template('prijavi-napaka.html', submitted=submitted) 
+    return render_template('prijavi-napaka.html', submitted=submitted)
 
+@f_app.route('/kviz')
+def kviz_api():
+    return controllers.kviz.get_kviz_questions()
+
+@f_app.route('/profil')
+@login_required
+def profile():
+    """User profile with liked recipes"""
+    from models.vsecki import LikeSystem
+    
+    conn = g.db
+    
+    # Všečkani recepti
+    liked_recipes = LikeSystem.get_user_liked_recipes(conn, current_user.id)
+    
+    # Tvoji recepti
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT r.*, COUNT(v.id) as like_count
+        FROM recepti r
+        LEFT JOIN vsecki v ON r.id = v.recept_id
+        WHERE r.uporabnik_id = %s
+        GROUP BY r.id
+        ORDER BY r.datum_kreiranja DESC
+    """, (current_user.id,))
+    
+    my_recipes = cur.fetchall()
+    cur.close()
+    
+    return render_template('profile.html', 
+                         liked_recipes=liked_recipes,
+                         my_recipes=my_recipes)
+
+# Error handlers
+@f_app.errorhandler(404)
+def not_found_error(error):
+    return render_template('errors/404.html'), 404
+
+@f_app.errorhandler(500)
+def internal_error(error):
+    return render_template('errors/500.html'), 500
 @f_app.route("/forums")
 def forum_site():
     return controllers.forum.forum_site()

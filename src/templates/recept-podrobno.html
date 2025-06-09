@@ -53,11 +53,46 @@
         {% endif %}
       </div>
       <div class="recipe-image">
-        {% if recept.slika_url %}
-          <img src="{{ recept.slika_url }}" alt="{{ recept.naslov }}">
+        {% if recept.slike and recept.slike|length > 0 %}
+          <div class="galerija{% if recept.slike|length > 1 %} multiple-images{% endif %}" id="recipe-gallery">
+            <!-- Navigacijski gumbi -->
+            <button class="nav-btn prev-btn" onclick="changeSlide(-1)">‹</button>
+            <button class="nav-btn next-btn" onclick="changeSlide(1)">›</button>
+            
+            <!-- Števec slik -->
+            <div class="image-counter">
+              <span id="current-slide">1</span> / <span id="total-slides">{{ recept.slike|length }}</span>
+            </div>
+            
+            <!-- Slike -->
+            {% for slika_pot in recept.slike %}
+              <img src="{{ '/' + slika_pot }}" 
+                  alt="Slika recepta {{ loop.index }}" 
+                  class="{% if loop.first %}active{% endif %}"
+                  onclick="openModal('{{ '/' + slika_pot }}')">
+            {% endfor %}
+          </div>
+          
+          <!-- Kazalci slik (samo za več slik) -->
+          {% if recept.slike|length > 1 %}
+            <div class="slideshow-indicators" id="indicators">
+              {% for slika_pot in recept.slike %}
+                <span class="indicator {% if loop.first %}active{% endif %}" 
+                      data-slide="{{ loop.index0 }}"></span>
+              {% endfor %}
+            </div>
+          {% endif %}
         {% else %}
           <img src="{{ url_for('static', filename='img/default-recipe.jpg') }}" alt="Privzeta slika">
         {% endif %}
+      </div>
+
+      <!-- Modal za povečano sliko -->
+      <div id="image-modal" class="image-modal" onclick="closeModal()">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+          <img id="modal-image" src="" alt="Povečana slika">
+        </div>
       </div>
 
       <div class="recipe-description">
@@ -97,6 +132,18 @@
           {% endif %}
         </div>
 
+        {% if recept.alergeni %}
+        <div id="alergeni-popup" class="fade-in">
+          <h3>⚠️ Alergeni</h3>
+          <ul>
+            {% for alergen in recept.alergeni %}
+              <li>{{ alergen }}</li>
+            {% endfor %}
+          </ul>
+          <span class="close-btn" onclick="this.parentElement.style.display='none'">x</span>
+        </div>
+        {% endif %}
+
         <div class="recipe-instructions">
           <h2>Postopek priprave</h2>
           {% if recept.priprava %}
@@ -113,6 +160,29 @@
         </div>
       {% endif %}
       
+      <section class="komentarji-sekcija">
+          <h2 class="komentarji-naslov">Komentarji</h2>
+
+          <div id="komentarji-seznam" class="komentarji-seznam">
+              <!-- Komentarji bodo tukaj prikazani -->
+          </div>
+
+          <div class="dodaj-komentar-sekcija">
+              <h4 class="dodaj-komentar-naslov">Dodaj komentar</h4>
+              <form id="komentar-form" class="komentar-form">
+                  <div class="input-skupina">
+                      <input type="text" id="avtor" name="avtor" placeholder="Tvoje ime" class="avtor-input" required>
+                  </div>
+                  <div class="input-skupina">
+                      <textarea id="komentar" name="komentar" rows="4" placeholder="Vnesi komentar..." class="komentar-textarea" required></textarea>
+                  </div>
+                  <div class="gumb-skupina">
+                      <button type="submit" class="objavi-gumb">Objavi komentar</button>
+                  </div>
+              </form>
+          </div>
+      </section>
+
       <div class="translate-section">
         <span>Translate page</span>
         <div id="google_translate_element"></div>
@@ -122,6 +192,7 @@
   <footer>
     &copy; 2025 DelishBites. Vse pravice pridržane.
   </footer> 
+  
 
   <script type="text/javascript">
     function googleTranslateElementInit() {
@@ -213,6 +284,69 @@
   </script>
 
   <script>
+    //===KOMENTARJI===
+    const receptId = "{{ recept.id }}";
+    const komentarjiSeznam = document.getElementById("komentarji-seznam");
+    const komentarForm = document.getElementById("komentar-form");
+
+    function naloziKomentarje() {
+      fetch(`/komentarji/${receptId}`)
+          .then(res => {
+              if (!res.ok) {
+                  throw new Error(`HTTP error! status: ${res.status}`);
+              }
+              return res.json();
+          })
+          .then(komentarji => {
+              komentarjiSeznam.innerHTML = "";
+              komentarji.forEach(k => {
+                  const komentarDiv = document.createElement("div");
+                  komentarDiv.className = "komentar-item";
+                  komentarDiv.innerHTML = `
+                      <div class="komentar-header">
+                          <strong class="komentar-avtor">${k.avtor || "Anonimno"}</strong> 
+                          <small class="komentar-datum">(${k.datum || ''})</small>
+                      </div>
+                      <div class="komentar-vsebina">${k.komentar}</div>
+                  `;
+                  komentarjiSeznam.appendChild(komentarDiv);
+              });
+          })
+          .catch(error => {
+              console.error('Napaka pri nalaganju komentarjev:', error);
+          });
+    }
+
+    komentarForm.addEventListener("submit", e => {
+        e.preventDefault();
+        const avtor = document.getElementById("avtor").value;
+        const komentar = document.getElementById("komentar").value;
+
+        fetch('/dodaj-komentar', {  // Popravljen URL
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ 
+                recept_id: receptId,  // Dodajte recept_id
+                avtor: avtor,         // Dodajte avtor
+                komentar: komentar 
+            })
+        }).then(res => {
+            if (res.ok) {
+                komentarForm.reset();
+                naloziKomentarje();
+            } else {
+                alert("Napaka pri pošiljanju komentarja.");
+            }
+        });
+    });
+
+    // Ob nalaganju strani naloži komentarje
+    document.addEventListener("DOMContentLoaded", naloziKomentarje);
+  </script>
+
+  <script>
     const root = document.getElementById('html-root');
     const toggle = document.getElementById('toggle-theme');
 
@@ -227,6 +361,217 @@
         localStorage.setItem('theme', next);
     });
   </script>
+  
+  <script>
+    //===ALERGENI===
+    window.addEventListener('DOMContentLoaded', () => {
+      // Prikaži alergene po 2 sekundah
+      setTimeout(() => {
+        const popup = document.getElementById('alergeni-popup');
+        if (popup) {
+          popup.classList.add('show');
+        }
+      }, 2000);
+
+      // Funkcija za zapiranje popupa
+      function zapriAlergeniPopup() {
+        const popup = document.getElementById('alergeni-popup');
+        if (popup) {
+          popup.classList.remove('show');
+        }
+      }
+
+      // Če imaš 'x' gumb, poveži ga z zapri funkcijo
+      const closeBtn = document.querySelector('#alergeni-popup .close-btn');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', zapriAlergeniPopup);
+      }
+    });
+  </script>
+
+  <script>
+    //===SLIKE===
+    // SLIDESHOW FUNKCIONALNOST
+    let currentSlide = 0;
+    let slides = [];
+    let indicators = [];
+    let totalSlides = 0;
+    let autoSlideInterval;
+
+    // Posodobi prikaz trenutne slike
+    function updateSlideDisplay() {
+      // Skrij vse slike
+      slides.forEach((slide, index) => {
+        slide.classList.remove('active', 'slide-in-left', 'slide-in-right');
+        if (index === currentSlide) {
+          slide.classList.add('active');
+        }
+      });
+      
+      // Posodobi kazalce
+      indicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === currentSlide);
+      });
+      
+      // Posodobi števec
+      const currentSlideElement = document.getElementById('current-slide');
+      if (currentSlideElement) {
+        currentSlideElement.textContent = currentSlide + 1;
+      }
+    }
+
+    // Spremeni sliko (direction: -1 za nazaj, 1 za naprej)
+    function changeSlide(direction) {
+      if (totalSlides <= 1) return;
+      
+      const previousSlide = currentSlide;
+      currentSlide += direction;
+      
+      // Ciklična navigacija
+      if (currentSlide >= totalSlides) {
+        currentSlide = 0;
+      } else if (currentSlide < 0) {
+        currentSlide = totalSlides - 1;
+      }
+      
+      // Dodaj animacijski razred
+      const newSlide = slides[currentSlide];
+      if (direction > 0) {
+        newSlide.classList.add('slide-in-right');
+      } else {
+        newSlide.classList.add('slide-in-left');
+      }
+      
+      updateSlideDisplay();
+    }
+
+    // Pojdi na določeno sliko
+    function goToSlide(slideIndex) {
+      const index = parseInt(slideIndex);
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateSlideDisplay();
+      }
+    }
+
+    // Avtomatski slideshow
+    function startAutoSlide() {
+      stopAutoSlide(); // Počisti obstoječi interval
+      if (totalSlides > 1) {
+        autoSlideInterval = setInterval(() => {
+          changeSlide(1);
+        }, 5000); // Spremeni sliko vsakih 5 sekund
+      }
+    }
+
+    function stopAutoSlide() {
+      if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = null;
+      }
+    }
+
+    // MODAL FUNKCIONALNOST
+    function openModal(imageSrc) {
+      const modal = document.getElementById('image-modal');
+      const modalImage = document.getElementById('modal-image');
+      
+      if (modal && modalImage) {
+        modalImage.src = imageSrc;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden'; // Prepreči scrollanje
+      }
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = 'auto'; // Omogoči scrollanje
+      }
+    }
+
+    // Touch/swipe podpora za mobilne naprave
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    function handleSwipe() {
+      const swipeThreshold = 50;
+      const diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          changeSlide(1); // Swipe levo = naslednja slika
+        } else {
+          changeSlide(-1); // Swipe desno = prejšnja slika
+        }
+      }
+    }
+
+    // Inicializacija ob nalaganju strani
+    document.addEventListener('DOMContentLoaded', () => {
+      // Inicializiraj elemente
+      slides = document.querySelectorAll('.galerija img');
+      indicators = document.querySelectorAll('.indicator');
+      totalSlides = slides.length;
+      
+      // Če ni slik, ne nadaljuj
+      if (totalSlides === 0) return;
+      
+      // Začetni prikaz
+      updateSlideDisplay();
+      
+      // Dodaj event listener za kazalce
+      indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+          goToSlide(index);
+        });
+      });
+      
+      // Galerija event listenerji
+      const gallery = document.querySelector('.galerija');
+      if (gallery) {
+        // Touch eventi
+        gallery.addEventListener('touchstart', (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+
+        gallery.addEventListener('touchend', (e) => {
+          touchEndX = e.changedTouches[0].screenX;
+          handleSwipe();
+        });
+        
+        // Hover eventi za avtomatski slideshow
+        gallery.addEventListener('mouseenter', stopAutoSlide);
+        gallery.addEventListener('mouseleave', startAutoSlide);
+      }
+      
+      // Modal event listener
+      const modal = document.getElementById('image-modal');
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target.id === 'image-modal') {
+            closeModal();
+          }
+        });
+      }
+      
+      // Tipkovnica navigacija
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+          changeSlide(-1);
+        } else if (e.key === 'ArrowRight') {
+          changeSlide(1);
+        } else if (e.key === 'Escape') {
+          closeModal();
+        }
+      });
+      
+      // ZAČNI AVTOMATSKI SLIDESHOW
+      startAutoSlide();
+    });
+  </script>
+  
 
 </body>
 </html>

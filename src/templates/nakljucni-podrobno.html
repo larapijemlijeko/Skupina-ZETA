@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="sl" id="html-root" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DelishBites - {{ recept.naslov }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% include 'header.html' %}
+
+  <main>
+    <section class="section recipe-detail">
+      <h1>{{ recept.naslov }}</h1>
+
+      {% if recept.slika_url %}
+        <img src="{{ recept.slika_url }}" alt="{{ recept.naslov }}" style="max-width: 100%; height: auto;">
+      {% else %}
+        <img src="{{ url_for('static', filename='img/default-recipe.jpg') }}" alt="Privzeta slika" style="max-width: 100%; height: auto;">
+      {% endif %}
+
+      <p>{{ recept.opis }}</p>
+
+      <h2>Sestavine</h2>
+      {% if recept.surovine and recept.surovine|length > 0 %}
+        <ul>
+          {% for sestavina in recept.surovine %}
+            <li>
+              {% set kolicina = sestavina.kolicina | float %}
+              {% if kolicina == kolicina|int %}
+                {{ kolicina|int }}
+              {% else %}
+                {{ "%.2f"|format(kolicina) }}
+              {% endif %}
+              {{ sestavina.enota }} {{ sestavina.ime }}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Za ta recept sestavine niso navedene.</p>
+      {% endif %}
+
+      <h2>Postopek priprave</h2>
+      {% if recept.priprava %}
+        <div>{{ recept.priprava | safe }}</div>
+      {% else %}
+        <p>Za ta recept postopek ni naveden.</p>
+      {% endif %}
+
+      {% if recept.avtor %}
+        <p><strong>Avtor:</strong> {{ recept.avtor }}</p>
+      {% endif %}
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 DelishBites. Vse pravice pridržane.
+  </footer>
+</body>
+</html>

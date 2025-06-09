@@ -14,7 +14,7 @@ def dodaj_testne_podatke():
     conn = db.get_connection()
     cur = conn.cursor()
     try:
-        # Preveri ali uporabnik že obstaja
+        # 1. Uporabnik
         cur.execute("SELECT id FROM uporabniki WHERE uporabnisko_ime = 'adminuser'")
         uporabnik = cur.fetchone()
         if uporabnik:
@@ -27,7 +27,7 @@ def dodaj_testne_podatke():
             """)
             uporabnik_id = cur.fetchone()[0]
 
-        # Podatki za 4 recepte
+        # 2. Recepti
         recepti = [
             ("Testni recept 1", "Opis Testni recept 1", "Navodila za pripravo Testni recept 1", 15, 1, "", "soli", "1", "žlička", 2, "Testna1"),
             ("Testni recept 2", "Opis Testni recept 2", "Navodila za pripravo Testni recept 2", 25, 2, "", "popra", "2", "žlički", 3, "Testna2"),
@@ -52,8 +52,26 @@ def dodaj_testne_podatke():
                 INSERT INTO oznake (recept_id, oznaka)
                 VALUES (%s, %s);
             """, (recept_id, oznaka))
+            # Tukaj dodaš alergene za "moke"
+            if sest_ime == "moke":
+                cur.execute("""
+                    INSERT INTO alergeni (ime) VALUES ('Gluten')
+                    ON CONFLICT (ime) DO NOTHING;
+                """)
+                cur.execute("SELECT id FROM alergeni WHERE ime = 'Gluten'")
+                alergen_id = cur.fetchone()[0]
 
-        # DODAJ VPRAŠANJA V TABELO FAQ
+                cur.execute("""
+                    SELECT id FROM sestavine WHERE recept_id = %s AND ime = %s
+                """, (recept_id, sest_ime))
+                sestavina_id = cur.fetchone()[0]
+
+                cur.execute("""
+                    INSERT INTO sestavine_alergeni (sestavina_id, alergen_id)
+                    VALUES (%s, %s);
+                """, (sestavina_id, alergen_id))
+
+        # 3. FAQ
         faq_data = [
             ("Kako lahko dodam svoj recept?", "Za dodajanje recepta se prijavite in kliknite 'Oddaj recept'."),
             ("Ali lahko uporabljam recepte brez registracije?", "Da, brskanje po receptih je omogočeno tudi brez prijave."),
@@ -66,6 +84,29 @@ def dodaj_testne_podatke():
                 VALUES (%s, %s)
                 ON CONFLICT (question) DO NOTHING;
             """, (question, answer))
+
+        # 4. Navedki (citati)
+        quotes = [
+            {"navedek": "One cannot think well, love well, sleep well, if one has not dined well.", "avtor": "Virginia Woolf"},
+            {"navedek": "Let food be thy medicine and medicine be thy food.", "avtor": "Hippocrates"},
+            {"navedek": "People who love to eat are always the best people.", "avtor": "Julia Child"},
+            {"navedek": "The only way to get rid of a temptation is to yield to it.", "avtor": "Oscar Wilde"},
+            {"navedek": "Food is our common ground, a universal experience.", "avtor": "James Beard"},
+            {"navedek": "Life is uncertain. Eat dessert first.", "avtor": "Ernestine Ulmer"},
+            {"navedek": "All you need is love. But a little chocolate now and then doesn't hurt.", "avtor": "Charles M. Schulz"},
+            {"navedek": "Tell me what you eat, and I will tell you what you are.", "avtor": "Jean Anthelme"}
+        ]
+
+        for quote in quotes:
+            cur.execute("""
+                SELECT 1 FROM navedki WHERE navedek = %s AND avtor = %s
+            """, (quote['navedek'], quote['avtor']))
+            exists = cur.fetchone()
+            if not exists:
+                cur.execute("""
+                    INSERT INTO navedki (navedek, avtor)
+                    VALUES (%s, %s)
+                """, (quote['navedek'], quote['avtor']))
 
         conn.commit()
         print("✅ Testni podatki uspešno dodani.")

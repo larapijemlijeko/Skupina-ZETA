@@ -447,7 +447,8 @@ body {
 
 .submit-recipe-btn,
 .scrape-btn,
-.podprte-strani-btn {
+.podprte-strani-btn,
+.random-recipe-btn {
   background-color: #ff7043;
   color: white;
   text-decoration: none;
@@ -457,7 +458,8 @@ body {
   transition: background-color 0.3s;
 }
 
-.submit-recipe-btn:hover {
+.submit-recipe-btn:hover,
+.random-recipe-btn:hover {
   background-color: #e95e2f;
 }
 
@@ -499,10 +501,11 @@ body {
 }
 
 .recipe-ingredients, .recipe-instructions {
-  background-color: var(--bg-color);
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
+  margin: 1rem 0;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .ingredients {
@@ -928,6 +931,12 @@ body {
   color: #6a6a6a;
 }
 
+.recipe-button-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
 /* === Desni filter === */
 .filter-sidebar {
   flex: 1 1 250px;
@@ -974,6 +983,44 @@ body {
 .filter-tags span:hover {
   background-color: #ff7043;
   color: var(--text-color);
+}
+
+.filter-tags a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.filter-tags a span {
+  background-color: var(--span-color);
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-block;
+  color: inherit;
+}
+
+.filter-tags a span:hover {
+  background-color: #ff7043;
+  color: var(--text-color);
+}
+
+.reset-filter {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.reset-filter:hover {
+  background-color: #ff7043;
+  color: white;
 }
 
 /* Odzivnost */
@@ -1262,3 +1309,1432 @@ button {
 
 }
 
+/* Prijava napake*/
+.report-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.report-form {
+  background-color: var(--form-bg);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;  
+}
+
+.report-form h2 {
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.report-form label {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.report-form select,
+.report-form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+.report-form select:focus,
+.report-form textarea:focus {
+  border-color: var(--btn-bg);
+  background-color: var(--input-focus-bg, #fff);
+  outline: none;
+}
+
+.report-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.report-form button {
+  align-self: center;
+  margin-top: 1rem;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: var(--btn-bg);
+  color: var(--btn-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.report-form button:hover {
+  background-color: var(--btn-hover-bg);
+  transform: translateY(-1px);
+}
+
+/* ======= Popup za alergene ======= */
+#alergeni-popup {
+  display: block; /* Vedno block, kontroliramo le opacity */
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #ffe0e0;
+  color: #c62828;
+  border: 1px solid #c62828;
+  border-radius: 5px;
+  padding: 10px 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none; /* Ko je skrit, naj ne moti klikanja */
+  transition: opacity 0.5s ease;
+}
+
+#alergeni-popup.show {
+  opacity: 1;
+  pointer-events: auto; /* Ko je prikazan, omogoči klikanje */
+}
+
+#alergeni-popup ul {
+  margin: 5px 0 0 15px;
+  padding: 0;
+}
+
+#alergeni-popup .close-btn {
+  float: right;
+  font-weight: bold;
+  cursor: pointer;
+  color: #c62828;
+}
+
+/* === KOMENTARJI SEKCIJA === */
+.komentarji-sekcija {
+    margin: 2rem 0;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.komentarji-naslov {
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e8f4f8;
+    font-size: 1.5rem;
+}
+
+/* === SEZNAM KOMENTARJEV === */
+.komentarji-seznam {
+    margin-bottom: 2rem;
+    min-height: 100px;
+}
+
+.komentar-item {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.3s ease;
+}
+
+.komentar-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.komentar-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.komentar-avtor {
+    color: #ff7043;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.komentar-datum {
+    color: #6c757d;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.komentar-vsebina {
+    color: #495057;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* === DODAJANJE KOMENTARJA === */
+.dodaj-komentar-sekcija {
+    border-top: 1px solid #e9ecef;
+    padding-top: 2rem;
+}
+
+.dodaj-komentar-naslov {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.komentar-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.input-skupina {
+    display: flex;
+    flex-direction: column;
+}
+
+.avtor-input {
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    max-width: 300px;
+}
+
+.avtor-input:focus {
+    outline: none;
+    border-color: #ff7043;
+    box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+}
+
+.komentar-textarea {
+    padding: 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.komentar-textarea:focus {
+    outline: none;
+    border-color: #ff7043;
+    box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+}
+
+.gumb-skupina {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.objavi-gumb {
+  background-color: #ff7043;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.objavi-gumb:hover {
+    background: #e95e2f;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+}
+
+.objavi-gumb:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(44, 90, 160, 0.3);
+}
+
+.komentarji-seznam:empty::before {
+    content: "Še ni komentarjev. Bodite prvi, ki komentirate!";
+    color: #6c757d;
+    font-style: italic;
+    display: block;
+    text-align: center;
+    padding: 2rem;
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+    .komentarji-sekcija {
+        margin: 1rem 0;
+        padding: 1rem;
+    }
+    
+    .avtor-input {
+        max-width: 100%;
+    }
+    
+    .komentar-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+}
+
+/* ===== ADMIN PANEL ===== */
+/* Admin container styling */
+.admin-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Admin page title */
+.admin-title {
+  text-align: center;
+  color: var(--text-color, #333);
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+/* Admin button container */
+.admin-buttons {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  margin-top: 2rem;
+}
+
+/* Individual admin button forms */
+.admin-form {
+  width: 100%;
+}
+
+/* Admin buttons styling */
+.admin-btn {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific button colors */
+.admin-btn.add-data {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+}
+
+.admin-btn.add-data:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+}
+
+.admin-btn.delete-data {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+}
+
+.admin-btn.delete-data:hover {
+  background: linear-gradient(135deg, #f57c00, #ef6c00);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+}
+
+.admin-btn.delete-tables {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+
+.admin-btn.delete-tables:hover {
+  background: linear-gradient(135deg, #d32f2f, #c62828);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3);
+}
+
+.admin-btn.backup-data {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+.admin-btn.backup-data:hover {
+  background: linear-gradient(135deg, #1976D2, #1565C0);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+}
+
+/* Button active state */
+.admin-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Button icons */
+.admin-btn .icon {
+  font-size: 1.2rem;
+}
+
+/* Warning section for dangerous actions */
+.admin-warning {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  color: #856404;
+}
+
+.admin-warning h3 {
+  margin: 0 0 0.5rem 0;
+  color: #b8860b;
+}
+
+.admin-warning p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .admin-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .admin-title {
+    font-size: 2rem;
+  }
+  
+  .admin-buttons {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .admin-btn {
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* Dark theme support */
+[data-theme="dark"] .admin-container {
+  background: var(--card-bg-dark, #2a2a2a);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .admin-title {
+  color: var(--text-color-dark, #e0e0e0);
+}
+
+[data-theme="dark"] .admin-warning {
+  background: #3e3e2a;
+  border-color: #5a5a2a;
+  color: #e6d84a;
+}
+
+[data-theme="dark"] .admin-warning h3 {
+  color: #f1c40f;
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.mb-2 {
+  margin-bottom: 2rem;
+}
+
+.mt-2 {
+  margin-top: 2rem;
+}
+
+/* === KALORIJE ===*/
+.kalorije-card {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #fdfdfd;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.kalkulator-naslov {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.kalorije-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.kalorije-label {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.kalorije-input,
+.kalorije-select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.kalorije-btn {
+  margin-top: 1rem;
+  padding: 0.6rem;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.kalorije-btn:hover {
+  background-color: #ff4c4c;
+}
+
+.kalorije-rezultat {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #444;
+  text-align: center;
+}
+
+/* SLIDESHOW GALERIJA STILI */
+/* Osnovna galerija */
+.galerija {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Slike v galeriji */
+.galerija img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.galerija img.active {
+  display: block;
+}
+
+.galerija img:hover {
+  transform: scale(1.02);
+}
+
+/* Navigacijski gumbi */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 10;
+  display: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.galerija.multiple-images .nav-btn {
+  display: block;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+  left: 15px;
+}
+
+.next-btn {
+  right: 15px;
+}
+
+/* Kazalci slik */
+.slideshow-indicators {
+  display: none;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.galerija.multiple-images + .slideshow-indicators {
+  display: flex;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ccc;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+.indicator.active {
+  background: #ff7043;
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.indicator:hover {
+  background: #e95e2f;
+}
+
+/* Števec slik */
+.image-counter {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  z-index: 10;
+  display: none;
+}
+
+.galerija.multiple-images .image-counter {
+  display: block;
+}
+
+/* Modal za povečano sliko */
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  animation: fadeIn 0.3s ease;
+}
+
+.image-modal.show {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.close-modal {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1001;
+  transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+  color: #ff6b6b;
+}
+
+/* Animacije */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.galerija img.slide-in-right {
+  animation: slideInFromRight 0.5s ease;
+}
+
+.galerija img.slide-in-left {
+  animation: slideInFromLeft 0.5s ease;
+}
+
+.galerija:not(.multiple-images) .nav-btn {
+  display: none !important;
+}
+
+.galerija:not(.multiple-images) .image-counter {
+  display: none !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .galerija {
+    height: 300px;
+  }
+  
+  .nav-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+  
+  .prev-btn {
+    left: 10px;
+  }
+  
+  .next-btn {
+    right: 10px;
+  }
+  
+  .image-counter {
+    top: 10px;
+    right: 10px;
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+  
+  .close-modal {
+    font-size: 30px;
+    top: 15px;
+    right: 20px;
+  }
+}
+
+/* === ODDAJA SLIK === */
+.recipe-form-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--card-bg, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-form-intro {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--accent-light, #f8f9fa);
+    border-radius: 8px;
+    color: var(--text-secondary, #666);
+    line-height: 1.6;
+    border-left: 4px solid #ff7043;
+}
+
+.recipe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Form Groups */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--text-primary, #333);
+    font-size: 0.95rem;
+}
+
+/* Input Styles */
+.form-input,
+.form-textarea,
+.form-select {
+    padding: 0.5rem;
+    border: 2px solid var(--border-color, #e1e5e9);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: var(--input-bg, #ffffff);
+    color: var(--text-primary, #333);
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #ff7043;
+    box-shadow: 0 0 0 3px rgba(255, 112, 67, 0.1);
+}
+
+.form-textarea {
+    min-height: 80px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.form-input[type="number"] {
+    max-width: 120px;
+}
+
+.form-input[type="text"]:not(.ingredient-input) {
+    max-width: 400px;
+}
+
+.form-select {
+    max-width: 200px;
+}
+
+/* File Input */
+.file-input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.file-input {
+    padding: 0.75rem;
+    border: 2px dashed var(--border-color, #e1e5e9);
+    border-radius: 8px;
+    background: var(--input-bg, #ffffff);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.file-input:hover {
+    border-color: #ff7043;
+    background: var(--accent-light, #f8f9fa);
+}
+
+/* Ingredients Section */
+.ingredients-section {
+    background: var(--section-bg, #f8f9fa);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color, #e1e5e9);
+}
+
+.ingredients-section h3 {
+    margin: 0 0 1rem 0;
+    color: var(--text-primary, #333);
+    font-size: 1.25rem;
+}
+
+.ingredient-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1rem;
+    align-items: end;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-light, #e9ecef);
+}
+
+.ingredient-item:last-child {
+    border-bottom: none;
+}
+
+.ingredient-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.ingredient-field label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary, #666);
+}
+
+.ingredient-input {
+    padding: 0.5rem;
+    border: 1px solid var(--border-color, #e1e5e9);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.add-ingredient-btn {
+    background: #ff7043;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.add-ingredient-btn:hover {
+    background: #e95e2f;
+    transform: translateY(-1px);
+}
+
+/* Allergens Section */
+.allergens-section {
+    background: var(--section-bg, #f8f9fa);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color, #e1e5e9);
+}
+
+.allergens-section h3 {
+    margin: 0 0 1rem 0;
+    color: var(--text-primary, #333);
+    font-size: 1.25rem;
+}
+
+.allergens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
+}
+
+.allergen-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.allergen-checkbox:hover {
+    background: rgba(255, 112, 67, 0.05);
+}
+
+.allergen-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #ff7043;
+}
+
+.allergen-checkbox label {
+    font-size: 0.9rem;
+    color: var(--text-primary, #333);
+    cursor: pointer;
+}
+
+/* Submit Button */
+.submit-btn {
+    background: linear-gradient(135deg, #ff7043, #e95e2f);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    box-shadow: 0 4px 12px rgba(255, 112, 67, 0.3);
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #e95e2f, #d4531f);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 112, 67, 0.4);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .recipe-form-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+    
+    .ingredient-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .allergens-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-input[type="number"] {
+        max-width: 100%;
+    }
+}
+
+/* Dark Theme Support */
+[data-theme="dark"] .recipe-form-container {
+    background: var(--card-bg-dark, #2d3748);
+    color: var(--text-primary-dark, #e2e8f0);
+}
+
+[data-theme="dark"] .recipe-form-intro {
+    background: var(--accent-light-dark, #4a5568);
+    color: var(--text-secondary-dark, #a0aec0);
+}
+
+[data-theme="dark"] .ingredients-section,
+[data-theme="dark"] .allergens-section {
+    background: var(--section-bg-dark, #4a5568);
+    border-color: var(--border-color-dark, #2d3748);
+}
+
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-textarea,
+[data-theme="dark"] .form-select,
+[data-theme="dark"] .ingredient-input {
+    background: var(--input-bg-dark, #4a5568);
+    border-color: var(--border-color-dark, #2d3748);
+    color: var(--text-primary-dark, #e2e8f0);
+}
+
+[data-theme="dark"] .allergen-checkbox:hover {
+    background: rgba(255, 112, 67, 0.1);
+}
+
+/* === IMAGE UPLOAD SYSTEM === */
+
+.image-upload-section {
+    background: var(--section-bg, #f8f9fa);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color, #e1e5e9);
+}
+
+.image-upload-section h3 {
+    margin: 0 0 1rem 0;
+    color: var(--text-primary, #333);
+    font-size: 1.25rem;
+}
+
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.image-upload-input {
+    padding: 0.75rem;
+    border: 2px dashed var(--border-color, #e1e5e9);
+    border-radius: 8px;
+    background: var(--input-bg, #ffffff);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    position: relative;
+}
+
+.image-upload-input:hover {
+    border-color: #ff7043;
+    background: rgba(255, 112, 67, 0.05);
+}
+
+.image-upload-input input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.upload-text {
+    color: var(--text-secondary, #666);
+    font-size: 0.9rem;
+}
+
+.upload-text strong {
+    color: #ff7043;
+}
+
+.images-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.image-preview-item {
+    position: relative;
+    border: 2px solid var(--border-color, #e1e5e9);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--input-bg, #ffffff);
+    transition: all 0.3s ease;
+}
+
+.image-preview-item:hover {
+    border-color: #ff7043;
+    box-shadow: 0 2px 8px rgba(255, 112, 67, 0.2);
+}
+
+.image-preview {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+}
+
+.image-info {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary, #666);
+    background: var(--section-bg, #f8f9fa);
+    border-top: 1px solid var(--border-color, #e1e5e9);
+}
+
+.image-name {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    word-break: break-all;
+}
+
+.image-size {
+    color: var(--text-tertiary, #999);
+    font-size: 0.75rem;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-image-btn:hover {
+    background: rgba(255, 0, 0, 1);
+    transform: scale(1.1);
+}
+
+.images-count {
+    font-size: 0.9rem;
+    color: var(--text-secondary, #666);
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 112, 67, 0.1);
+    border-radius: 6px;
+    text-align: center;
+}
+
+/* Hidden file inputs for form submission */
+.hidden-file-inputs {
+    display: none;
+}
+
+/* Dark theme support */
+[data-theme="dark"] .image-upload-section {
+    background: var(--section-bg-dark, #4a5568);
+    border-color: var(--border-color-dark, #2d3748);
+}
+
+[data-theme="dark"] .image-upload-input {
+    background: var(--input-bg-dark, #4a5568);
+    border-color: var(--border-color-dark, #2d3748);
+}
+
+[data-theme="dark"] .image-upload-input:hover {
+    background: rgba(255, 112, 67, 0.1);
+}
+
+[data-theme="dark"] .image-preview-item {
+    background: var(--input-bg-dark, #4a5568);
+    border-color: var(--border-color-dark, #2d3748);
+}
+
+[data-theme="dark"] .image-info {
+    background: var(--section-bg-dark, #4a5568);
+    border-color: var(--border-color-dark, #2d3748);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .images-preview {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 0.75rem;
+    }
+    
+    .image-preview {
+        height: 100px;
+    }
+}
+
+/* ===== PROFILE PAGE STYLES ===== */
+/* Profile container */
+.profile-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--card-bg, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile title */
+.profile-title {
+  color: var(--text-color, #333);
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 2px solid var(--primary-color, #ff6b6b);
+  padding-bottom: 1rem;
+}
+
+/* User info section */
+.user-info {
+  background: var(--bg-light, #f8f9fa);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  border-left: 4px solid var(--primary-color, #ff6b6b);
+}
+
+.user-info p {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: var(--text-color, #333);
+}
+
+.user-info p strong {
+  color: var(--primary-color, #ff6b6b);
+  font-weight: 600;
+}
+
+/* Liked recipes section */
+.liked-recipes-section {
+  margin-top: 2rem;
+}
+
+.liked-recipes-title {
+  color: var(--text-color, #333);
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.liked-recipes-title::before {
+  content: "❤️";
+  font-size: 1.5rem;
+}
+
+/* Liked recipes list */
+.liked-recipes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.liked-recipe-item {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.liked-recipe-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color, #ff6b6b);
+}
+
+.liked-recipe-link {
+  display: block;
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  color: var(--text-color, #333);
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.liked-recipe-link:hover {
+  color: var(--primary-color, #ff6b6b);
+}
+
+/* Empty state message */
+.empty-message {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: var(--bg-light, #f8f9fa);
+  border-radius: 8px;
+  color: var(--text-muted, #666);
+  font-size: 1.1rem;
+}
+
+.empty-message::before {
+  content: "🍽️";
+  display: block;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* Profile stats (if you want to add recipe count, etc.) */
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.stat-card {
+  background: var(--card-bg, #ffffff);
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  border: 1px solid var(--border-color, #e0e0e0);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color, #ff6b6b);
+  display: block;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-muted, #666);
+  margin-top: 0.5rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .profile-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .profile-title {
+    font-size: 1.8rem;
+  }
+  
+  .liked-recipes-title {
+    font-size: 1.5rem;
+  }
+  
+  .user-info {
+    padding: 1rem;
+  }
+  
+  .liked-recipe-link {
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+/* Dark theme support */
+[data-theme="dark"] .profile-container {
+  background: var(--card-bg-dark, #2a2a2a);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .user-info {
+  background: var(--bg-dark, #333);
+}
+
+[data-theme="dark"] .liked-recipe-item {
+  background: var(--card-bg-dark, #2a2a2a);
+  border-color: var(--border-color-dark, #444);
+}
+
+[data-theme="dark"] .empty-message {
+  background: var(--bg-dark, #333);
+}
+
+[data-theme="dark"] .stat-card {
+  background: var(--card-bg-dark, #2a2a2a);
+  border-color: var(--border-color-dark, #444);
+}
