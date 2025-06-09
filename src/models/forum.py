@@ -9,7 +9,7 @@ def create_table(cur):
         );
     """)
     cur.execute("""
-        CREATE TABLE IF NOT EXISTS komentarji (
+        CREATE TABLE IF NOT EXISTS komentarji_forum (
             id SERIAL PRIMARY KEY,
             forum_id INTEGER NOT NULL REFERENCES forum(id),
             uporabnik_id INTEGER NOT NULL REFERENCES uporabniki(id),
